@@ -1,4 +1,4 @@
-# [Nombre de la Aplicación]
+# HashPass
 
 ## 👥 Miembros del Equipo
 | Nombre y Apellidos | Correo URJC | Usuario GitHub |
@@ -6,7 +6,7 @@
 | Iván Tabares Rico | i.tabares.2024@alumnos.urjc.es | ivvaann29 |
 | Yago Contreras Nevares | y.contreras.2024@alumnos.urjc.es | yagoo-cn |
 | Iker Marín López | i.marin.2024@alumnos.urjc.es | IML15 |
-| [Carlos Javier González Ledo] | cj.gonzalezl.2024@alumnos.urjc.es | k4r0n22 |
+| Carlos Javier González Ledo | cj.gonzalezl.2024@alumnos.urjc.es | k4r0n22 |
 
 ---
 
