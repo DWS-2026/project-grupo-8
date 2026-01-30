@@ -3,10 +3,10 @@
 ## 👥 Miembros del Equipo
 | Nombre y Apellidos | Correo URJC | Usuario GitHub |
 |:--- |:--- |:--- |
-| [Nombre 1] | [email1]@alumnos.urjc.es | [User1] |
-| [Nombre 2] | [email2]@alumnos.urjc.es | [User2] |
-| [Nombre 3] | [email3]@alumnos.urjc.es | [User3] |
-| [Nombre 4] | [email4]@alumnos.urjc.es | [User4] |
+| Iván Tabares Rico | [email1]@alumnos.urjc.es | [User1] |
+| Carlos Javier Gonzalez Ledo | [email2]@alumnos.urjc.es | [User2] |
+| Iker Marín López | [email3]@alumnos.urjc.es | [User3] |
+| Yago Contreras Nevares | y.contreras.2024@alumnos.urjc.es | yagoo-cn |
 
 ---
 
@@ -18,8 +18,8 @@
 ### **Entidades**
 Indicar las entidades principales que gestionará la aplicación y las relaciones entre ellas:
 
-1. **[Entidad 1]**: [Ej: Usuario]
-2. **[Entidad 2]**: [Ej: Producto]
+1. **[Entidad 1]**: Usuario
+2. **[Entidad 2]**: Entrada
 3. **[Entidad 3]**: [Ej: Pedido]
 4. **[Entidad 4]**: [Ej: Categoría]
 
