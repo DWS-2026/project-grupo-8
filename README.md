@@ -3,46 +3,44 @@
 ## 👥 Miembros del Equipo
 | Nombre y Apellidos | Correo URJC | Usuario GitHub |
 |:--- |:--- |:--- |
-| Iván Tabares Rico | [email1]@alumnos.urjc.es | [User1] |
-| Carlos Javier Gonzalez Ledo | [email2]@alumnos.urjc.es | [User2] |
-| Iker Marín López | [email3]@alumnos.urjc.es | [User3] |
+| Iván Tabares Rico | i.tabares.2024@alumnos.urjc.es | ivvaann29 |
 | Yago Contreras Nevares | y.contreras.2024@alumnos.urjc.es | yagoo-cn |
+| Iker Marín López | i.marin.2024@alumnos.urjc.es | IML15 |
+| [Carlos Javier González Ledo] | cj.gonzalezl.2024@alumnos.urjc.es | k4r0n22 |
 
 ---
 
 ## 🎭 **Preparación: Definición del Proyecto**
 
 ### **Descripción del Tema**
-[Escribe aquí una descripción breve y concisa de qué trata tu aplicación, el sector al que pertenece y qué valor aporta al usuario].
-
+Es una aplicación web de gestión segura de contraseñas cuyo objetivo es permitir a los usuarios almacenar, organizar y consultar credenciales de forma segura
 ### **Entidades**
 Indicar las entidades principales que gestionará la aplicación y las relaciones entre ellas:
 
 1. **[Entidad 1]**: Usuario
-2. **[Entidad 2]**: Entrada
-3. **[Entidad 3]**: [Ej: Pedido]
-4. **[Entidad 4]**: [Ej: Categoría]
+2. **[Entidad 2]**: Entrada (Contraseña)
+3. **[Entidad 3]**: Rol
+4. **[Entidad 4]**: 
 
 **Relaciones entre entidades:**
-- [Ej: Usuario - Pedido: Un usuario puede tener múltiples pedidos (1:N)]
-- [Ej: Pedido - Producto: Un pedido puede contener múltiples productos y un producto puede estar en múltiples pedidos (N:M)]
-- [Ej: Producto - Categoría: Un producto pertenece a una categoría (N:1)]
-- [Descripción de otras relaciones relevantes]
+- Usuario – Contraseña:Un usuario puede tener múltiples contraseñas (1:N).
+- Usuario – Rol:Cada usuario tiene asignado un rol (N:1).
+- 
 
 ### **Permisos de los Usuarios**
 Describir los permisos de cada tipo de usuario e indicar de qué entidades es dueño:
 
 * **Usuario Anónimo**: 
-  - Permisos: [Ej: Visualización de catálogo, búsqueda de productos, registro]
+  - Permisos: visualización del landing page, descripción, registro,
   - No es dueño de ninguna entidad
 
 * **Usuario Registrado**: 
-  - Permisos: [Ej: Gestión de perfil, realizar pedidos, crear valoraciones]
-  - Es dueño de: [Ej: Sus propios Pedidos, su Perfil de Usuario, sus Valoraciones]
+  - Permisos: Gestión de perfil, guardar contraseñas
+  - Es dueño de: Sus contraseñas, su Perfil de Usuario
 
 * **Administrador**: 
-  - Permisos: [Ej: Gestión completa de productos (CRUD), visualización de estadísticas, moderación de contenido]
-  - Es dueño de: [Ej: Productos, Categorías, puede gestionar todos los Pedidos y Usuarios]
+  - Permisos: Gestión completa de usuarios, visualización de estadísticas, visualización de logs
+  - Es dueño de: Puede gestionar todos los Usuarios
 
 ### **Imágenes**
 Indicar qué entidades tendrán asociadas una o varias imágenes:
