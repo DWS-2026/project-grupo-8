@@ -1,5 +1,5 @@
 /* =========================================
-1. VARIABLES (Tus colores)
+1. VARIABLES / COLORES
 ========================================= */
 :root {
     --fondo-oscuro: #0f172a;       
@@ -19,7 +19,7 @@ body {
     font-family: system-ui, -apple-system, sans-serif;
 }
 
-/* Forzar que todos los títulos sean blancos */
+
 h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
     color: var(--texto-blanco) !important;
 }
@@ -57,7 +57,7 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
 }
 
 /* =========================================
-4. TUS CLASES ESPECIALES 
+4. CLASES ESPECIALES 
 ========================================= */
 
 .icono-brillante {
@@ -78,6 +78,27 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
 .texto-gradient {
     color: var(--verde-principal);
 }
+.left-panel { 
+    background: #ffffff; color: #0f172a; border-radius: 12px; padding: 40px; 
+}
+.email-pill { 
+    display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:999px; background:var(--texto-gris); box-shadow: 0 6px 18px rgba(2,6,23,0.06); 
+}
+.email-pill i { 
+    color: #0f172a; 
+}
+.password-input .form-control { 
+    border: 2px solid #0b5bff; 
+}
+.big-cta { 
+    background: var(--verde-principal); color: #111827; font-weight:700; 
+}
+.right-decor { 
+    background: linear-gradient(180deg,#072c5a 0%, #01203d 100%); border-radius: 12px; min-height: 420px; 
+}
+.muted-link { 
+    color: #2563eb;
+} 
 
 .carousel-indicators {
     position: static;
