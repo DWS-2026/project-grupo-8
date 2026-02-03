@@ -1,0 +1,80 @@
+/* =========================================
+1. VARIABLES (Tus colores)
+========================================= */
+:root {
+    --fondo-oscuro: #0f172a;       
+    --fondo-tarjeta: #1e293b;      
+    --verde-principal: #10b981;    
+    --verde-hover: #059669;        
+    --texto-blanco: #ffffff;       
+    --texto-gris: #cbd5e1;       
+}
+
+/* =========================================
+2. REGLAS GENERALES
+========================================= */
+body {
+    background-color: var(--fondo-oscuro) !important;
+    color: var(--texto-gris) !important;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Forzar que todos los títulos sean blancos */
+h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
+    color: var(--texto-blanco) !important;
+}
+
+/* =========================================
+3. PERSONALIZACIÓN DE BOOTSTRAP
+========================================= */
+
+/* Barra de navegación transparente */
+.navbar {
+    background-color: transparent !important;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+.navbar-brand { color: var(--texto-blanco) !important; }
+.nav-link { color: var(--texto-gris) !important; }
+.nav-link:hover, .nav-link.active { color: var(--verde-principal) !important; }
+
+/* Tarjetas oscuras */
+.card {
+    background-color: var(--fondo-tarjeta) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--texto-gris);
+}
+
+/* Botones Verdes */
+.btn-primary {
+    background-color: var(--verde-principal);
+    border: none;
+    font-weight: 600;
+    padding: 10px 25px;
+}
+.btn-primary:hover {
+    background-color: var(--verde-hover);
+}
+
+/* =========================================
+4. TUS CLASES ESPECIALES 
+========================================= */
+
+.icono-brillante {
+    width: 80px;            
+    height: 80px;           
+    background: linear-gradient(135deg, var(--verde-principal), var(--verde-hover));
+    border-radius: 20px;
+    display: flex;          
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
+    font-size: 2.5rem;
+    color: white;
+    margin: 0 auto; 
+}
+
+/* Texto degradado  */
+.texto-gradient {
+    color: var(--verde-principal);
+}
