@@ -78,3 +78,8 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
 .texto-gradient {
     color: var(--verde-principal);
 }
+
+.carousel-indicators {
+    position: static;
+    margin-top: 2rem;
+}
