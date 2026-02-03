@@ -26,11 +26,11 @@
 
 					<div id="alert" class="alert d-none" role="alert"></div>
 
-					<form id="loginForm">
+					<form id="loginForm" method="get" action="password-login.html">
 						<div class="mb-3">
-							<label for="password" class="form-label">Introduzca su correo</label>
+							<label for="email" class="form-label">Introduzca su correo</label>
 							<div class="input-group">
-								<input type="password" id="password" class="form-control" placeholder="Correo electrónico" required>
+								<input type="email" id="email" name="email" class="form-control" placeholder="Correo electrónico" required>
 								<!--button class="btn btn-outline-secondary" type="button" id="togglePwd" title="Mostrar/ocultar">
 									<i class="bi bi-eye-slash" id="toggleIcon"></i>
 								</button>-->
@@ -39,7 +39,7 @@
 
 						<div class="d-flex gap-2">
 							<button id="loginBtn" class="btn btn-primary w-100" type="submit">Acceder</button>
-							<button id="createBtn" class="btn btn-outline-light w-100" type="button">Crear cuenta</button>
+							<button id="createBtn" class="btn btn-outline-light w-100" type="button">Regístrate ya!</button>
 						</div>
 					</form>
 
