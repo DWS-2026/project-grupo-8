@@ -57,7 +57,7 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
 }
 
 /* =========================================
-4. CLASES ESPECIALES 
+4. TUS CLASES ESPECIALES DE PASSWORDS.HTML
 ========================================= */
 
 .icono-brillante {
@@ -105,3 +105,64 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
     margin-top: 2rem;
 }
 
+
+/* =========================================
+   ESTILOS ESPECÍFICOS PARA LA BARRA
+   (Usando tus variables)
+========================================= */
+
+/* 1. Estilo para el contenedor del buscador (Simula una sola caja) */
+.search-box {
+    background-color: var(--fondo-tarjeta);
+    border: 1px solid rgba(206, 181, 181, 0.163);
+    border-radius: 6px; /* Radio similar a Bootstrap standard */
+}
+
+/* Color del texto del placeholder */
+.search-box input::placeholder {
+    color: var(--texto-gris);
+    opacity: 0.6;
+}
+
+/* 2. Clase genérica para botones oscuros (Filtro y Toggles) */
+.btn-dark-custom {
+    background-color: var(--fondo-tarjeta);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--texto-gris);
+}
+
+.btn-dark-custom:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--texto-blanco);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Estado activo para el botón de vista (el cuadrado gris claro) */
+.btn-dark-custom.active {
+    background-color: rgba(254, 248, 248, 0.064); /* Un poco más claro */
+    color: var(--texto-blanco);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+/* =========================================
+   ESTILO SIDEBAR MÓVIL (TIPO POPUP)
+========================================= */
+@media (max-width: 767.98px) {
+    #sidebar {
+        /* Posición fija para que flote sobre el contenido */
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        height: 100vh; /* Ocupa toda la altura */
+        width: 280px;  /* Ancho del menú en móvil */
+        z-index: 1050; /* Asegura que esté por encima de todo */
+        
+        /* Aseguramos que tenga fondo (si no, sería transparente) */
+        background-color: var(--fondo-oscuro, #0f172a); 
+        border-right: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 10px 0 30px rgba(0,0,0,0.5); /* Sombra para efecto 3D */
+        
+        padding-right: 1rem;
+        padding-left: 1rem;
+        overflow-y: auto; /* Scroll interno si el menú es muy largo */
+    }
+}
