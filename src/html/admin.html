@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Inicio - HashPass</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="../css/styles.css">
+
+</head>
+
+<body>
+    <header class="barra-superior d-flex justify-content-between align-items-center px-4 py-3">
+        <div class="marca-logo fs-4 fw-bold">
+            <i class="bi bi-shield-lock-fill texto-gradient"></i> <span>HashPass</span>
+        </div>
+
+        <a href="index.html" class="boton-bloquear btn btn-outline-light rounded-pill px-4 text-decoration-none">
+            <i class="bi bi-lock-fill"></i> Bloquear
+        </a>
+    </header>
+
+    <div class="container mt-4">
+        <div class="input-group mb-4 search-box">
+            <span class="input-group-text bg-transparent border-0" id="lupa-icono">
+                <i class="bi bi-search text-secondary"></i>
+            </span>
+            <input type="text" class="form-control bg-transparent border-0 text-white" id="inputBusqueda"
+                placeholder="Buscar usuario...">
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-6">
+                <div class="tarjeta-dato text-center p-3">
+                    <h6 class="text-secondary text-uppercase small fw-bold">Contraseñas</h6>
+                    <h3 class="texto-gradient mb-0">68</h3>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="tarjeta-dato text-center p-3">
+                    <h6 class="text-secondary text-uppercase small fw-bold">Usuarios</h6>
+                    <h3 class="texto-gradient mb-0">3</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabla-contenedor card border-0 shadow-lg">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0">
+
+                    <thead>
+                        <tr class="cabecera-estilizada">
+
+                            <th scope="col" class="py-3 px-3">
+                                <div class="dropdown">
+                                    <button
+                                        class="btn btn-link text-white text-decoration-none dropdown-toggle fw-bold p-0 border-0"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Usuario
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li><a class="dropdown-item ordenar-tabla" href="#" data-col="1"
+                                                data-orden="asc" data-tipo="texto">A - Z (Ascendente)</a></li>
+                                        <li><a class="dropdown-item ordenar-tabla" href="#" data-col="1"
+                                                data-orden="desc" data-tipo="texto">Z - A (Descendente)</a></li>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th scope="col" class="py-3 text-secondary">Nº contraseñas</th>
+
+                            <th scope="col" class="py-3">
+                                <div class="dropdown">
+                                    <button
+                                        class="btn btn-link text-white text-decoration-none dropdown-toggle fw-bold p-0 border-0"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Plan
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li><a class="dropdown-item filtro-tabla" href="#" data-col="2"
+                                                data-val="todos">Ver
+                                                Todos</a></li>
+                                        <li><a class="dropdown-item filtro-tabla" href="#" data-col="2"
+                                                data-val="gratuito">Gratuito</a></li>
+                                        <li><a class="dropdown-item filtro-tabla" href="#" data-col="2"
+                                                data-val="premium">Premium</a></li>
+                                        <li><a class="dropdown-item filtro-tabla" href="#" data-col="2"
+                                                data-val="platinum">Platinum</a></li>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th scope="col" class="py-3">
+                                <div class="dropdown">
+                                    <button
+                                        class="btn btn-link text-white text-decoration-none dropdown-toggle fw-bold p-0 border-0"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Registro
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li><a class="dropdown-item ordenar-tabla" href="#" data-col="3"
+                                                data-orden="asc" data-tipo="fecha">Más Antiguo</a></li>
+                                        <li><a class="dropdown-item ordenar-tabla" href="#" data-col="3"
+                                                data-orden="desc" data-tipo="fecha">Más Reciente</a></li>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th scope="col" class="py-3">
+                                <div class="dropdown">
+                                    <button
+                                        class="btn btn-link text-white text-decoration-none dropdown-toggle fw-bold p-0 border-0"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Pago
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li><a class="dropdown-item filtro-tabla" href="#" data-col="4"
+                                                data-val="todos">Ver
+                                                Todos</a></li>
+                                        <li><a class="dropdown-item filtro-tabla" href="#" data-col="4"
+                                                data-val="activo">Activo</a></li>
+                                        <li><a class="dropdown-item filtro-tabla" href="#" data-col="4"
+                                                data-val="pendiente">Pendiente</a></li>
+                                        <li><a class="dropdown-item filtro-tabla" href="#" data-col="4"
+                                                data-val="suspendido">Suspendido</a></li>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th scope="col" class="py-3 text-center"><i class="bi bi-trash-fill text-secondary"></i>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="align-middle">
+                        <tr>
+                            <td class="px-3">Mauro@gmail.com</td>
+                            <td>9</td>
+                            <td><span
+                                    class="badge bg-dark-subtle border border-secondary text-white fw-normal">Gratuito</span>
+                            </td>
+                            <td>05/01/2026</td>
+                            <td><span class="text-success small"><i class="bi bi-circle-fill me-1"
+                                        style="font-size: 8px;"></i>Activo</span></td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-outline-danger btn-sm border-0"><i
+                                        class="bi bi-x-lg"></i></button>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="px-3">Djokers@gmail.com</td>
+                            <td>34</td>
+                            <td><span
+                                    class="badge bg-dark-subtle border border-secondary text-white fw-normal">Premium</span>
+                            </td>
+                            <td>22/01/2026</td>
+                            <td><span class="text-warning small"><i class="bi bi-circle-fill me-1"
+                                        style="font-size: 8px;"></i>Pendiente</span></td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-outline-danger btn-sm border-0"><i
+                                        class="bi bi-x-lg"></i></button>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="px-3">Mateo.arbalda@gmail.com</td>
+                            <td>25</td>
+                            <td><span
+                                    class="badge bg-dark-subtle border border-secondary text-white fw-normal">Platinum</span>
+                            </td>
+                            <td>27/12/2025</td>
+                            <td><span class="text-danger small"><i class="bi bi-circle-fill me-1"
+                                        style="font-size: 8px;"></i>Suspendido</span></td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-outline-danger btn-sm border-0"><i
+                                        class="bi bi-x-lg"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
