@@ -166,3 +166,74 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
         overflow-y: auto; /* Scroll interno si el menú es muy largo */
     }
 }
+/* =========================================
+   5. ESTILOS ADMIN
+========================================= */
+
+/* 1. Ajuste de la Tabla para que sea azul oscuro (no gris/negro) */
+.table-dark {
+    --bs-table-bg: var(--fondo-tarjeta);
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.03);
+    color: var(--texto-gris);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* 2. Cabecera de la tabla con fondo ligeramente distinto */
+.cabecera-estilizada {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.cabecera-estilizada th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 3. Contenedor de la tabla (Borde redondeado y sombra) */
+.tabla-contenedor {
+    background-color: var(--fondo-tarjeta);
+    border-radius: 12px;
+    overflow: hidden; /* Importante para que las esquinas de la tabla se recorten */
+}
+
+/* 4. Efecto Focus en el Buscador (El brillo verde) */
+.search-box:focus-within {
+    border-color: var(--verde-principal) !important;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* 5. Dropdowns oscuros personalizados */
+.dropdown-menu-dark {
+    background-color: var(--fondo-tarjeta);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-item:hover {
+    background-color: var(--verde-principal);
+    color: #fff !important;
+}
+
+/* 6. Estilo específico para las tarjetas de estadísticas */
+.tarjeta-dato {
+    background-color: var(--fondo-tarjeta);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tarjeta-dato:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 7. Badges (Etiquetas) más elegantes */
+.badge {
+    padding: 0.6em 1em;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
