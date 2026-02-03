@@ -226,7 +226,6 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
 }
 
 .tarjeta-dato:hover {
-    transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     border-color: rgba(255, 255, 255, 0.1);
 }
@@ -236,4 +235,49 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
     padding: 0.6em 1em;
     font-weight: 500;
     letter-spacing: 0.5px;
+}
+/* =========================================
+   6. ESTILOS DASHBOARD
+========================================= */
+/* Altura fija para la tabla y activación del scroll */
+.tabla-scroll-y {
+    max-height: 300px;  /* Altura del rectángulo */
+    min-height: 300px;  /* Fuerza que mantenga el tamaño aunque esté vacía */
+    overflow-y: auto;   /* Activa el scroll vertical si se pasa */
+    padding-right: 5px; /* Espacio para que el scroll no tape texto */
+}
+
+/* Personalización de la barra de scroll (Webkit: Chrome, Edge, Safari) */
+.tabla-scroll-y::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tabla-scroll-y::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.tabla-scroll-y::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2); 
+    border-radius: 4px;
+}
+
+.tabla-scroll-y::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4); 
+}
+
+/* Encabezado de tabla pegajoso (Sticky Header) */
+.thead-sticky th {
+    position: sticky;
+    top: 0;
+    background-color: var(--fondo-tarjeta); /* Color sólido para tapar el texto que pasa por debajo */
+    z-index: 10;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem; /* Espacio extra para que respire */
+}
+
+/* Ajuste para que los números grandes sean blancos como en la foto, no verdes */
+.text-white-stats {
+    color: var(--texto-blanco);
+    font-weight: 700;
 }
