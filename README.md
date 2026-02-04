@@ -18,10 +18,10 @@ HashPass es Password Manager diseñado para proteger los credenciales de los usu
 ### **Entidades**
 Indicar las entidades principales que gestionará la aplicación y las relaciones entre ellas:
 
-1. **[Entidad 1]**:Usuario
-2. **[Entidad 2]**Credencial (Contraseña)
-3. **[Entidad 3]**:Plan (Suscripción)
-4. **[Entidad 4]**:Registro de Actividad (Log)
+1. **[Entidad 1]**: Usuario
+2. **[Entidad 2]**: Credencial (Contraseña)
+3. **[Entidad 3]**: Plan (Suscripción)
+4. **[Entidad 4]**: Registro de Actividad (Log)
 
 **Relaciones entre entidades:**
 - Un **Usuario** puede tener muchas **Credenciales** (1:N).
