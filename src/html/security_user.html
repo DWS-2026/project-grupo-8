@@ -136,135 +136,186 @@
             </div>
 
             <main id="main-content" class="col-md-9 col-lg-10 pt-4 px-4 transition-all">
+
                 <div class="mb-4">
                     <button class="btn btn-dark-custom border-0" id="toggle-btn" onclick="toggleSidebar()">
                         <i class="bi bi-list fs-4" id="toggle-icon"></i>
                     </button>
                 </div>
-                <div class="row mb-4">
-                    <div class="col-md-4 mb-3">
-                        <div class="tarjeta-dato text-center p-4">
-                            <h6 class="text-secondary text-uppercase small fw-bold">Contraseñas guardadas</h6>
-                            <h3 class="display-5 text-white-stats mb-0">7</h3>
-                        </div>
-                    </div>
 
-                    <div class="col-md-4 mb-3">
-                        <div class="tarjeta-dato text-center p-4">
-                            <h6 class="text-secondary text-uppercase small fw-bold">Contraseñas poco seguras</h6>
-                            <h3 class="display-5 text-white-stats mb-0">2</h3>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 mb-3">
-                        <div class="tarjeta-dato text-center p-4">
-                            <h6 class="text-secondary text-uppercase small fw-bold">Accesos mensuales</h6>
-                            <h3 class="display-5 text-white-stats mb-0">14</h3>
-                        </div>
-                    </div>
-                </div>
+                <h3 class="text-white fw-bold mb-4">Seguridad y Acceso</h3>
 
                 <div class="row">
-                    <div class="col-12">
-                        <div class="tarjeta-dato p-4">
-                            <h5 class="text-white mb-4">Actividad de los últimos 30 días</h5>
+                    <div class="col-12 col-lg-6 mb-4">
+                        <div class="tarjeta-dato p-4 h-100 d-flex flex-column">
 
-                            <div class="tabla-scroll-y">
-                                <table class="table table-dark table-hover mb-0" style="--bs-table-bg: transparent;">
-                                    <thead class="thead-sticky">
-                                        <tr class="text-secondary">
-                                            <th scope="col" class="fw-normal">Acción</th>
-                                            <th scope="col" class="fw-normal text-center">Servicio</th>
-                                            <th scope="col" class="fw-normal text-end">Fecha</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="py-3"><span
-                                                    class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25">Creada</span>
-                                            </td>
-                                            <td class="py-3 text-white text-center">netflix.com</td>
-                                            <td class="py-3 text-end text-secondary">03 Feb 2026</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="py-3"><span
-                                                    class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25">Editada</span>
-                                            </td>
-                                            <td class="py-3 text-white text-center">google.com</td>
-                                            <td class="py-3 text-end text-secondary">03 Feb 2026</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="py-3"><span
-                                                    class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25">Eliminada</span>
-                                            </td>
-                                            <td class="py-3 text-white text-center">spotify.com</td>
-                                            <td class="py-3 text-end text-secondary">22 Ene 2026</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="py-3"><span
-                                                    class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25">Alerta</span>
-                                            </td>
-                                            <td class="py-3 text-white text-center">amazon.es</td>
-                                            <td class="py-3 text-end text-secondary">20 Ene 2026</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="py-3"><span
-                                                    class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25">Creada</span>
-                                            </td>
-                                            <td class="py-3 text-white text-center">facebook.com</td>
-                                            <td class="py-3 text-end text-secondary">18 Ene 2026</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="py-3"><span
-                                                    class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25">Editada</span>
-                                            </td>
-                                            <td class="py-3 text-white text-center">twitter.com</td>
-                                            <td class="py-3 text-end text-secondary">15 Ene 2026</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <div class="icono-brillante"
+                                    style="width: 50px; height: 50px; font-size: 1.5rem; margin: 0;">
+                                    <i class="bi bi-key-fill"></i>
+                                </div>
+                                <h5 class="text-white mb-0">Contraseña Maestra</h5>
+                            </div>
+
+                            <p class="text-secondary small mb-4">
+                                Esta es la llave única para acceder a tu bóveda. Si la pierdes, no podremos recuperarla
+                                por ti.
+                            </p>
+
+                            <form class="d-flex flex-column flex-grow-1 justify-content-between">
+
+                                <div class="mb-3">
+                                    <label for="currentPass" class="form-label text-white small fw-bold">Contraseña
+                                        actual</label>
+                                    <div class="input-group">
+                                        <input type="password"
+                                            class="form-control bg-transparent text-white shadow-none" id="currentPass">
+                                        <button class="btn btn-ojito" type="button"><i class="bi bi-eye"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="newPass" class="form-label text-white small fw-bold">Nueva
+                                        contraseña</label>
+                                    <div class="input-group">
+                                        <input type="password"
+                                            class="form-control bg-transparent text-white shadow-none" id="newPass">
+                                        <button class="btn btn-ojito" type="button"><i class="bi bi-eye"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="confirmPass" class="form-label text-white small fw-bold">Confirmar nueva
+                                        contraseña</label>
+                                    <div class="input-group">
+                                        <input type="password"
+                                            class="form-control bg-transparent text-white shadow-none" id="confirmPass">
+                                        <button class="btn btn-ojito" type="button"><i class="bi bi-eye"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid mt-2">
+                                    <button type="button" class="btn btn-primary">Actualizar contraseña</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6 mb-4 d-flex flex-column">
+
+                        <div class="tarjeta-dato p-4 mb-4">
+                            <h5 class="text-white mb-4">Ajustes de Protección</h5>
+
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <div>
+                                    <h6 class="text-white mb-0 text-success"><i class="bi bi-shield-check me-2"></i>2FA
+                                    </h6>
+                                    <small class="text-secondary">Autenticación en dos pasos</small>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input custom-switch" type="checkbox" role="switch"
+                                        id="check2FA" onclick="toggle2FA()">
+                                </div>
+                            </div>
+
+                            <div id="setup2FA" class="mb-4 pt-3 border-top border-secondary border-opacity-25"
+                                style="display: none;">
+                                <label class="text-secondary small fw-bold text-uppercase mb-2 d-block">Configurar
+                                    correo</label>
+                                <div class="input-group search-box mb-2">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="bi bi-envelope-at text-secondary"></i>
+                                    </span>
+                                    <input type="email"
+                                        class="form-control bg-transparent border-0 text-white shadow-none"
+                                        placeholder="tucorreo@ejemplo.com">
+                                    <button class="btn btn-primary btn-sm m-1 rounded-2" type="button">Enviar</button>
+                                </div>
+                                <small class="text-secondary d-block fst-italic"><i
+                                        class="bi bi-info-circle me-1"></i>Te enviaremos un código de
+                                    confirmación.</small>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label text-white small fw-bold">Timeout de seguridad</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent border-secondary text-secondary"><i
+                                            class="bi bi-stopwatch"></i></span>
+                                    <input type="text"
+                                        class="form-control bg-transparent text-white border-secondary shadow-none"
+                                        placeholder="Ej: 5">
+                                    <span
+                                        class="input-group-text bg-transparent border-secondary text-secondary">minutos</span>
+                                </div>
+                                <div class="form-text text-secondary opacity-75 small">La sesión se cerrará
+                                    automáticamente tras inactividad.</div>
                             </div>
                         </div>
+
+                        <div class="tarjeta-dato p-4 border border-danger flex-grow-1">
+                            <h6 class="text-danger fw-bold mb-3"><i
+                                    class="bi bi-exclamation-triangle-fill me-2"></i>Zona de Peligro</h6>
+                            <p class="text-secondary small mb-3">
+                                Eliminar tu cuenta borrará permanentemente todas tus bóvedas y contraseñas. Esta acción
+                                no se puede deshacer.
+                            </p>
+                            <button type="button" class="btn btn-outline-danger w-100">
+                                Eliminar cuenta definitivamente
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </main>
-        </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const main = document.getElementById('main-content');
-            const icon = document.getElementById('toggle-icon');
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-            if (sidebar.classList.contains('d-none')) {
-                // MOSTRAR
-                sidebar.classList.remove('d-none');
-                sidebar.classList.add('d-md-block');
+            <script>
+                function toggle2FA() {
+                    const check = document.getElementById('check2FA');
+                    const panel = document.getElementById('setup2FA');
 
-                main.classList.remove('col-12');
-                main.classList.add('col-md-9', 'col-lg-10');
+                    if (check.checked) {
+                        panel.style.display = "block";
+                    } else {
+                        panel.style.display = "none";
+                    }
+                }
+            </script>
 
-                icon.classList.remove('bi-arrow-right-short');
-                icon.classList.add('bi-list');
-            } else {
-                // OCULTAR
-                sidebar.classList.add('d-none');
-                sidebar.classList.remove('d-md-block');
+            <script>
+                function toggleSidebar() {
+                    const sidebar = document.getElementById('sidebar');
+                    const main = document.getElementById('main-content');
+                    const icon = document.getElementById('toggle-icon');
 
-                main.classList.remove('col-md-9', 'col-lg-10');
-                main.classList.add('col-12');
+                    if (sidebar.classList.contains('d-none')) {
+                        // MOSTRAR
+                        sidebar.classList.remove('d-none');
+                        sidebar.classList.add('d-md-block');
 
-                icon.classList.remove('bi-list');
-                icon.classList.add('bi-arrow-right-short');
-            }
-        }
-    </script>
+                        main.classList.remove('col-12');
+                        main.classList.add('col-md-9', 'col-lg-10');
 
-    <footer class="text-center text-secondary small py-4 border-top border-secondary">
-        © 2026 HashPass · Seguridad sin compromisos
-    </footer>
+                        icon.classList.remove('bi-arrow-right-short');
+                        icon.classList.add('bi-list');
+                    } else {
+                        // OCULTAR
+                        sidebar.classList.add('d-none');
+                        sidebar.classList.remove('d-md-block');
+
+                        main.classList.remove('col-md-9', 'col-lg-10');
+                        main.classList.add('col-12');
+
+                        icon.classList.remove('bi-list');
+                        icon.classList.add('bi-arrow-right-short');
+                    }
+                }
+            </script>
+
+            <footer class="text-center text-secondary small py-4 border-top border-secondary">
+                © 2026 HashPass · Seguridad sin compromisos
+            </footer>
 
 </body>
 

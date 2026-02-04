@@ -516,3 +516,33 @@ h6,
     transform: translateY(0px);
   }
 }
+
+/* =========================================
+   7. AJUSTES FORMULARIOS SEGURIDAD
+========================================= */
+
+/* Unificar el estilo del input con el botón del ojo */
+.input-group .form-control {
+    border-right: none; /* Quitamos el borde derecho del input */
+}
+
+.input-group .btn-ojito {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Borde gris suave */
+    border-left: none; /* Quitamos borde izquierdo para unirlo al input */
+    color: var(--texto-gris);
+}
+
+.input-group .btn-ojito:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--texto-blanco);
+}
+
+/* Forzar borde del input para que coincida con el botón */
+.input-group .form-control {
+    border-color: rgba(255, 255, 255, 0.2) !important; 
+}
+.input-group .form-control:focus {
+    border-color: var(--verde-principal) !important;
+    border-right: 1px solid var(--verde-principal) !important; /* Recupera borde al enfocar */
+}
