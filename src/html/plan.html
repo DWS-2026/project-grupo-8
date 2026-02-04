@@ -3,134 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planes - HashPass</title>
+    <title>Planes y precios - HashPass</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/styles.css">
 </head>
+
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark">
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark">
     <div class="container">
         <a class="navbar-brand fw-bold" href="index.html">
             <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
         </a>
 
-        <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#menu"
-                aria-controls="menu"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="menu">
-            <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item">
-                    <a class="btn btn-primary rounded-pill" href="plan.html">Planes</a>
-                </li>
-                <li class="nav-item ms-3">
-                    <a href="login.html" class="btn btn-primary rounded-pill">Acceder a mi Bóveda</a>
-                </li>
-            </ul>
+        <div class="d-flex ms-auto align-items-center gap-3">
+            <a class="btn btn-outline-light rounded-pill" href="plan.html">Planes</a>
+            <a class="btn btn-primary rounded-pill" href="login.html">
+                Acceder a mi Bóveda
+            </a>
         </div>
     </div>
 </nav>
 
-<div class="container py-5">
-    <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold">Elige tu plan</h1>
-        <p class="lead">Protección avanzada a tu medida</p>
-    </div>
 
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                    class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                    aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                    aria-label="Slide 3"></button>
+<!-- HERO -->
+<section class="container py-5 text-center">
+    <h1 class="display-5 fw-bold mb-3">Planes diseñados para tu seguridad</h1>
+    <p class="lead text-secondary">
+        Control total de tus credenciales con cifrado fuerte y auditoría continua.
+    </p>
+</section>
+
+<!-- PLANES -->
+<section class="container pb-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+
+        <!-- GRATUITO -->
+        <div class="col">
+            <div class="card h-100 p-4">
+                <div class="text-center mb-3">
+                    <i class="bi bi-unlock-fill fs-1 texto-gradient"></i>
+                    <h4 class="fw-bold mt-3">Gratuito</h4>
+                    <p class="small text-secondary">Para empezar</p>
+                </div>
+
+                <h2 class="display-6 fw-bold text-center mb-3">€0</h2>
+                <p class="text-center text-secondary mb-4">Gratis para siempre</p>
+
+                <ul class="list-unstyled small flex-grow-1">
+                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Hasta 10 credenciales</li>
+                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>1 dispositivo</li>
+                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Cifrado AES-256</li>
+                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Generador básico</li>
+                </ul>
+
+                <button class="btn btn-dark-custom w-100 mt-3">
+                    Empezar gratis
+                </button>
+            </div>
         </div>
 
-        <div class="carousel-inner">
+        <!-- PREMIUM -->
+        <div class="col">
+            <div class="card h-100 p-4 border border-success position-relative">
 
-            <!-- GRATUITO -->
-            <div class="carousel-item active">
-                <div class="d-flex justify-content-center">
-                    <div class="card shadow-sm" style="width: 22rem;">
-                        <div class="card-header bg-transparent border-0 text-center pt-4">
-                            <h3>Gratuito</h3>
-                        </div>
-                        <div class="card-body text-center">
-                            <h2 class="display-4 fw-bold">€0</h2>
-                            <ul class="list-unstyled mt-4 mb-4 text-start">
-                                <li><i class="bi bi-check-lg text-success me-2"></i>Hasta 10 contraseñas</li>
-                                <li><i class="bi bi-check-lg text-success me-2"></i>1 dispositivo</li>
-                            </ul>
-                            <button class="btn btn-outline-secondary w-100">Elegir plan</button>
-                        </div>
-                    </div>
+                <span class="badge bg-success position-absolute top-0 start-50 translate-middle">
+                    Recomendado
+                </span>
+
+                <div class="text-center mb-3 mt-3">
+                    <i class="bi bi-shield-check fs-1 texto-gradient"></i>
+                    <h4 class="fw-bold mt-3">Premium</h4>
+                    <p class="small text-secondary">Uso diario avanzado</p>
                 </div>
-            </div>
 
-            <!-- PREMIUM -->
-            <div class="carousel-item">
-                <div class="d-flex justify-content-center">
-                    <div class="card border-success shadow" style="width: 22rem;">
-                        <div class="card-header bg-success text-white text-center py-3">
-                            <span class="badge bg-white text-success mb-2">RECOMENDADO</span>
-                            <h3 class="m-0">Premium</h3>
-                        </div>
-                        <div class="card-body text-center">
-                            <h2 class="display-4 fw-bold">€4.99</h2>
-                            <ul class="list-unstyled mt-4 mb-4 text-start">
-                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Contraseñas ilimitadas</li>
-                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Multi-dispositivo</li>
-                            </ul>
-                            <button class="btn btn-success w-100 btn-lg">Actualizar ahora</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <h2 class="display-6 fw-bold text-center mb-3">€4.99</h2>
+                <p class="text-center text-secondary mb-4">por mes</p>
 
-            <!-- PLATINUM -->
-            <div class="carousel-item">
-                <div class="d-flex justify-content-center">
-                    <div class="card shadow-sm" style="width: 22rem;">
-                        <div class="card-header bg-transparent border-0 text-center pt-4">
-                            <h3>Platinum</h3>
-                        </div>
-                        <div class="card-body text-center">
-                            <h2 class="display-4 fw-bold">€9.99</h2>
-                            <ul class="list-unstyled mt-4 mb-4 text-start">
-                                <li><i class="bi bi-check-lg text-success me-2"></i>Todo Premium</li>
-                                <li><i class="bi bi-check-lg text-success me-2"></i>Generador de contraseñas</li>
-                                <li><i class="bi bi-check-lg text-success me-2"></i>2FA</li>
-                            </ul>
-                            <button class="btn btn-success w-100 btn-lg">Actualizar ahora</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <ul class="list-unstyled small flex-grow-1">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Credenciales ilimitadas</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Dispositivos ilimitados</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Auditoría de contraseñas</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Alertas de brechas</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Soporte prioritario</li>
+                </ul>
 
+                <button class="btn btn-primary w-100 mt-3">
+                    Actualizar a Premium
+                </button>
+            </div>
         </div>
 
-        <button class="carousel-control-prev" type="button"
-                data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-            <span class="visually-hidden">Anterior</span>
-        </button>
+        <!-- PLATINUM -->
+        <div class="col">
+            <div class="card h-100 p-4">
+                <div class="text-center mb-3">
+                    <i class="bi bi-gem fs-1 texto-gradient"></i>
+                    <h4 class="fw-bold mt-3">Platinum</h4>
+                    <p class="small text-secondary">Seguridad profesional</p>
+                </div>
 
-        <button class="carousel-control-next" type="button"
-                data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-            <span class="visually-hidden">Siguiente</span>
-        </button>
+                <h2 class="display-6 fw-bold text-center mb-3">€9.99</h2>
+                <p class="text-center text-secondary mb-4">por mes</p>
+
+                <ul class="list-unstyled small flex-grow-1">
+                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Todo Premium</li>
+                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>2FA avanzado</li>
+                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Compartición segura</li>
+                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Acceso de emergencia</li>
+                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Soporte 24/7</li>
+                </ul>
+
+                <button class="btn btn-dark-custom w-100 mt-3">
+                    Elegir Platinum
+                </button>
+            </div>
+        </div>
+
     </div>
-</div>
+</section>
+
+    <!-- FOOTER -->
+    <footer class="text-center text-secondary small py-4 border-top border-secondary">
+        © 2026 HashPass · Seguridad sin compromisos
+    </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

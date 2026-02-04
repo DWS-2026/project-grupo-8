@@ -13,41 +13,41 @@
 ## 🎭 **Preparación: Definición del Proyecto**
 
 ### **Descripción del Tema**
-Es una aplicación web de gestión segura de contraseñas cuyo objetivo es permitir a los usuarios almacenar, organizar y consultar credenciales de forma segura
+HashPass es Password Manager diseñado para proteger los credenciales de los usuarios. El objetivo principal es almacenar y organizar credenciales bajo un cifrado robusto.
+
 ### **Entidades**
 Indicar las entidades principales que gestionará la aplicación y las relaciones entre ellas:
 
 1. **[Entidad 1]**: Usuario
-2. **[Entidad 2]**: Entrada (Contraseña)
-3. **[Entidad 3]**: Rol
-4. **[Entidad 4]**: 
+2. **[Entidad 2]**: Credencial (Contraseña)
+3. **[Entidad 3]**: Plan (Suscripción)
+4. **[Entidad 4]**: Registro de Actividad (Log)
 
 **Relaciones entre entidades:**
-- Usuario – Contraseña:Un usuario puede tener múltiples contraseñas (1:N).
-- Usuario – Rol:Cada usuario tiene asignado un rol (N:1).
-- 
+- Un **Usuario** puede tener muchas **Credenciales** (1:N).
+- Un **Usuario** tiene asignado un único **Plan** activo (1:1).
+- Un **Usuario** genera múltiples **Registros de Actividad** (1:N).
 
 ### **Permisos de los Usuarios**
 Describir los permisos de cada tipo de usuario e indicar de qué entidades es dueño:
 
 * **Usuario Anónimo**: 
-  - Permisos: visualización del landing page, descripción, registro,
-  - No es dueño de ninguna entidad
+  - Permisos: Visualización de la Landing Page, consulta de Planes de precios, acceso a Login y Registro.
+  - No es dueño de ninguna entidad.
 
 * **Usuario Registrado**: 
-  - Permisos: Gestión de perfil, guardar contraseñas
-  - Es dueño de: Sus contraseñas, su Perfil de Usuario
+  - Permisos: Gestión completa de su Bóveda (Crear, Leer, Editar, Borrar credenciales), gestión de su perfil (avatar, email, contraseña maestra), visualización de su Panel Principal.
+  - Es dueño de: Sus **Credenciales** y su **Perfil de Usuario**.
 
 * **Administrador**: 
-  - Permisos: Gestión completa de usuarios, visualización de estadísticas, visualización de logs
-  - Es dueño de: Puede gestionar todos los Usuarios
+  - Permisos: Visualización del listado global de usuarios, capacidad para eliminar cuentas, visualización de estadísticas globales del sistema.
+  - Es dueño de: Gestión de **Usuarios**.
 
 ### **Imágenes**
 Indicar qué entidades tendrán asociadas una o varias imágenes:
 
-- **[Entidad con imágenes 1]**: [Ej: Usuario - Una imagen de avatar por usuario]
-- **[Entidad con imágenes 2]**: [Ej: Producto - Múltiples imágenes por producto (galería)]
-- **[Entidad con imágenes 3]**: [Ej: Categoría - Una imagen representativa por categoría]
+- **[Entidad con imágenes 1]**: Usuario - Un avatar de perfil personalizado (subido por el usuario o generado por API).
+- **[Entidad con imágenes 1]**: Credencial - Icono o logotipo del servicio asociado (ej: Logo de Netflix, Google, etc.).
 
 ---
 
