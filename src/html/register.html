@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Registrarse - HashPass</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+	<link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+	<nav class="navbar navbar-expand-lg navbar-dark">
+		<div class="container">
+			<a class="navbar-brand fw-bold" href="index.html">
+				<i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
+			</a>
+		</div>
+	</nav>
+
+	<main class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<div class="card p-4" style="min-height: 750px;">
+					<h3 class="mb-3 text-center fw-bold" style="font-weight: 800;">Crear nueva cuenta</h3>
+
+					<div id="alert" class="alert d-none" role="alert"></div>
+
+					<form id="registerForm" method="post" action="#">
+						<div class="mb-3">
+							<label for="fullname" class="form-label">Nombre completo</label>
+							<div class="input-group">
+								<input type="text" id="fullname" name="fullname" class="form-control login-email-input" placeholder="Ej: Juan Pérez" required>
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="email" class="form-label">Correo electrónico</label>
+							<div class="input-group">
+								<input type="email" id="email" name="email" class="form-control login-email-input" placeholder="Correo electrónico" required>
+							</div>
+							<small id="emailError" class="form-text text-danger" style="display:none;">Correo electrónico inválido</small>
+							<small id="emailSuccess" class="form-text text-success" style="display:none;">Correo válido</small>
+						</div>
+
+						<div class="mb-3">
+							<label for="phone" class="form-label">Teléfono (opcional)</label>
+							<div class="input-group">
+								<select id="country-code" class="form-select" style="flex: 0 0 auto; width: auto; border-radius: 6px 0 0 6px !important;">
+									<option value="+34">🇪🇸 +34 (España)</option>
+                                    <option value="+1">🇺🇸 +1 (EE.UU.)</option>
+									<option value="+44">🇬🇧 +44 (Reino Unido)</option>
+									<option value="+33">🇫🇷 +33 (Francia)</option>
+									<option value="+49">🇩🇪 +49 (Alemania)</option>
+									<option value="+39">🇮🇹 +39 (Italia)</option>
+									<option value="+43">🇦🇹 +43 (Austria)</option>
+									<option value="+41">🇨🇭 +41 (Suiza)</option>
+									<option value="+31">🇳🇱 +31 (Países Bajos)</option>
+									<option value="+32">🇧🇪 +32 (Bélgica)</option>
+									<option value="+351">🇵🇹 +351 (Portugal)</option>
+									<option value="+48">🇵🇱 +48 (Polonia)</option>
+									<option value="+46">🇸🇪 +46 (Suecia)</option>
+									<option value="+47">🇳🇴 +47 (Noruega)</option>
+									<option value="+45">🇩🇰 +45 (Dinamarca)</option>
+									<option value="+358">🇫🇮 +358 (Finlandia)</option>
+									<option value="+55">🇧🇷 +55 (Brasil)</option>
+									<option value="+52">🇲🇽 +52 (México)</option>
+									<option value="+54">🇦🇷 +54 (Argentina)</option>
+									<option value="+56">🇨🇱 +56 (Chile)</option>
+									<option value="+57">🇨🇴 +57 (Colombia)</option>
+									<option value="+591">🇧🇴 +591 (Bolivia)</option>
+									<option value="+598">🇺🇾 +598 (Uruguay)</option>
+									<option value="+81">🇯🇵 +81 (Japón)</option>
+									<option value="+86">🇨🇳 +86 (China)</option>
+									<option value="+91">🇮🇳 +91 (India)</option>
+									<option value="+82">🇰🇷 +82 (Corea del Sur)</option>
+									<option value="+60">🇲🇾 +60 (Malasia)</option>
+									<option value="+65">🇸🇬 +65 (Singapur)</option>
+									<option value="+61">🇦🇺 +61 (Australia)</option>
+									<option value="+64">🇳🇿 +64 (Nueva Zelanda)</option>
+									<option value="+27">🇿🇦 +27 (Sudáfrica)</option>
+								</select>
+								<input type="tel" id="phone" name="phone" class="form-control login-email-input" placeholder="Número de teléfono" style="border-radius: 0 6px 6px 0 !important;">
+							</div>
+						</div>
+
+						<div class="mb-3 mt-4 mt-5">
+							<label for="password" class="form-label">Contraseña Maestra</label>
+							<div class="input-group">
+								<input type="password" id="password" name="password" class="form-control login-email-input" placeholder="Contraseña segura" required>
+								<button class="btn btn-outline-secondary" type="button" aria-label="Mostrar contraseña" onclick="togglePasswordRegister(event)"><i class="bi bi-eye"></i></button>
+							</div>
+							<!-- Indicador de fortaleza -->
+							<label class="form-label mt-3">Nivel de seguridad de la contraseña</label>
+							<div class="progress" style="height: 6px;">
+								<div id="strengthBar" class="progress-bar"></div>
+							</div>
+							<small id="strengthText" class="form-text text-muted">Mínimo 8 caracteres con mayúsculas, números y símbolos.</small>
+						</div>
+
+						<div class="mb-3">
+							<label for="confirm-password" class="form-label">Confirmar Contraseña</label>
+							<div class="input-group">
+								<input type="password" id="confirm-password" name="confirm-password" class="form-control login-email-input" placeholder="Repite tu contraseña" required>
+								<button class="btn btn-outline-secondary" type="button" aria-label="Mostrar contraseña" onclick="toggleConfirmPasswordRegister(event)"><i class="bi bi-eye"></i></button>
+							</div>
+						</div>
+
+						<div class="mb-3 form-check">
+							<input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+							<label class="form-check-label" for="terms">
+								Acepto los <a href="#" class="muted-link">términos y condiciones</a>
+							</label>
+						</div>
+
+						<div class="d-grid gap-2">
+							<button id="registerBtn" class="btn btn-primary w-100 fw-bold" type="submit" disabled style="font-weight: 800;">Crear cuenta</button>
+						</div>
+					</form>
+
+					<div class="mt-4 text-center">
+						<p>¿Ya tienes cuenta? <a href="login.html" class="muted-link">Inicia sesión aquí</a></p>
+					</div>
+
+					<!-- Recuadro con logo similar a password-login -->
+					<div style="margin-top:8px;margin-bottom:25px;text-align:center;">
+						<a class="navbar-brand brand-logo-large lower-logo" style="display:inline-flex;align-items:center;justify-content:center;">
+							<i class="bi bi-shield-lock-fill text-success"></i>
+							<span>HashPass</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<footer class="text-center text-secondary small py-4 border-top border-secondary">
+		© 2026 HashPass · Seguridad sin compromisos
+	</footer>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.js"></script>
+
+	<script>
+		const passwordInput = document.getElementById('password');
+		const emailInput = document.getElementById('email');
+		const strengthBar = document.getElementById('strengthBar');
+		const strengthText = document.getElementById('strengthText');
+		const emailError = document.getElementById('emailError');
+		const emailSuccess = document.getElementById('emailSuccess');
+
+		const levels = [
+			{ text: "Muy débil", class: "bg-danger", width: "20%" },
+			{ text: "Débil", class: "bg-warning", width: "40%" },
+			{ text: "Aceptable", class: "bg-info", width: "60%" },
+			{ text: "Fuerte", class: "bg-primary", width: "80%" },
+			{ text: "Muy fuerte", class: "bg-success", width: "100%" }
+		];
+
+		// Validar formato de email
+		function isValidEmail(email) {
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			return emailRegex.test(email);
+		}
+
+		emailInput.addEventListener('input', () => {
+			const email = emailInput.value.trim();
+
+			if (!email) {
+				emailError.style.display = 'none';
+				emailSuccess.style.display = 'none';
+			} else if (isValidEmail(email)) {
+				emailError.style.display = 'none';
+				emailSuccess.style.display = 'block';
+			} else {
+				emailError.style.display = 'block';
+				emailSuccess.style.display = 'none';
+			}
+
+			validateForm();
+		});
+
+		function togglePasswordRegister(ev) {
+			const input = document.getElementById('password');
+			const icon = ev.currentTarget.querySelector('i');
+
+			if (input.type === "password") {
+				input.type = "text";
+				icon.classList.replace('bi-eye', 'bi-eye-slash');
+			} else {
+				input.type = "password";
+				icon.classList.replace('bi-eye-slash', 'bi-eye');
+			}
+		}
+
+		function toggleConfirmPasswordRegister(ev) {
+			const input = document.getElementById('confirm-password');
+			const icon = ev.currentTarget.querySelector('i');
+
+			if (input.type === "password") {
+				input.type = "text";
+				icon.classList.replace('bi-eye', 'bi-eye-slash');
+			} else {
+				input.type = "password";
+				icon.classList.replace('bi-eye-slash', 'bi-eye');
+			}
+		}
+
+		// Validar seguridad y fortaleza de contraseña
+		passwordInput.addEventListener('input', () => {
+			const value = passwordInput.value;
+
+			if (!value) {
+				strengthBar.style.width = "0%";
+				strengthBar.className = "progress-bar";
+				strengthText.textContent = "Mínimo 8 caracteres con mayúsculas, números y símbolos.";
+				validateForm();
+				return;
+			}
+
+			const result = zxcvbn(value);
+			const level = levels[result.score];
+
+			strengthBar.style.width = level.width;
+			strengthBar.className = `progress-bar ${level.class}`;
+			strengthText.textContent = `Nivel: ${level.text}`;
+
+			validateForm();
+		});
+
+		// Validar que todos los campos estén rellenos y términos aceptados
+		function validateForm() {
+			const fullname = document.getElementById('fullname').value.trim();
+			const email = document.getElementById('email').value.trim();
+			const password = document.getElementById('password').value.trim();
+			const confirmPassword = document.getElementById('confirm-password').value.trim();
+			const terms = document.getElementById('terms').checked;
+
+			const btn = document.getElementById('registerBtn');
+			
+			// Verificar si el email es válido
+			const emailValid = isValidEmail(email);
+
+			// Verificar si la contraseña es lo suficientemente fuerte (score >= 3)
+			let passwordStrong = false;
+			if (password) {
+				const result = zxcvbn(password);
+				passwordStrong = result.score >= 3;
+			}
+
+			const isValid = fullname && email && emailValid && password && confirmPassword && terms && passwordStrong && password === confirmPassword;
+
+			btn.disabled = !isValid;
+		}
+
+		// Agregar event listeners a todos los inputs
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('fullname').addEventListener('input', validateForm);
+			document.getElementById('password').addEventListener('input', validateForm);
+			document.getElementById('confirm-password').addEventListener('input', validateForm);
+			document.getElementById('terms').addEventListener('change', validateForm);
+		});
+	</script>
+
+</body>
+</html>
