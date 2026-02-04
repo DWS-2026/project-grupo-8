@@ -308,3 +308,32 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
     color: white !important;
     border-color: rgba(255, 255, 255, 0.2);
 }
+
+/* ESTILOS PARA CONFIGURACIÓN DE USUARIO */
+
+/* Ajuste fino para inputs en fondo oscuro */
+.form-control:focus {
+    background-color: transparent !important; /* Que no se ponga blanco al escribir */
+    color: white !important;
+    border-color: var(--verde-principal) !important;
+    box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
+}
+/* ESTILOS PARA LA FOTO DE PERFIL */
+.avatar-img {
+    width: 80px;      /* Tamaño del círculo */
+    height: 80px;
+    object-fit: cover; /* Recorta la imagen para que no se estire */
+    background-color: #1e293b; /* Fondo por si la imagen es transparente */
+    transition: transform 0.2s ease;
+}
+
+.avatar-img:hover {
+    transform: scale(1.05); /* Pequeño efecto zoom al pasar el ratón */
+}
+
+/* Efecto suave para el botón */
+.hover-scale:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s;
+}
+
