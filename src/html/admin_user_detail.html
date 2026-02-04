@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Usuario (Admin) - HashPass</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark border-bottom border-secondary border-opacity-25 bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="admin.html">
+                <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass <span
+                    class="badge bg-danger ms-2 small" style="font-size: 0.5em; vertical-align: middle;">ADMIN</span>
+            </a>
+
+            <div class="ms-auto">
+                <a href="admin.html" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                    <i class="bi bi-arrow-left me-2"></i>Volver al Listado
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="admin.html"
+                        class="text-secondary text-decoration-none">Usuarios</a></li>
+                <li class="breadcrumb-item active text-white" aria-current="page">Detalle de Usuario</li>
+            </ol>
+        </nav>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <div class="card border-0 bg-transparent mb-5">
+                    <div class="d-flex align-items-center gap-4 flex-wrap">
+                        <div class="position-relative">
+                            <img src="https://ui-avatars.com/api/?name=Nombre+Apellido&background=random&size=128"
+                                class="rounded-circle border border-2 border-secondary shadow-lg" width="100"
+                                height="100" alt="Avatar">
+                            <span
+                                class="position-absolute bottom-0 end-0 p-2 bg-success border border-dark rounded-circle"
+                                title="Usuario Activo">
+                                <span class="visually-hidden">Activo</span>
+                            </span>
+                        </div>
+                        <div>
+                            <h2 class="fw-bold text-white mb-1">Nombre Apellido</h2>
+                            <div class="d-flex align-items-center gap-2 text-secondary mb-2">
+                                <i class="bi bi-envelope"></i> usuario@ejemplo.com
+                                <button class="btn btn-link p-0 text-secondary" title="Copiar"><i
+                                        class="bi bi-copy"></i></button>
+                            </div>
+                            <span
+                                class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 rounded-pill px-3 me-2">
+                                Usuario Verificado
+                            </span>
+                            <span
+                                class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25 rounded-pill px-3">
+                                ID: 849201
+                            </span>
+                        </div>
+
+                        <div class="ms-auto d-flex gap-2">
+                            <button class="btn btn-dark-custom text-warning border-warning border-opacity-25">
+                                <i class="bi bi-envelope-paper me-2"></i> Reset Pass
+                            </button>
+                            <button
+                                class="btn btn-danger bg-danger bg-opacity-10 border-danger border-opacity-25 text-danger">
+                                <i class="bi bi-slash-circle me-2"></i> Suspender
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 tarjeta-dato">
+                            <h6 class="text-secondary text-uppercase small fw-bold">Plan Actual</h6>
+                            <h4 class="text-white">Gratuito</h4>
+                            <div class="progress mt-2" style="height: 4px;">
+                                <div class="progress-bar bg-success" style="width: 50%"></div>
+                            </div>
+                            <small class="text-white-50 mt-1 d-block">Uso de almacenamiento</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 tarjeta-dato">
+                            <h6 class="text-secondary text-uppercase small fw-bold">Riesgo</h6>
+                            <h4 class="text-success">Bajo</h4>
+                            <p class="text-secondary small mb-0 mt-2">0 contraseñas comprometidas</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 tarjeta-dato">
+                            <h6 class="text-secondary text-uppercase small fw-bold">Registro</h6>
+                            <h4 class="text-white">Ene 2026</h4>
+                            <p class="text-secondary small mb-0 mt-2">IP Registro: 192.168.1.1</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card tarjeta-dato p-4 mb-5">
+                    <h5 class="text-white fw-bold mb-4 border-bottom border-secondary border-opacity-25 pb-3">Auditoría
+                        de Cuenta</h5>
+                    <form>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary small">UUID Sistema</label>
+                                <input type="text"
+                                    class="form-control bg-dark text-white border-secondary border-opacity-25"
+                                    value="a1b2-c3d4-e5f6-7890" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary small">Último Login</label>
+                                <input type="text"
+                                    class="form-control bg-dark text-white border-secondary border-opacity-25"
+                                    value="04 Feb 2026 - 19:30 (España)" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary small">Intentos fallidos recientes</label>
+                                <input type="text"
+                                    class="form-control bg-dark text-white border-secondary border-opacity-25" value="0"
+                                    disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary small">Estado 2FA</label>
+                                <input type="text"
+                                    class="form-control bg-dark text-white border-secondary border-opacity-25"
+                                    value="Desactivado" disabled>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

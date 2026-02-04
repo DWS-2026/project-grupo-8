@@ -2,26 +2,35 @@
 1. VARIABLES / COLORES
 ========================================= */
 :root {
-    --fondo-oscuro: #0f172a;       
-    --fondo-tarjeta: #1e293b;      
-    --verde-principal: #10b981;    
-    --verde-hover: #059669;        
-    --texto-blanco: #ffffff;       
-    --texto-gris: #cbd5e1;       
+  --fondo-oscuro: #0f172a;
+  --fondo-tarjeta: #1e293b;
+  --verde-principal: #10b981;
+  --verde-hover: #059669;
+  --texto-blanco: #ffffff;
+  --texto-gris: #cbd5e1;
 }
 
 /* =========================================
 2. REGLAS GENERALES
 ========================================= */
 body {
-    background-color: var(--fondo-oscuro) !important;
-    color: var(--texto-gris) !important;
-    font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--fondo-oscuro) !important;
+  color: var(--texto-gris) !important;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
-
-h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
-    color: var(--texto-blanco) !important;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.display-4,
+.display-5 {
+  color: var(--texto-blanco) !important;
 }
 
 /* =========================================
@@ -30,30 +39,37 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
 
 /* Barra de navegación transparente */
 .navbar {
-    background-color: transparent !important;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+  background-color: transparent !important;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
-.navbar-brand { color: var(--texto-blanco) !important; }
-.nav-link { color: var(--texto-gris) !important; }
-.nav-link:hover, .nav-link.active { color: var(--verde-principal) !important; }
+.navbar-brand {
+  color: var(--texto-blanco) !important;
+}
+.nav-link {
+  color: var(--texto-gris) !important;
+}
+.nav-link:hover,
+.nav-link.active {
+  color: var(--verde-principal) !important;
+}
 
 /* Tarjetas oscuras */
 .card {
-    background-color: var(--fondo-tarjeta) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--texto-gris);
+  background-color: var(--fondo-tarjeta) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--texto-gris);
 }
 
 /* Botones Verdes */
 .btn-primary {
-    background-color: var(--verde-principal);
-    border: none;
-    font-weight: 600;
-    padding: 10px 25px;
+  background-color: var(--verde-principal);
+  border: none;
+  font-weight: 600;
+  padding: 10px 25px;
 }
 .btn-primary:hover {
-    background-color: var(--verde-hover);
+  background-color: var(--verde-hover);
 }
 
 /* =========================================
@@ -61,50 +77,66 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
 ========================================= */
 
 .icono-brillante {
-    width: 80px;            
-    height: 80px;           
-    background: linear-gradient(135deg, var(--verde-principal), var(--verde-hover));
-    border-radius: 20px;
-    display: flex;          
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
-    font-size: 2.5rem;
-    color: white;
-    margin: 0 auto; 
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(
+    135deg,
+    var(--verde-principal),
+    var(--verde-hover)
+  );
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
+  font-size: 2.5rem;
+  color: white;
+  margin: 0 auto;
 }
 
 /* Texto degradado  */
 .texto-gradient {
-    color: var(--verde-principal);
+  color: var(--verde-principal);
 }
-.left-panel { 
-    background: var(--texto-blanco); color: var(--fondo-oscuro); border-radius: 12px; padding: 40px; 
+.left-panel {
+  background: var(--texto-blanco);
+  color: var(--fondo-oscuro);
+  border-radius: 12px;
+  padding: 40px;
 }
-.email-pill { 
-    display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:999px; background: var(--texto-gris); box-shadow: 0 6px 18px rgba(2,6,23,0.06); 
+.email-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--texto-gris);
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
 }
-.email-pill i { 
-    color: var(--fondo-oscuro); 
+.email-pill i {
+  color: var(--fondo-oscuro);
 }
-.password-input .form-control { 
-    border: 2px solid #0b5bff; 
+.password-input .form-control {
+  border: 2px solid #0b5bff;
 }
-.big-cta { 
-    background: var(--verde-principal); color: var(--fondo-oscuro); font-weight:700; 
+.big-cta {
+  background: var(--verde-principal);
+  color: var(--fondo-oscuro);
+  font-weight: 700;
 }
-.right-decor { 
-    background: linear-gradient(180deg,#072c5a 0%, #01203d 100%); border-radius: 12px; min-height: 420px; 
+.right-decor {
+  background: linear-gradient(180deg, #072c5a 0%, #01203d 100%);
+  border-radius: 12px;
+  min-height: 420px;
 }
-.muted-link { 
-    color: #2563eb;
-} 
+.muted-link {
+  color: #2563eb;
+}
 
 .carousel-indicators {
-    position: static;
-    margin-top: 2rem;
+  position: static;
+  margin-top: 2rem;
 }
-
 
 /* =========================================
    ESTILOS ESPECÍFICOS PARA LA BARRA
@@ -113,58 +145,58 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
 
 /* 1. Estilo para el contenedor del buscador (Simula una sola caja) */
 .search-box {
-    background-color: var(--fondo-tarjeta);
-    border: 1px solid rgba(206, 181, 181, 0.163);
-    border-radius: 6px; /* Radio similar a Bootstrap standard */
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid rgba(206, 181, 181, 0.163);
+  border-radius: 6px; /* Radio similar a Bootstrap standard */
 }
 
 /* Color del texto del placeholder */
 .search-box input::placeholder {
-    color: var(--texto-gris);
-    opacity: 0.6;
+  color: var(--texto-gris);
+  opacity: 0.6;
 }
 
 /* 2. Clase genérica para botones oscuros (Filtro y Toggles) */
 .btn-dark-custom {
-    background-color: var(--fondo-tarjeta);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--texto-gris);
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--texto-gris);
 }
 
 .btn-dark-custom:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--texto-blanco);
-    border-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--texto-blanco);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Estado activo para el botón de vista (el cuadrado gris claro) */
 .btn-dark-custom.active {
-    background-color: rgba(254, 248, 248, 0.064); /* Un poco más claro */
-    color: var(--texto-blanco);
-    border-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(254, 248, 248, 0.064); /* Un poco más claro */
+  color: var(--texto-blanco);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 /* =========================================
    ESTILO SIDEBAR MÓVIL (TIPO POPUP)
 ========================================= */
 @media (max-width: 767.98px) {
-    #sidebar {
-        /* Posición fija para que flote sobre el contenido */
-        position: fixed !important;
-        top: 0;
-        left: 0;
-        height: 100vh; /* Ocupa toda la altura */
-        width: 280px;  /* Ancho del menú en móvil */
-        z-index: 1050; /* Asegura que esté por encima de todo */
-        
-        /* Aseguramos que tenga fondo (si no, sería transparente) */
-        background-color: var(--fondo-oscuro, #0f172a); 
-        border-right: 1px solid rgba(255,255,255,0.1);
-        box-shadow: 10px 0 30px rgba(0,0,0,0.5); /* Sombra para efecto 3D */
-        
-        padding-right: 1rem;
-        padding-left: 1rem;
-        overflow-y: auto; /* Scroll interno si el menú es muy largo */
-    }
+  #sidebar {
+    /* Posición fija para que flote sobre el contenido */
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100vh; /* Ocupa toda la altura */
+    width: 280px; /* Ancho del menú en móvil */
+    z-index: 1050; /* Asegura que esté por encima de todo */
+
+    /* Aseguramos que tenga fondo (si no, sería transparente) */
+    background-color: var(--fondo-oscuro, #0f172a);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5); /* Sombra para efecto 3D */
+
+    padding-right: 1rem;
+    padding-left: 1rem;
+    overflow-y: auto; /* Scroll interno si el menú es muy largo */
+  }
 }
 /* =========================================
    5. ESTILOS ADMIN
@@ -172,268 +204,292 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
 
 /* 1. Ajuste de la Tabla para que sea azul oscuro (no gris/negro) */
 .table-dark {
-    --bs-table-bg: var(--fondo-tarjeta);
-    --bs-table-hover-bg: rgba(255, 255, 255, 0.03);
-    color: var(--texto-gris);
-    border-color: rgba(255, 255, 255, 0.05);
+  --bs-table-bg: var(--fondo-tarjeta);
+  --bs-table-hover-bg: rgba(255, 255, 255, 0.03);
+  color: var(--texto-gris);
+  border-color: rgba(255, 255, 255, 0.05);
 }
 
 /* 2. Cabecera de la tabla con fondo ligeramente distinto */
 .cabecera-estilizada {
-    background-color: rgba(255, 255, 255, 0.05) !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
 }
 
 .cabecera-estilizada th {
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* 3. Contenedor de la tabla (Borde redondeado y sombra) */
 .tabla-contenedor {
-    background-color: var(--fondo-tarjeta);
-    border-radius: 12px;
-    overflow: hidden; /* Importante para que las esquinas de la tabla se recorten */
+  background-color: var(--fondo-tarjeta);
+  border-radius: 12px;
+  overflow: hidden; /* Importante para que las esquinas de la tabla se recorten */
 }
 
 /* 4. Efecto Focus en el Buscador (El brillo verde) */
 .search-box:focus-within {
-    border-color: var(--verde-principal) !important;
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
-    transition: all 0.3s ease;
+  border-color: var(--verde-principal) !important;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+  transition: all 0.3s ease;
 }
 
 /* 5. Dropdowns oscuros personalizados */
 .dropdown-menu-dark {
-    background-color: var(--fondo-tarjeta);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .dropdown-item:hover {
-    background-color: var(--verde-principal);
-    color: #fff !important;
+  background-color: var(--verde-principal);
+  color: #fff !important;
 }
 
 /* 6. Estilo específico para las tarjetas de estadísticas */
 .tarjeta-dato {
-    background-color: var(--fondo-tarjeta);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .tarjeta-dato:hover {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* 7. Badges (Etiquetas) más elegantes */
 .badge {
-    padding: 0.6em 1em;
-    font-weight: 500;
-    letter-spacing: 0.5px;
+  padding: 0.6em 1em;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 /* =========================================
    6. ESTILOS DASHBOARD
 ========================================= */
 /* Altura fija para la tabla y activación del scroll */
 .tabla-scroll-y {
-    max-height: 300px;  /* Altura del rectángulo */
-    min-height: 300px;  /* Fuerza que mantenga el tamaño aunque esté vacía */
-    overflow-y: auto;   /* Activa el scroll vertical si se pasa */
-    padding-right: 5px; /* Espacio para que el scroll no tape texto */
+  max-height: 300px; /* Altura del rectángulo */
+  min-height: 300px; /* Fuerza que mantenga el tamaño aunque esté vacía */
+  overflow-y: auto; /* Activa el scroll vertical si se pasa */
+  padding-right: 5px; /* Espacio para que el scroll no tape texto */
 }
 
 /* Personalización de la barra de scroll (Webkit: Chrome, Edge, Safari) */
 .tabla-scroll-y::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 
 .tabla-scroll-y::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
 }
 
 .tabla-scroll-y::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2); 
-    border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
 }
 
 .tabla-scroll-y::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.4); 
+  background: rgba(255, 255, 255, 0.4);
 }
 
 /* Encabezado de tabla pegajoso (Sticky Header) */
 .thead-sticky th {
-    position: sticky;
-    top: 0;
-    background-color: var(--fondo-tarjeta); /* Color sólido para tapar el texto que pasa por debajo */
-    z-index: 10;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 1rem; /* Espacio extra para que respire */
+  position: sticky;
+  top: 0;
+  background-color: var(
+    --fondo-tarjeta
+  ); /* Color sólido para tapar el texto que pasa por debajo */
+  z-index: 10;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 1rem; /* Espacio extra para que respire */
 }
 
 /* Ajuste para que los números grandes sean blancos como en la foto, no verdes */
 .text-white-stats {
-    color: var(--texto-blanco);
-    font-weight: 700;
+  color: var(--texto-blanco);
+  font-weight: 700;
 }
 /* EFECTO HOVER EN LAS FILAS */
 .hover-effect {
-    transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .hover-effect:hover {
-    background-color: rgba(255, 255, 255, 0.05); /* Se ilumina un poco al pasar el ratón */
-    cursor: pointer;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.05
+  ); /* Se ilumina un poco al pasar el ratón */
+  cursor: pointer;
 }
 
 /* BOTONES PEQUEÑOS DE ACCIÓN */
 .btn-icon-sm {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    border: 1px solid transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
 }
 
 .btn-icon-sm:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white !important;
-    border-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* ESTILOS PARA CONFIGURACIÓN DE USUARIO */
 
 /* Ajuste fino para inputs en fondo oscuro */
 .form-control:focus {
-    background-color: transparent !important; /* Que no se ponga blanco al escribir */
-    color: white !important;
-    border-color: var(--verde-principal) !important;
-    box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
+  background-color: transparent !important; /* Que no se ponga blanco al escribir */
+  color: white !important;
+  border-color: var(--verde-principal) !important;
+  box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
 }
 /* ESTILOS PARA LA FOTO DE PERFIL */
 .avatar-img {
-    width: 80px;      /* Tamaño del círculo */
-    height: 80px;
-    object-fit: cover; /* Recorta la imagen para que no se estire */
-    background-color: #1e293b; /* Fondo por si la imagen es transparente */
-    transition: transform 0.2s ease;
+  width: 80px; /* Tamaño del círculo */
+  height: 80px;
+  object-fit: cover; /* Recorta la imagen para que no se estire */
+  background-color: #1e293b; /* Fondo por si la imagen es transparente */
+  transition: transform 0.2s ease;
 }
 
 .avatar-img:hover {
-    transform: scale(1.05); /* Pequeño efecto zoom al pasar el ratón */
+  transform: scale(1.05); /* Pequeño efecto zoom al pasar el ratón */
 }
 
 /* Efecto suave para el botón */
 .hover-scale:hover {
-    transform: translateY(-2px);
-    transition: transform 0.2s;
+  transform: translateY(-2px);
+  transition: transform 0.2s;
 }
 
 /* === ESTILOS PARA EL NAVBAR USER MENU === */
 
 /* 1. La imagen del avatar en el navbar */
 .avatar-img-nav {
-    width: 42px;
-    height: 42px;
-    object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
-    padding: 2px; /* Espacio entre borde e imagen */
-    transition: all 0.2s ease;
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+  padding: 2px; /* Espacio entre borde e imagen */
+  transition: all 0.2s ease;
 }
 
 .avatar-img-nav:hover {
-    border-color: var(--verde-principal, #10b981); /* Se ilumina en verde al pasar */
-    transform: scale(1.05);
+  border-color: var(
+    --verde-principal,
+    #10b981
+  ); /* Se ilumina en verde al pasar */
+  transform: scale(1.05);
 }
 
 /* 2. Ocultar la flecha por defecto del dropdown toggle */
 .dropdown-toggle.no-arrow::after {
-    display: none !important;
+  display: none !important;
 }
 
 /* 3. Personalización del menú desplegable oscuro */
 .dropdown-menu-dark {
-    background-color: var(--fondo-tarjeta, #1e293b); /* Tu color de fondo de tarjetas */
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background-color: var(
+    --fondo-tarjeta,
+    #1e293b
+  ); /* Tu color de fondo de tarjetas */
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 /* Estilo de los elementos al pasar el ratón */
 .dropdown-item {
-    transition: all 0.15s ease;
-    border-radius: 6px; /* Bordes redondeados en los ítems */
-    margin: 0 4px; /* Un poco de margen lateral */
-    width: auto;
+  transition: all 0.15s ease;
+  border-radius: 6px; /* Bordes redondeados en los ítems */
+  margin: 0 4px; /* Un poco de margen lateral */
+  width: auto;
 }
 
 .dropdown-item:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: white !important;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white !important;
 }
 
 /* Hacer que el icono también cambie de color al pasar el ratón sobre el enlace */
 .dropdown-item:hover i {
-    color: var(--verde-principal, #10b981) !important;
-    transition: color 0.15s ease;
+  color: var(--verde-principal, #10b981) !important;
+  transition: color 0.15s ease;
 }
 
 /* 4. Estilo especial para "Cerrar sesión" (Rojo) */
 .dropdown-item.text-danger:hover {
-    background-color: rgba(220, 53, 69, 0.15) !important; /* Fondo rojo suave */
-    color: #ef4444 !important; /* Texto rojo vivo */
+  background-color: rgba(220, 53, 69, 0.15) !important; /* Fondo rojo suave */
+  color: #ef4444 !important; /* Texto rojo vivo */
 }
 
 .dropdown-item.text-danger:hover i {
-    color: #ef4444 !important; /* Icono rojo vivo */
+  color: #ef4444 !important; /* Icono rojo vivo */
 }
-
 
 /* IMAGEN FLOTANDO PARA LANDING */
 .hero-section {
-    padding: 80px 0;
-    position: relative;
-    overflow: hidden;
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
 }
 
 /* Efecto de brillo de fondo */
 .hero-bg-glow {
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0) 70%);
-    top: -100px;
-    right: -100px;
-    z-index: -1;
-    border-radius: 50%;
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(16, 185, 129, 0.15) 0%,
+    rgba(15, 23, 42, 0) 70%
+  );
+  top: -100px;
+  right: -100px;
+  z-index: -1;
+  border-radius: 50%;
 }
 
 /* Imagen del dashboard flotante */
 .hero-img-container {
-    position: relative;
-    animation: float 6s ease-in-out infinite;
+  position: relative;
+  animation: float 6s ease-in-out infinite;
 }
 
 .hero-img {
-    border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    border: 1px solid rgba(255,255,255,0.1);
-    transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);
-    transition: transform 0.5s ease;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);
+  transition: transform 0.5s ease;
 }
 
 .hero-img:hover {
-    transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+  transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
 }
 
 @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
-    100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
