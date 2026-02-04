@@ -12,252 +12,250 @@
 
 <body>
 
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <div class="container-fluid px-4">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid px-4">
 
-                <a class="navbar-brand fw-bold" href="index.html">
-                    <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
+            </a>
+
+            <div class="dropdown ms-auto">
+
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle no-arrow pe-0"
+                    id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="Usuario"
+                        class="avatar-img-nav rounded-circle">
                 </a>
 
-                <div class="dropdown ms-auto">
+                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end mt-3 shadow-lg border-0"
+                    aria-labelledby="userDropdown" style="min-width: 220px;">
 
-                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle no-arrow pe-0"
-                        id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="Usuario"
-                            class="avatar-img-nav rounded-circle">
-                    </a>
+                    <li>
+                        <h6 class="dropdown-header text-white-50 fw-normal py-2">
+                            Conectado como <br>
+                            <span class="text-white fw-bold">usuario@ejemplo.com</span>
+                        </h6>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider border-secondary opacity-25 mx-2">
+                    </li>
 
-                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end mt-3 shadow-lg border-0"
-                        aria-labelledby="userDropdown" style="min-width: 220px;">
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="config_user.html">
+                            <i class="bi bi-person-gear fs-5 text-secondary"></i>
+                            <span>Configuración de la cuenta</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="security_user.html">
+                            <i class="bi bi-shield-lock fs-5 text-secondary"></i>
+                            <span>Seguridad</span>
+                        </a>
+                    </li>
 
-                        <li>
-                            <h6 class="dropdown-header text-white-50 fw-normal py-2">
-                                Conectado como <br>
-                                <span class="text-white fw-bold">usuario@ejemplo.com</span>
-                            </h6>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider border-secondary opacity-25 mx-2">
-                        </li>
+                    <li>
+                        <hr class="dropdown-divider border-secondary opacity-25 mx-2 my-2">
+                    </li>
 
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="config_user.html">
-                                <i class="bi bi-person-gear fs-5 text-secondary"></i>
-                                <span>Configuración de la cuenta</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="security_user.html">
-                                <i class="bi bi-shield-lock fs-5 text-secondary"></i>
-                                <span>Seguridad</span>
-                            </a>
-                        </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="login.html">
+                            <i class="bi bi-lock fs-5 text-secondary"></i>
+                            <span>Bloquear</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-3 py-2 text-danger icon-link-hover-danger"
+                            href="login.html">
+                            <i class="bi bi-box-arrow-right fs-5"></i>
+                            <span>Cerrar sesión</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-                        <li>
-                            <hr class="dropdown-divider border-secondary opacity-25 mx-2 my-2">
-                        </li>
+        </div>
+    </nav>
 
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="login.html">
-                                <i class="bi bi-lock fs-5 text-secondary"></i>
-                                <span>Bloquear</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center gap-3 py-2 text-danger icon-link-hover-danger"
-                                href="login.html">
-                                <i class="bi bi-box-arrow-right fs-5"></i>
-                                <span>Cerrar sesión</span>
-                            </a>
-                        </li>
-                    </ul>
+    <div class="container-fluid">
+        <div class="row">
+
+            <div id="sidebar"
+                class="col-md-3 col-lg-2 d-none d-md-block border-end border-secondary border-opacity-25 pt-4 transition-all"
+                style="min-height: 100vh;">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-uppercase text-white-50 small fw-bold m-0">MENU</h6>
+
+                    <button class="btn btn-link text-white text-decoration-none p-0 d-md-none"
+                        onclick="toggleSidebar()">
+                        <i class="bi bi-x-lg fs-5"></i>
+                    </button>
                 </div>
 
+                <div class="nav flex-column nav-pills gap-1">
+
+                    <a class="nav-link " href="dashboard.html">
+                        <i class="bi bi-grid me-2"></i> Panel Principal
+                    </a>
+
+                    <a class="nav-link text-secondary" href="passwords.html">
+                        <i class="bi bi-shield-lock me-2"></i> Bóveda
+                    </a>
+
+                    <a class="nav-link " href="user.html">
+                        <i class="bi bi-person-vcard me-2"></i> Información de usuario
+                    </a>
+                    <a class="nav-link text-secondary" href="plan.html">
+                        <i class="bi bi-currency-dollar me-2"></i> Planes
+                    </a>
+                </div>
+                <a class="nav-link text-secondary d-flex justify-content-between align-items-center px-3 py-3"
+                    data-bs-toggle="collapse" href="#configMenu" role="button" aria-expanded="true"
+                    aria-controls="configMenu">
+
+                    <span>
+                        <i class="bi bi-gear me-2"></i> Configuración
+                    </span>
+                    <i class="bi bi-chevron-down" style="font-size: 0.8rem;"></i>
+                </a>
+
+                <div class="collapse show" id="configMenu">
+                    <div class="nav flex-column ms-3 mt-1 border-start border-secondary border-opacity-25 ps-2">
+
+                        <a class="nav-link text-secondary py-1 small hover-effect-link active bg-success bg-opacity-25 text-success"
+                            href="config_user.html">
+                            Configuración de Usuario
+                        </a>
+
+                        <a class="nav-link text-secondary py-1 small hover-effect-link" href="security_user.html">
+                            Seguridad
+                        </a>
+
+                    </div>
+                </div>
             </div>
-        </nav>
 
-        <div class="container-fluid">
-            <div class="row">
+            <main id="main-content" class="col-md-9 col-lg-10 pt-4 px-4 transition-all">
+                <main id="main-content" class="col-md-9 col-lg-10 pt-4 px-4 transition-all">
 
-                <div id="sidebar"
-                    class="col-md-3 col-lg-2 d-none d-md-block border-end border-secondary border-opacity-25 pt-4 transition-all"
-                    style="min-height: 100vh;">
-
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="text-uppercase text-white-50 small fw-bold m-0">Filtros</h6>
-
-                        <button class="btn btn-link text-white text-decoration-none p-0 d-md-none"
-                            onclick="toggleSidebar()">
-                            <i class="bi bi-x-lg fs-5"></i>
+                    <div class="mb-4">
+                        <button class="btn btn-dark-custom border-0" id="toggle-btn" onclick="toggleSidebar()">
+                            <i class="bi bi-list fs-4" id="toggle-icon"></i>
                         </button>
                     </div>
 
-                    <div class="nav flex-column nav-pills gap-1">
-                        <a class="nav-link text-secondary" href="passwords.html">
-                            <i class="bi bi-shield-lock me-2"></i> Bóvedas
-                        </a>
+                    <h3 class="text-white fw-bold mb-4">Cambiar correo electrónico</h3>
 
-                        <a class="nav-link text-secondary" href="#">
-                            <i class="bi bi-star me-2"></i> Favoritos
-                        </a>
+                    <div class="row">
+                        <div class="col-12 col-lg-7">
 
-                        <a class="nav-link " href="dashboard.html">
-                            <i class="bi bi-person-vcard me-2"></i> Información de usuario
-                        </a>
-                        
-                        <a class="nav-link text-secondary" href="plan.html">
-                        <i class="bi bi-currency-dollar me-2"></i> Planes
-                    </a>
-                    </div>
-                    <a class="nav-link text-secondary d-flex justify-content-between align-items-center px-3 py-3"
-                        data-bs-toggle="collapse" href="#configMenu" role="button" aria-expanded="true"
-                        aria-controls="configMenu">
-
-                        <span>
-                            <i class="bi bi-gear me-2"></i> Configuración
-                        </span>
-                        <i class="bi bi-chevron-down" style="font-size: 0.8rem;"></i>
-                    </a>
-
-                    <div class="collapse show" id="configMenu">
-                        <div class="nav flex-column ms-3 mt-1 border-start border-secondary border-opacity-25 ps-2">
-
-                            <a class="nav-link text-secondary py-1 small hover-effect-link active bg-success bg-opacity-25 text-success"
-                                href="config_user.html">
-                                Configuración de Usuario
-                            </a>
-
-                            <a class="nav-link text-secondary py-1 small hover-effect-link" href="security_user.html">
-                                Seguridad
-                            </a>
-
-                        </div>
-                    </div>
-                </div>
-
-                <main id="main-content" class="col-md-9 col-lg-10 pt-4 px-4 transition-all">
-                    <main id="main-content" class="col-md-9 col-lg-10 pt-4 px-4 transition-all">
-
-                        <div class="mb-4">
-                            <button class="btn btn-dark-custom border-0" id="toggle-btn" onclick="toggleSidebar()">
-                                <i class="bi bi-list fs-4" id="toggle-icon"></i>
-                            </button>
-                        </div>
-
-                        <h3 class="text-white fw-bold mb-4">Cambiar correo electrónico</h3>
-
-                            <div class="row">
-                                <div class="col-12 col-lg-7">
-
-                                    <div class="mb-3">
-                                        <label for="masterPass" class="form-label text-secondary small">Contraseña
-                                            maestra (requerido)</label>
-                                        <div class="input-group">
-                                            <input type="password"
-                                                class="form-control bg-transparent text-white border-secondary"
-                                                id="masterPass">
-                                            <button class="btn btn-outline-secondary border-secondary" type="button">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label for="newEmail" class="form-label text-secondary small">Nuevo correo
-                                            electrónico (requerido)</label>
-                                        <input type="email"
-                                            class="form-control bg-transparent text-white border-secondary"
-                                            id="newEmail">
-                                    </div>
-
-                                <button class="btn btn-primary px-4">Guardar</button>
+                            <div class="mb-3">
+                                <label for="masterPass" class="form-label text-secondary small">Contraseña
+                                    maestra (requerido)</label>
+                                <div class="input-group">
+                                    <input type="password"
+                                        class="form-control bg-transparent text-white border-secondary" id="masterPass">
+                                    <button class="btn btn-outline-secondary border-secondary" type="button">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
                             </div>
 
-                            <div class="col-12 col-lg-5 mt-4 mt-lg-0 ps-lg-5">
+                            <div class="mb-4">
+                                <label for="newEmail" class="form-label text-secondary small">Nuevo correo
+                                    electrónico (requerido)</label>
+                                <input type="email" class="form-control bg-transparent text-white border-secondary"
+                                    id="newEmail">
+                            </div>
 
-                                <div class="d-flex align-items-center gap-3 mb-4">
+                            <button class="btn btn-primary px-4">Guardar</button>
+                        </div>
 
-                                    <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff"
-                                        id="avatarPreview"
-                                        class="avatar-img rounded-circle border border-2 border-secondary"
-                                        alt="Foto de perfil">
+                        <div class="col-12 col-lg-5 mt-4 mt-lg-0 ps-lg-5">
 
-                                    <div>
-                                        <input type="file" id="avatarInput" class="d-none" accept="image/*"
-                                            onchange="previewImage(this)">
+                            <div class="d-flex align-items-center gap-3 mb-4">
 
-                                        <button class="btn btn-outline-light btn-sm rounded-pill px-3 mb-1 hover-scale"
-                                            onclick="document.getElementById('avatarInput').click()">
-                                            <i class="bi bi-camera me-2"></i>Seleccionar imagen
-                                        </button>
+                                <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff"
+                                    id="avatarPreview"
+                                    class="avatar-img rounded-circle border border-2 border-secondary"
+                                    alt="Foto de perfil">
 
-                                        <div class="text-white-50 small" style="font-size: 0.75rem;">
-                                            Máx. 2MB (JPG, PNG)
-                                        </div>
+                                <div>
+                                    <input type="file" id="avatarInput" class="d-none" accept="image/*"
+                                        onchange="previewImage(this)">
+
+                                    <button class="btn btn-outline-light btn-sm rounded-pill px-3 mb-1 hover-scale"
+                                        onclick="document.getElementById('avatarInput').click()">
+                                        <i class="bi bi-camera me-2"></i>Seleccionar imagen
+                                    </button>
+
+                                    <div class="text-white-50 small" style="font-size: 0.75rem;">
+                                        Máx. 2MB (JPG, PNG)
                                     </div>
                                 </div>
-
-
                             </div>
 
-                            <div style="height: 100px;"></div>
 
-                    </main>
-            </div>
+                        </div>
+
+                        <div style="height: 100px;"></div>
+
+                </main>
         </div>
+    </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-            function toggleSidebar() {
-                const sidebar = document.getElementById('sidebar');
-                const main = document.getElementById('main-content');
-                const icon = document.getElementById('toggle-icon');
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const main = document.getElementById('main-content');
+            const icon = document.getElementById('toggle-icon');
 
-                if (sidebar.classList.contains('d-none')) {
-                    // MOSTRAR
-                    sidebar.classList.remove('d-none');
-                    sidebar.classList.add('d-md-block');
+            if (sidebar.classList.contains('d-none')) {
+                // MOSTRAR
+                sidebar.classList.remove('d-none');
+                sidebar.classList.add('d-md-block');
 
-                    main.classList.remove('col-12');
-                    main.classList.add('col-md-9', 'col-lg-10');
+                main.classList.remove('col-12');
+                main.classList.add('col-md-9', 'col-lg-10');
 
-                    icon.classList.remove('bi-arrow-right-short');
-                    icon.classList.add('bi-list');
-                } else {
-                    // OCULTAR
-                    sidebar.classList.add('d-none');
-                    sidebar.classList.remove('d-md-block');
+                icon.classList.remove('bi-arrow-right-short');
+                icon.classList.add('bi-list');
+            } else {
+                // OCULTAR
+                sidebar.classList.add('d-none');
+                sidebar.classList.remove('d-md-block');
 
-                    main.classList.remove('col-md-9', 'col-lg-10');
-                    main.classList.add('col-12');
+                main.classList.remove('col-md-9', 'col-lg-10');
+                main.classList.add('col-12');
 
-                    icon.classList.remove('bi-list');
-                    icon.classList.add('bi-arrow-right-short');
-                }
+                icon.classList.remove('bi-list');
+                icon.classList.add('bi-arrow-right-short');
             }
-        </script>
-        <script>
-            function previewImage(input) {
-                // Si se ha seleccionado un archivo
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
+        }
+    </script>
+    <script>
+        function previewImage(input) {
+            // Si se ha seleccionado un archivo
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
-                    // Cuando termine de leer el archivo...
-                    reader.onload = function (e) {
-                        // ...cambiamos la fuente (src) de la imagen por la nueva foto
-                        document.getElementById('avatarPreview').src = e.target.result;
-                    }
-
-                    // Leer el archivo como una URL de datos
-                    reader.readAsDataURL(input.files[0]);
+                // Cuando termine de leer el archivo...
+                reader.onload = function (e) {
+                    // ...cambiamos la fuente (src) de la imagen por la nueva foto
+                    document.getElementById('avatarPreview').src = e.target.result;
                 }
+
+                // Leer el archivo como una URL de datos
+                reader.readAsDataURL(input.files[0]);
             }
-        </script>
+        }
+    </script>
 
 
-        <footer class="text-center text-secondary small py-4 border-top border-secondary">
-            © 2026 HashPass · Seguridad sin compromisos
-        </footer>
+    <footer class="text-center text-secondary small py-4 border-top border-secondary">
+        © 2026 HashPass · Seguridad sin compromisos
+    </footer>
 
 </body>
 
