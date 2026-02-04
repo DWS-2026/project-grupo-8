@@ -47,7 +47,7 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
 
 /* Botones Verdes */
 .btn-primary {
-    background-color: var(--verde-principal);
+    background-color: var(--verde-hover);
     border: none;
     font-weight: 600;
     padding: 10px 25px;
@@ -107,8 +107,21 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
     background: var(--verde-principal); color: var(--fondo-oscuro); font-weight:700; 
 }
 .right-decor { 
-    background: linear-gradient(180deg,#072c5a 0%, #01203d 100%); border-radius: 12px; min-height: 420px; 
+    background: linear-gradient(180deg, var(--fondo-tarjeta) 0%, #090f1f 100%); border-radius: 12px; min-height: 420px; 
 }
+.decor-logo { display:inline-flex; align-items:center; justify-content:center; width:auto; height:auto; padding:10px 12px; border-radius:14px; box-shadow:0 10px 26px rgba(0,0,0,0.28); background:transparent; }
+.brand-logo-large { display:flex; align-items:center; gap:0.1rem; color:inherit; text-decoration:none; }
+.brand-logo-large i { font-size:5.2rem; line-height:1; transform:translateY(-2px); }
+.brand-logo-large span { font-size:1.7rem; color:#fff; font-weight:800; line-height:1; margin-left:6px; }
+
+/* Color específico para el escudo del logo inferior en la página de login */
+.lower-logo i { color: var(--verde-hover) !important; }
+
+/* Redondear esquinas solo del input de email en login */
+.login-email-input {
+    border-radius: 6px !important;
+}
+
 .muted-link { 
     color: #2563eb;
 } 
