@@ -15,20 +15,66 @@
     <body>
 
         <nav class="navbar navbar-expand-lg navbar-dark">
-            <div class="container-fluid px-4"> <a class="navbar-brand fw-bold" href="index.html">
+            <div class="container-fluid px-4">
+
+                <a class="navbar-brand fw-bold" href="index.html">
                     <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="menu">
-                    <ul class="navbar-nav ms-auto align-items-center">
-                        <li class="nav-item"><a class="nav-link" href="login.html">Cerrar sesión</a></li>
-                        <li class="nav-item ms-3">
-                            <a href="login.html" class="btn btn-primary rounded-pill">Bloquear</a>
+
+                <div class="dropdown ms-auto">
+
+                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle no-arrow pe-0"
+                        id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="Usuario"
+                            class="avatar-img-nav rounded-circle">
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end mt-3 shadow-lg border-0"
+                        aria-labelledby="userDropdown" style="min-width: 220px;">
+
+                        <li>
+                            <h6 class="dropdown-header text-white-50 fw-normal py-2">
+                                Conectado como <br>
+                                <span class="text-white fw-bold">usuario@ejemplo.com</span>
+                            </h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider border-secondary opacity-25 mx-2">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="config_user.html">
+                                <i class="bi bi-person-gear fs-5 text-secondary"></i>
+                                <span>Configuración de la cuenta</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="security_user.html">
+                                <i class="bi bi-shield-lock fs-5 text-secondary"></i>
+                                <span>Seguridad</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider border-secondary opacity-25 mx-2 my-2">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="login.html">
+                                <i class="bi bi-lock fs-5 text-secondary"></i>
+                                <span>Bloquear</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-3 py-2 text-danger icon-link-hover-danger"
+                                href="login.html">
+                                <i class="bi bi-box-arrow-right fs-5"></i>
+                                <span>Cerrar sesión</span>
+                            </a>
                         </li>
                     </ul>
                 </div>
+
             </div>
         </nav>
 
@@ -61,40 +107,38 @@
                             <i class="bi bi-person-vcard me-2"></i> Información de usuario
                         </a>
                     </div>
-                    <a class="nav-link text-secondary d-flex justify-content-between align-items-center px-3 py-3" 
-   data-bs-toggle="collapse" 
-   href="#configMenu" 
-   role="button" 
-   aria-expanded="true" 
-   aria-controls="configMenu">
-    
-    <span>
-        <i class="bi bi-gear me-2"></i> Configuración
-    </span>
-    <i class="bi bi-chevron-down" style="font-size: 0.8rem;"></i>
-</a>
+                    <a class="nav-link text-secondary d-flex justify-content-between align-items-center px-3 py-3"
+                        data-bs-toggle="collapse" href="#configMenu" role="button" aria-expanded="true"
+                        aria-controls="configMenu">
 
-<div class="collapse show" id="configMenu">
-    <div class="nav flex-column ms-3 mt-1 border-start border-secondary border-opacity-25 ps-2">
-        
-        <a class="nav-link text-secondary py-1 small hover-effect-link" href="config_user.html">
-            Configuración de Usuario
-        </a>
-        
-        <a class="nav-link text-secondary py-1 small hover-effect-link active bg-success bg-opacity-25 text-success" href="security_user.html">
-            Seguridad
-        </a>
+                        <span>
+                            <i class="bi bi-gear me-2"></i> Configuración
+                        </span>
+                        <i class="bi bi-chevron-down" style="font-size: 0.8rem;"></i>
+                    </a>
 
-    </div>
-</div>
+                    <div class="collapse show" id="configMenu">
+                        <div class="nav flex-column ms-3 mt-1 border-start border-secondary border-opacity-25 ps-2">
+
+                            <a class="nav-link text-secondary py-1 small hover-effect-link" href="config_user.html">
+                                Configuración de Usuario
+                            </a>
+
+                            <a class="nav-link text-secondary py-1 small hover-effect-link active bg-success bg-opacity-25 text-success"
+                                href="security_user.html">
+                                Seguridad
+                            </a>
+
+                        </div>
+                    </div>
                 </div>
 
                 <main id="main-content" class="col-md-9 col-lg-10 pt-4 px-4 transition-all">
-<div class="mb-4">
-                    <button class="btn btn-dark-custom border-0" id="toggle-btn" onclick="toggleSidebar()">
-                        <i class="bi bi-list fs-4" id="toggle-icon"></i>
-                    </button>
-                </div>
+                    <div class="mb-4">
+                        <button class="btn btn-dark-custom border-0" id="toggle-btn" onclick="toggleSidebar()">
+                            <i class="bi bi-list fs-4" id="toggle-icon"></i>
+                        </button>
+                    </div>
                     <div class="row mb-4">
                         <div class="col-md-4 mb-3">
                             <div class="tarjeta-dato text-center p-4">

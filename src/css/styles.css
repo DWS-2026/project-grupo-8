@@ -337,3 +337,60 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
     transition: transform 0.2s;
 }
 
+/* === ESTILOS PARA EL NAVBAR USER MENU === */
+
+/* 1. La imagen del avatar en el navbar */
+.avatar-img-nav {
+    width: 42px;
+    height: 42px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+    padding: 2px; /* Espacio entre borde e imagen */
+    transition: all 0.2s ease;
+}
+
+.avatar-img-nav:hover {
+    border-color: var(--verde-principal, #10b981); /* Se ilumina en verde al pasar */
+    transform: scale(1.05);
+}
+
+/* 2. Ocultar la flecha por defecto del dropdown toggle */
+.dropdown-toggle.no-arrow::after {
+    display: none !important;
+}
+
+/* 3. Personalización del menú desplegable oscuro */
+.dropdown-menu-dark {
+    background-color: var(--fondo-tarjeta, #1e293b); /* Tu color de fondo de tarjetas */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Estilo de los elementos al pasar el ratón */
+.dropdown-item {
+    transition: all 0.15s ease;
+    border-radius: 6px; /* Bordes redondeados en los ítems */
+    margin: 0 4px; /* Un poco de margen lateral */
+    width: auto;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white !important;
+}
+
+/* Hacer que el icono también cambie de color al pasar el ratón sobre el enlace */
+.dropdown-item:hover i {
+    color: var(--verde-principal, #10b981) !important;
+    transition: color 0.15s ease;
+}
+
+/* 4. Estilo especial para "Cerrar sesión" (Rojo) */
+.dropdown-item.text-danger:hover {
+    background-color: rgba(220, 53, 69, 0.15) !important; /* Fondo rojo suave */
+    color: #ef4444 !important; /* Texto rojo vivo */
+}
+
+.dropdown-item.text-danger:hover i {
+    color: #ef4444 !important; /* Icono rojo vivo */
+}
+
