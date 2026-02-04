@@ -2,12 +2,12 @@
 1. VARIABLES / COLORES
 ========================================= */
 :root {
-    --fondo-oscuro: #0f172a;
-    --fondo-tarjeta: #1e293b;
-    --verde-principal: #10b981;
-    --verde-hover: #059669;
-    --texto-blanco: #ffffff;
-    --texto-gris: #cbd5e1;
+    --fondo-oscuro: #0f172a;       
+    --fondo-tarjeta: #1e293b;      
+    --verde-principal: #10b981;    
+    --verde-hover: #059669;        
+    --texto-blanco: #ffffff;       
+    --texto-gris: #cbd5e1;       
 }
 
 /* =========================================
@@ -20,14 +20,7 @@ body {
 }
 
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.display-4,
-.display-5 {
+h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
     color: var(--texto-blanco) !important;
 }
 
@@ -41,19 +34,9 @@ h6,
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
 }
-
-.navbar-brand {
-    color: var(--texto-blanco) !important;
-}
-
-.nav-link {
-    color: var(--texto-gris) !important;
-}
-
-.nav-link:hover,
-.nav-link.active {
-    color: var(--verde-principal) !important;
-}
+.navbar-brand { color: var(--texto-blanco) !important; }
+.nav-link { color: var(--texto-gris) !important; }
+.nav-link:hover, .nav-link.active { color: var(--verde-principal) !important; }
 
 /* Tarjetas oscuras */
 .card {
@@ -64,12 +47,11 @@ h6,
 
 /* Botones Verdes */
 .btn-primary {
-    background-color: var(--verde-principal);
+    background-color: var(--verde-hover);
     border: none;
     font-weight: 600;
     padding: 10px 25px;
 }
-
 .btn-primary:hover {
     background-color: var(--verde-hover);
 }
@@ -79,64 +61,70 @@ h6,
 ========================================= */
 
 .icono-brillante {
-    width: 80px;
-    height: 80px;
+    width: 80px;            
+    height: 80px;           
     background: linear-gradient(135deg, var(--verde-principal), var(--verde-hover));
     border-radius: 20px;
-    display: flex;
+    display: flex;          
     align-items: center;
     justify-content: center;
     box-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
     font-size: 2.5rem;
     color: white;
-    margin: 0 auto;
+    margin: 0 auto; 
 }
 
 /* Texto degradado  */
 .texto-gradient {
     color: var(--verde-principal);
 }
-
-.left-panel {
-    background: var(--texto-blanco);
-    color: var(--fondo-oscuro);
-    border-radius: 12px;
-    padding: 40px;
+.left-panel { 
+    background: var(--texto-blanco); color: var(--fondo-oscuro); border-radius: 12px; padding: 40px; 
 }
-
-.email-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 18px;
-    border-radius: 999px;
-    background: var(--texto-gris);
-    box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+.email-pill { 
+    display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:999px; background: var(--texto-gris); box-shadow: 0 6px 18px rgba(2,6,23,0.06); 
 }
-
-.email-pill i {
-    color: var(--fondo-oscuro);
+.email-pill i { 
+    color: var(--fondo-oscuro); 
 }
-
-.password-input .form-control {
+.password-input .form-control { 
     border: 2px solid #0b5bff;
+    color: #000 !important;
+    font-size: 1rem;
+    background-color: #fff !important;
+}
+.password-input .form-control::placeholder {
+    color: #999 !important;
+    opacity: 0.7;
+}
+.password-input .form-control:focus {
+    background-color: #fff !important;
+    color: #000 !important;
+    border-color: #0b5bff !important;
+    box-shadow: 0 0 0 0.25rem rgba(11, 91, 255, 0.25) !important;
+}
+.big-cta { 
+    background: var(--verde-principal); color: var(--fondo-oscuro); font-weight:700; 
+}
+.right-decor { 
+    background: linear-gradient(180deg, var(--fondo-tarjeta) 0%, #090f1f 100%); border-radius: 12px; min-height: 420px; 
+}
+.decor-logo { display:inline-flex; align-items:center; justify-content:center; width:auto; height:auto; padding:10px 12px; border-radius:14px; box-shadow:0 10px 26px rgba(0,0,0,0.28); background:transparent; }
+.brand-logo-large { display:flex; align-items:center; gap:0.1rem; color:inherit; text-decoration:none; }
+.brand-logo-large i { font-size:5.2rem; line-height:1; transform:translateY(-2px); }
+.brand-logo-large span { font-size:1.7rem; color:#fff; font-weight:800; line-height:1; margin-left:6px; }
+
+/* Color específico para el escudo del logo inferior en la página de login */
+.lower-logo i { color: var(--verde-hover) !important; }
+
+/* Redondear esquinas solo del input de email en login */
+.login-email-input {
+    border-radius: 6px !important;
 }
 
-.big-cta {
-    background: var(--verde-principal);
-    color: var(--fondo-oscuro);
-    font-weight: 700;
-}
-
-.right-decor {
-    background: linear-gradient(180deg, #072c5a 0%, #01203d 100%);
-    border-radius: 12px;
-    min-height: 420px;
-}
-
-.muted-link {
+.muted-link { 
     color: #2563eb;
-}
+} 
 
 .carousel-indicators {
     position: static;
@@ -153,8 +141,7 @@ h6,
 .search-box {
     background-color: var(--fondo-tarjeta);
     border: 1px solid rgba(206, 181, 181, 0.163);
-    border-radius: 6px;
-    /* Radio similar a Bootstrap standard */
+    border-radius: 6px; /* Radio similar a Bootstrap standard */
 }
 
 /* Color del texto del placeholder */
@@ -178,12 +165,10 @@ h6,
 
 /* Estado activo para el botón de vista (el cuadrado gris claro) */
 .btn-dark-custom.active {
-    background-color: rgba(254, 248, 248, 0.064);
-    /* Un poco más claro */
+    background-color: rgba(254, 248, 248, 0.064); /* Un poco más claro */
     color: var(--texto-blanco);
     border-color: rgba(255, 255, 255, 0.1);
 }
-
 /* =========================================
    ESTILO SIDEBAR MÓVIL (TIPO POPUP)
 ========================================= */
@@ -193,26 +178,20 @@ h6,
         position: fixed !important;
         top: 0;
         left: 0;
-        height: 100vh;
-        /* Ocupa toda la altura */
-        width: 280px;
-        /* Ancho del menú en móvil */
-        z-index: 1050;
-        /* Asegura que esté por encima de todo */
-
+        height: 100vh; /* Ocupa toda la altura */
+        width: 280px;  /* Ancho del menú en móvil */
+        z-index: 1050; /* Asegura que esté por encima de todo */
+        
         /* Aseguramos que tenga fondo (si no, sería transparente) */
-        background-color: var(--fondo-oscuro, #0f172a);
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
-        /* Sombra para efecto 3D */
-
+        background-color: var(--fondo-oscuro, #0f172a); 
+        border-right: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 10px 0 30px rgba(0,0,0,0.5); /* Sombra para efecto 3D */
+        
         padding-right: 1rem;
         padding-left: 1rem;
-        overflow-y: auto;
-        /* Scroll interno si el menú es muy largo */
+        overflow-y: auto; /* Scroll interno si el menú es muy largo */
     }
 }
-
 /* =========================================
    5. ESTILOS ADMIN
 ========================================= */
@@ -242,8 +221,7 @@ h6,
 .tabla-contenedor {
     background-color: var(--fondo-tarjeta);
     border-radius: 12px;
-    overflow: hidden;
-    /* Importante para que las esquinas de la tabla se recorten */
+    overflow: hidden; /* Importante para que las esquinas de la tabla se recorten */
 }
 
 /* 4. Efecto Focus en el Buscador (El brillo verde) */
@@ -284,20 +262,15 @@ h6,
     font-weight: 500;
     letter-spacing: 0.5px;
 }
-
 /* =========================================
    6. ESTILOS DASHBOARD
 ========================================= */
 /* Altura fija para la tabla y activación del scroll */
 .tabla-scroll-y {
-    max-height: 300px;
-    /* Altura del rectángulo */
-    min-height: 300px;
-    /* Fuerza que mantenga el tamaño aunque esté vacía */
-    overflow-y: auto;
-    /* Activa el scroll vertical si se pasa */
-    padding-right: 5px;
-    /* Espacio para que el scroll no tape texto */
+    max-height: 300px;  /* Altura del rectángulo */
+    min-height: 300px;  /* Fuerza que mantenga el tamaño aunque esté vacía */
+    overflow-y: auto;   /* Activa el scroll vertical si se pasa */
+    padding-right: 5px; /* Espacio para que el scroll no tape texto */
 }
 
 /* Personalización de la barra de scroll (Webkit: Chrome, Edge, Safari) */
@@ -311,24 +284,22 @@ h6,
 }
 
 .tabla-scroll-y::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.2); 
     border-radius: 4px;
 }
 
 .tabla-scroll-y::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.4); 
 }
 
 /* Encabezado de tabla pegajoso (Sticky Header) */
 .thead-sticky th {
     position: sticky;
     top: 0;
-    background-color: var(--fondo-tarjeta);
-    /* Color sólido para tapar el texto que pasa por debajo */
+    background-color: var(--fondo-tarjeta); /* Color sólido para tapar el texto que pasa por debajo */
     z-index: 10;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 1rem;
-    /* Espacio extra para que respire */
+    padding-bottom: 1rem; /* Espacio extra para que respire */
 }
 
 /* Ajuste para que los números grandes sean blancos como en la foto, no verdes */
@@ -336,15 +307,13 @@ h6,
     color: var(--texto-blanco);
     font-weight: 700;
 }
-
 /* EFECTO HOVER EN LAS FILAS */
 .hover-effect {
     transition: background-color 0.2s ease;
 }
 
 .hover-effect:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    /* Se ilumina un poco al pasar el ratón */
+    background-color: rgba(255, 255, 255, 0.05); /* Se ilumina un poco al pasar el ratón */
     cursor: pointer;
 }
 
@@ -370,28 +339,22 @@ h6,
 
 /* Ajuste fino para inputs en fondo oscuro */
 .form-control:focus {
-    background-color: transparent !important;
-    /* Que no se ponga blanco al escribir */
+    background-color: transparent !important; /* Que no se ponga blanco al escribir */
     color: white !important;
     border-color: var(--verde-principal) !important;
     box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
 }
-
 /* ESTILOS PARA LA FOTO DE PERFIL */
 .avatar-img {
-    width: 80px;
-    /* Tamaño del círculo */
+    width: 80px;      /* Tamaño del círculo */
     height: 80px;
-    object-fit: cover;
-    /* Recorta la imagen para que no se estire */
-    background-color: #1e293b;
-    /* Fondo por si la imagen es transparente */
+    object-fit: cover; /* Recorta la imagen para que no se estire */
+    background-color: #1e293b; /* Fondo por si la imagen es transparente */
     transition: transform 0.2s ease;
 }
 
 .avatar-img:hover {
-    transform: scale(1.05);
-    /* Pequeño efecto zoom al pasar el ratón */
+    transform: scale(1.05); /* Pequeño efecto zoom al pasar el ratón */
 }
 
 /* Efecto suave para el botón */
@@ -407,16 +370,13 @@ h6,
     width: 42px;
     height: 42px;
     object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    /* Borde sutil */
-    padding: 2px;
-    /* Espacio entre borde e imagen */
+    border: 2px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+    padding: 2px; /* Espacio entre borde e imagen */
     transition: all 0.2s ease;
 }
 
 .avatar-img-nav:hover {
-    border-color: var(--verde-principal, #10b981);
-    /* Se ilumina en verde al pasar */
+    border-color: var(--verde-principal, #10b981); /* Se ilumina en verde al pasar */
     transform: scale(1.05);
 }
 
@@ -427,18 +387,15 @@ h6,
 
 /* 3. Personalización del menú desplegable oscuro */
 .dropdown-menu-dark {
-    background-color: var(--fondo-tarjeta, #1e293b);
-    /* Tu color de fondo de tarjetas */
+    background-color: var(--fondo-tarjeta, #1e293b); /* Tu color de fondo de tarjetas */
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 /* Estilo de los elementos al pasar el ratón */
 .dropdown-item {
     transition: all 0.15s ease;
-    border-radius: 6px;
-    /* Bordes redondeados en los ítems */
-    margin: 0 4px;
-    /* Un poco de margen lateral */
+    border-radius: 6px; /* Bordes redondeados en los ítems */
+    margin: 0 4px; /* Un poco de margen lateral */
     width: auto;
 }
 
@@ -455,15 +412,12 @@ h6,
 
 /* 4. Estilo especial para "Cerrar sesión" (Rojo) */
 .dropdown-item.text-danger:hover {
-    background-color: rgba(220, 53, 69, 0.15) !important;
-    /* Fondo rojo suave */
-    color: #ef4444 !important;
-    /* Texto rojo vivo */
+    background-color: rgba(220, 53, 69, 0.15) !important; /* Fondo rojo suave */
+    color: #ef4444 !important; /* Texto rojo vivo */
 }
 
 .dropdown-item.text-danger:hover i {
-    color: #ef4444 !important;
-    /* Icono rojo vivo */
+    color: #ef4444 !important; /* Icono rojo vivo */
 }
 
 
@@ -494,8 +448,8 @@ h6,
 
 .hero-img {
     border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
     transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);
     transition: transform 0.5s ease;
 }
@@ -505,17 +459,9 @@ h6,
 }
 
 @keyframes float {
-    0% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-20px);
-    }
-
-    100% {
-        transform: translateY(0px);
-    }
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
 }
 
 /* =========================================
