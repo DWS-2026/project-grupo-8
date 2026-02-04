@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - HashPass</title>
+    <title>Perfil - HashPass</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/styles.css">
@@ -20,7 +20,6 @@
             </a>
 
             <div class="dropdown ms-auto">
-
                 <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle no-arrow pe-0"
                     id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="Usuario"
@@ -29,7 +28,6 @@
 
                 <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end mt-3 shadow-lg border-0"
                     aria-labelledby="userDropdown" style="min-width: 220px;">
-
                     <li>
                         <h6 class="dropdown-header text-white-50 fw-normal py-2">
                             Conectado como <br>
@@ -39,7 +37,6 @@
                     <li>
                         <hr class="dropdown-divider border-secondary opacity-25 mx-2">
                     </li>
-
                     <li>
                         <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="config_user.html">
                             <i class="bi bi-person-gear fs-5 text-secondary"></i>
@@ -52,11 +49,9 @@
                             <span>Seguridad</span>
                         </a>
                     </li>
-
                     <li>
                         <hr class="dropdown-divider border-secondary opacity-25 mx-2 my-2">
                     </li>
-
                     <li>
                         <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="login.html">
                             <i class="bi bi-lock fs-5 text-secondary"></i>
@@ -72,7 +67,6 @@
                     </li>
                 </ul>
             </div>
-
         </div>
     </nav>
 
@@ -84,10 +78,8 @@
                 style="min-height: 100vh;">
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="text-uppercase text-white-50 small fw-bold m-0">MENU</h6>
-
-                    <button class="btn btn-link text-white text-decoration-none p-0 d-md-none"
-                        onclick="toggleSidebar()">
+                    <h6 class="text-uppercase text-white-50 small fw-bold m-0">MENU</h6> <button
+                        class="btn btn-link text-white text-decoration-none p-0 d-md-none" onclick="toggleSidebar()">
                         <i class="bi bi-x-lg fs-5"></i>
                     </button>
                 </div>
@@ -109,8 +101,9 @@
                         <i class="bi bi-currency-dollar me-2"></i> Planes
                     </a>
                 </div>
+
                 <a class="nav-link text-secondary d-flex justify-content-between align-items-center px-3 py-3"
-                    data-bs-toggle="collapse" href="#configMenu" role="button" aria-expanded="true"
+                    data-bs-toggle="collapse" href="#configMenu" role="button" aria-expanded="false"
                     aria-controls="configMenu">
 
                     <span>
@@ -119,11 +112,10 @@
                     <i class="bi bi-chevron-down" style="font-size: 0.8rem;"></i>
                 </a>
 
-                <div class="collapse show" id="configMenu">
+                <div class="collapse" id="configMenu">
                     <div class="nav flex-column ms-3 mt-1 border-start border-secondary border-opacity-25 ps-2">
 
-                        <a class="nav-link text-secondary py-1 small hover-effect-link active bg-success bg-opacity-25 text-success"
-                            href="config_user.html">
+                        <a class="nav-link text-secondary py-1 small hover-effect-link" href="config_user.html">
                             Configuración de Usuario
                         </a>
 
@@ -136,71 +128,103 @@
             </div>
 
             <main id="main-content" class="col-md-9 col-lg-10 pt-4 px-4 transition-all">
-                <main id="main-content" class="col-md-9 col-lg-10 pt-4 px-4 transition-all">
 
-                    <div class="mb-4">
-                        <button class="btn btn-dark-custom border-0" id="toggle-btn" onclick="toggleSidebar()">
-                            <i class="bi bi-list fs-4" id="toggle-icon"></i>
-                        </button>
+                <div class="mb-4">
+                    <button class="btn btn-dark-custom border-0" id="toggle-btn" onclick="toggleSidebar()">
+                        <i class="bi bi-list fs-4" id="toggle-icon"></i>
+                    </button>
+                </div>
+
+                <div class="card border-0 bg-transparent mb-5">
+                    <div class="d-flex align-items-center gap-4 flex-column flex-md-row">
+                        <div class="position-relative">
+                            <img src="https://ui-avatars.com/api/?name=Usuario&background=random&size=128"
+                                class="rounded-circle border border-2 border-success shadow-lg" width="100" height="100"
+                                alt="Avatar">
+                        </div>
+                        <div class="text-center text-md-start">
+                            <h2 class="fw-bold text-white mb-1">Usuario Ejemplo</h2>
+                            <div
+                                class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 text-secondary mb-2">
+                                <i class="bi bi-envelope"></i> usuario@ejemplo.com
+                            </div>
+                        </div>
+                        <div class="ms-auto d-none d-md-block">
+                            <a href="config_user.html" class="btn btn-dark-custom">
+                                <i class="bi bi-pencil me-2"></i> Editar Perfil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <div class="tarjeta-dato h-100 p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h6 class="text-secondary text-uppercase small fw-bold">Plan Actual</h6>
+                                    <h4 class="text-white mb-0">Gratuito</h4>
+                                </div>
+                                <div class="p-2 bg-secondary bg-opacity-25 rounded text-white">
+                                    <i class="bi bi-box-seam"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <h3 class="text-white fw-bold mb-4">Cambiar correo electrónico</h3>
-
-                    <div class="row">
-                        <div class="col-12 col-lg-7">
-
-                            <div class="mb-3">
-                                <label for="masterPass" class="form-label text-secondary small">Contraseña
-                                    maestra (requerido)</label>
-                                <div class="input-group">
-                                    <input type="password"
-                                        class="form-control bg-transparent text-white border-secondary" id="masterPass">
-                                    <button class="btn btn-outline-secondary border-secondary" type="button">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="newEmail" class="form-label text-secondary small">Nuevo correo
-                                    electrónico (requerido)</label>
-                                <input type="email" class="form-control bg-transparent text-white border-secondary"
-                                    id="newEmail">
-                            </div>
-
-                            <button class="btn btn-primary px-4">Guardar</button>
-                        </div>
-
-                        <div class="col-12 col-lg-5 mt-4 mt-lg-0 ps-lg-5">
-
-                            <div class="d-flex align-items-center gap-3 mb-4">
-
-                                <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff"
-                                    id="avatarPreview"
-                                    class="avatar-img rounded-circle border border-2 border-secondary"
-                                    alt="Foto de perfil">
-
+                    <div class="col-md-4">
+                        <div class="tarjeta-dato h-100 p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div>
-                                    <input type="file" id="avatarInput" class="d-none" accept="image/*"
-                                        onchange="previewImage(this)">
-
-                                    <button class="btn btn-outline-light btn-sm rounded-pill px-3 mb-1 hover-scale"
-                                        onclick="document.getElementById('avatarInput').click()">
-                                        <i class="bi bi-camera me-2"></i>Seleccionar imagen
-                                    </button>
-
-                                    <div class="text-white-50 small" style="font-size: 0.75rem;">
-                                        Máx. 2MB (JPG, PNG)
-                                    </div>
+                                    <h6 class="text-secondary text-uppercase small fw-bold">Seguridad</h6>
+                                    <h4 class="text-white mb-0">Media</h4>
+                                </div>
+                                <div class="p-2 bg-warning bg-opacity-25 rounded text-warning">
+                                    <i class="bi bi-shield-check"></i>
                                 </div>
                             </div>
-
-
                         </div>
+                    </div>
 
-                        <div style="height: 100px;"></div>
+                    <div class="col-md-4">
+                        <div class="tarjeta-dato h-100 p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h6 class="text-secondary text-uppercase small fw-bold">Antigüedad</h6>
+                                    <h4 class="text-white mb-0">1 Mes</h4>
+                                </div>
+                                <div class="p-2 bg-info bg-opacity-25 rounded text-info">
+                                    <i class="bi bi-calendar-event"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                </main>
+                <h5 class="text-white fw-bold mb-4">Detalles de la Cuenta</h5>
+                <div class="tarjeta-dato p-4 mb-5">
+                    <form>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary small">Autenticación de Dos Factores
+                                    (2FA)</label>
+                                <div class="d-flex align-items-center gap-2 mt-1">
+                                    <i class="bi bi-x-circle-fill text-danger"></i>
+                                    <span class="text-white">Desactivado</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary small">Estado del Pago</label>
+                                <div class="d-flex align-items-center gap-2 mt-1">
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                    <span class="text-white">N/A (Plan Gratuito)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </main>
         </div>
     </div>
 
@@ -234,24 +258,6 @@
             }
         }
     </script>
-    <script>
-        function previewImage(input) {
-            // Si se ha seleccionado un archivo
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                // Cuando termine de leer el archivo...
-                reader.onload = function (e) {
-                    // ...cambiamos la fuente (src) de la imagen por la nueva foto
-                    document.getElementById('avatarPreview').src = e.target.result;
-                }
-
-                // Leer el archivo como una URL de datos
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
-
 
     <footer class="text-center text-secondary small py-4 border-top border-secondary">
         © 2026 HashPass · Seguridad sin compromisos
