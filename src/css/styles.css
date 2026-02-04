@@ -281,3 +281,30 @@ h1, h2, h3, h4, h5, h6, .display-4, .display-5 {
     color: var(--texto-blanco);
     font-weight: 700;
 }
+/* EFECTO HOVER EN LAS FILAS */
+.hover-effect {
+    transition: background-color 0.2s ease;
+}
+
+.hover-effect:hover {
+    background-color: rgba(255, 255, 255, 0.05); /* Se ilumina un poco al pasar el ratón */
+    cursor: pointer;
+}
+
+/* BOTONES PEQUEÑOS DE ACCIÓN */
+.btn-icon-sm {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-icon-sm:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2);
+}
