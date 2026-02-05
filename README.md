@@ -144,11 +144,11 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Creacion security_user.html, y cambios en config_user.html](https://github.com/DWS-2026/project-grupo-8/commit/7b74183b0a515468959e7963fad2a1827bb14188)  | [config_user.html](https://github.com/DWS-2026/project-grupo-8/commit/7b74183b0a515468959e7963fad2a1827bb14188#diff-7f36781ce5c980cd24233129f5c7329719e0963707cd30e7e217a5a8c29a7878), [security_user.html](https://github.com/DWS-2026/project-grupo-8/commit/7b74183b0a515468959e7963fad2a1827bb14188#diff-5087fd5a56ddd20d1d916e8043ba0552baa7e4a8c60d1ffd1c49cbf4f31b0b3c)   |
+|2| [Creacion pantalla admin.html y modificacion css](https://github.com/DWS-2026/project-grupo-8/commit/bfff8d51b0da97c16eccc775e196cab49dd16079)  | [admin.html](https://github.com/DWS-2026/project-grupo-8/commit/bfff8d51b0da97c16eccc775e196cab49dd16079#diff-9e792440d333205e8cbb842f9a84fa08648e8a69151f8e67ca418a5326ab03b7), [styles.css](https://github.com/DWS-2026/project-grupo-8/commit/bfff8d51b0da97c16eccc775e196cab49dd16079#diff-506553736ec2a7007edf02fc6f203dc94a6f62054042f9148957f96270a7db22)   |
+|3| [Creacion de dashboard.html y modificacion de passwords.html](https://github.com/DWS-2026/project-grupo-8/commit/a1a46ffa5b19c14c4062d4985a740f50be8d6d86)  | [dashboard.html](https://github.com/DWS-2026/project-grupo-8/commit/a1a46ffa5b19c14c4062d4985a740f50be8d6d86#diff-c53908a5b164e37da45cff45b26de99931e4221295d917eb6b0b0720a428ab56), [passwords.html](https://github.com/DWS-2026/project-grupo-8/commit/a1a46ffa5b19c14c4062d4985a740f50be8d6d86#diff-e3ae49905403e99b618ba1a7b002317ee3c559cf8db694a16f52b6a9d73b18cc).   |
+|4| [Mejoras en pantalla dashboard.html](https://github.com/DWS-2026/project-grupo-8/commit/0425f958fe3d9dfeb15c27f8c94d4a381aca0501)  | [dashboard.html](https://github.com/DWS-2026/project-grupo-8/commit/0425f958fe3d9dfeb15c27f8c94d4a381aca0501#diff-c53908a5b164e37da45cff45b26de99931e4221295d917eb6b0b0720a428ab56)   |
+|5| [Arreglo de varias interacciones entre pantallas](https://github.com/DWS-2026/project-grupo-8/commit/5378eb08680651325ea8a7cd753e07d0c778ca18)  | [dashboard.html](https://github.com/DWS-2026/project-grupo-8/commit/5378eb08680651325ea8a7cd753e07d0c778ca18#diff-c53908a5b164e37da45cff45b26de99931e4221295d917eb6b0b0720a428ab56), [config_user.html](https://github.com/DWS-2026/project-grupo-8/commit/5378eb08680651325ea8a7cd753e07d0c778ca18#diff-7f36781ce5c980cd24233129f5c7329719e0963707cd30e7e217a5a8c29a7878), [security_user.html](https://github.com/DWS-2026/project-grupo-8/commit/5378eb08680651325ea8a7cd753e07d0c778ca18#diff-5087fd5a56ddd20d1d916e8043ba0552baa7e4a8c60d1ffd1c49cbf4f31b0b3c).   |
 
 ---
 
