@@ -12,17 +12,23 @@
 
 <body>
 
-    <nav class="navbar navbar-dark">
+    <nav class="navbar navbar-dark navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand fw-bold" href="index.html">
                 <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
             </a>
 
-            <div class="d-flex ms-auto align-items-center gap-3">
-                <a class="btn btn-outline-light rounded-pill" href="plan.html">Planes</a>
-                <a class="btn btn-primary rounded-pill" href="login.html">
-                    Acceder a mi Bóveda
-                </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menu">
+                <div class="d-flex ms-auto align-items-center gap-3">
+                    <a class="btn btn-outline-light rounded-pill" href="register.html">Registrate ya !</a>
+                    <a class="btn btn-primary rounded-pill" href="login.html">
+                        Acceder a mi Bóveda
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
@@ -41,7 +47,7 @@
                         Protege tus credenciales con cifrado de alto grado.
                     </p>
                     <div class="d-flex gap-3">
-                        <a href="plan.html" class="btn btn-primary btn-lg rounded-pill px-5">Empezar ahora</a>
+                        <a href="register.html" class="btn btn-primary btn-lg rounded-pill px-5">Empezar ahora</a>
                         <a href="#features" class="btn btn-outline-light btn-lg rounded-pill px-5">Saber más</a>
                     </div>
 
@@ -61,7 +67,7 @@
         </div>
     </header>
 
-    <section class="py-5">
+    <section id="features" class="py-5">
         <div class="container">
             <h3 class="text-center fw-bold mb-5">Seguridad Total</h3>
 
@@ -103,6 +109,75 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-black bg-opacity-20">
+        <div class="container">
+            <h3 class="text-center fw-bold mb-5">Lo que dicen nuestros usuarios</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card p-4 h-100 border-0 bg-dark shadow-sm">
+                        <div class="mb-3 text-warning">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="mb-4 fst-italic">"Antes usaba el mismo password para todo. HashPass me ha salvado de
+                            varios intentos de hackeo. Imprescindible."</p>
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="https://ui-avatars.com/api/?name=Laura+G&background=random" class="rounded-circle"
+                                width="40">
+                            <div>
+                                <h6 class="mb-0 fw-bold text-white">Laura García</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-4 h-100 border-0 bg-dark shadow-sm">
+                        <div class="mb-3 text-warning">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="mb-4 fst-italic">"La interfaz es increíblemente limpia y rápida. Me encanta el modo
+                            oscuro y lo fácil que es compartir claves."</p>
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="https://ui-avatars.com/api/?name=Carlos+M&background=random"
+                                class="rounded-circle" width="40">
+                            <div>
+                                <h6 class="mb-0 fw-bold text-white">Carlos Martínez</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-4 h-100 border-0 bg-dark shadow-sm">
+                        <div class="mb-3 text-warning">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-half"></i>
+                        </div>
+                        <p class="mb-4 fst-italic">"El plan gratuito es muy generoso, pero me pasé al Premium solo por
+                            apoyar el proyecto. Excelente trabajo."</p>
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="https://ui-avatars.com/api/?name=Ana+R&background=random" class="rounded-circle"
+                                width="40">
+                            <div>
+                                <h6 class="mb-0 fw-bold text-white">Ana Rodríguez</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="reviews.html" class="btn btn-outline-light rounded-pill px-5 hover-scale">
+                    Ver más opiniones <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+            </div>
+
         </div>
     </section>
 
