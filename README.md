@@ -62,16 +62,79 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 ![Diagrama de Navegación](images/navigation-diagram.png)
 
-> [En el diagrama se observa la navegación dividida por roles: los usuarios anónimos acceden a las páginas públicas (azul), los registrados gestionan su información en el área privada (amarillo), y los administradores tienen un flujo exclusivo (verde) para la gestión global de usuarios.]
+> En el diagrama se observa la navegación dividida por roles: los usuarios anónimos acceden a las páginas públicas (azul), los registrados gestionan su información en el área privada (amarillo), y los administradores tienen un flujo exclusivo (verde) para la gestión global de usuarios.
 
 ### **Capturas de Pantalla y Descripción de Páginas**
 
 #### **1. Página Principal / Home**
 ![Página Principal](images/home-page.png)
 
-> [Página de inicio que muestra la seguridad que ofrece el gestor con una previsualización del perfil de usuario. Incluye botones de navegación como el de los planes y acceso a registro/login para usuarios no autenticados."]
+> Página de inicio que muestra la seguridad que ofrece el gestor con una previsualización del perfil de usuario. Incluye botones de navegación como el de los planes y acceso a registro/login para usuarios no autenticados.
 
-#### **AQUÍ AÑADIR EL RESTO DE PÁGINAS**
+#### **2. Planes de Subscripción**
+![Página Principal](images/plan.png)
+
+> Vista comparativa de los tres niveles de suscripción (Gratuito, Premium, Platinum).
+
+#### **3. Inicio de sesión - Fase 1**
+![Página Principal](images/login.png)
+
+> Paso inicial de la autenticación donde el usuario introduce su correo electrónico para validar su identidad en el sistema.
+
+#### **4. Inicio de sesión - Fase 2**
+![Página Principal](images/password_login.png)
+
+> Segunda fase del login que solicita la Contraseña Maestra para descifrar la bóveda, con ayudas visuales sobre seguridad.
+
+#### **5. Página de Registro**
+![Página Principal](images/register.png)
+
+> Formulario de alta para nuevos usuarios que establece las credenciales de acceso y la clave maestra de cifrado.
+
+#### **6. Panel Principal dentro de la sesión**
+![Página Principal](images/dashboard.png)
+
+> Centro de control privado con estadísticas de seguridad, historial de actividad reciente y menú lateral de navegación.
+
+#### **7. Bóveda de contraseñas**
+![Página Principal](images/passwords.png)
+
+> Listado completo de credenciales con buscador, filtros y botones de acción rápida para copiar datos o editar.
+
+#### **8. Añadir nuevos credenciales**
+![Página Principal](images/new_credential.png)
+
+> Formulario para añadir credenciales con medidor de fortaleza de contraseña en tiempo real y generador de claves aleatorias.
+
+#### **9. Ver info/Editar Credenciales**
+![Página Principal](images/info_credential.png)
+
+> Vista de detalle que permite visualizar, modificar o eliminar la información de una credencial existente.
+
+#### **10. Info de usuario - Sesión de usuario**
+![Página Principal](images/user.png)
+
+> Ficha de perfil integrada en la navegación que muestra información personal y el estado de la cuenta del usuario.
+
+#### **11. Configuración Básica de usuario**
+![Página Principal](images/config_user.png)
+
+> Formulario de gestión de perfil para actualizar datos personales como avatar y correo electrónico.
+
+#### **12. Configuración de seguridad de usuario**
+![Página Principal](images/security_user.png)
+
+> Panel crítico para cambiar la Contraseña Maestra, activar el doble factor (2FA) o eliminar la cuenta.
+
+#### **13. Página de Administrador**
+![Página Principal](images/admin.png)
+
+> Panel de gestión global con métricas del sistema y tabla de administración para filtrar y moderar usuarios.
+
+#### **14. Info de usuario - Sesión de admin**
+![Página Principal](images/admin_user_detail.png)
+
+> Vista técnica de un usuario para que el administrador gestione bloqueos sin acceder a la sesión personal.
 
 ### **Participación de Miembros en la Práctica 1**
 
