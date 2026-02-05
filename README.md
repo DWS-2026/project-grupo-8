@@ -178,7 +178,7 @@ Creación de la parte del usuario donde almacena las contraseñas y la configura
 
 #### **Alumno 3 - Iker Marín López**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Desarrollo de las páginas de login (tanto login inicial como password-login) y página de registro de nuevo usuario.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
