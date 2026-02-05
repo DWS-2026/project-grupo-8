@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra - HashPass</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+  
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark border-bottom border-secondary border-opacity-10">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
+            </a>
+            <div class="ms-auto text-secondary small">
+                <i class="bi bi-lock-fill me-1"></i> Pago 100% Seguro
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        <div class="row g-5">
+            
+            <div class="col-lg-8">
+                
+                <h3 class="fw-bold text-white mb-4">Información de pago</h3>
+
+                <div class="mb-4">
+                    <label class="form-label text-secondary small mb-3">SELECCIONA UN MÉTODO</label>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="payment-option active d-flex align-items-center gap-3" onclick="selectPayment('card', this)">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="methodCard" checked>
+                                </div>
+                                <i class="bi bi-credit-card-2-front fs-4 text-white"></i>
+                                <div>
+                                    <div class="text-white fw-bold small">Tarjeta</div>
+                                    <div class="text-secondary small" style="font-size: 0.75rem;">Crédito o Débito</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="payment-option d-flex align-items-center gap-3" onclick="selectPayment('paypal', this)">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="methodPaypal">
+                                </div>
+                                <i class="bi bi-paypal fs-4 text-info"></i>
+                                <div>
+                                    <div class="text-white fw-bold small">PayPal</div>
+                                    <div class="text-secondary small" style="font-size: 0.75rem;">Pago rápido</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-transparent border-0" id="cardForm">
+                    <div class="card p-4">
+                        <div class="row g-3">
+                            
+                            <div class="col-12">
+                                <label class="form-label text-secondary small">Nombre del titular</label>
+                                <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="Como aparece en la tarjeta">
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label text-secondary small">Número de tarjeta</label>
+                                <div class="position-relative">
+                                    <input type="text" id="cardNumber" class="form-control bg-dark text-white border-secondary" placeholder="0000 0000 0000 0000" maxlength="19">
+                                    <div class="input-icon-right">
+                                        <i class="bi bi-credit-card"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary small">Fecha de expiración</label>
+                                <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="MM / AA" maxlength="5">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary small">CVC / CVV</label>
+                                <div class="position-relative">
+                                    <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="123" maxlength="4">
+                                    <div class="input-icon-right">
+                                        <i class="bi bi-question-circle text-secondary" title="3 dígitos al reverso"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <label class="form-label text-secondary small">País de facturación</label>
+                                <select class="form-select bg-dark text-white border-secondary">
+                                    <option selected>España</option>
+                                    <option>México</option>
+                                    <option>Estados Unidos</option>
+                                    <option>Argentina</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card p-4 position-sticky" style="top: 2rem;">
+                    <h5 class="fw-bold text-white mb-4">Resumen del pedido</h5>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <div class="text-white fw-bold">Plan Premium</div>
+                            <div class="text-secondary small">Facturación anual</div>
+                        </div>
+                        <div class="text-white">4.99€</div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="text-secondary small">Descuento (Promo)</div>
+                        <div class="text-success small">-1.99€</div>
+                    </div>
+                    
+                    <hr class="border-secondary opacity-25 my-3">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="text-white fs-5 fw-bold">Total a pagar</div>
+                        <div class="fs-4 fw-bold texto-gradient">3.00€</div>
+                    </div>
+
+                    <a href="dashboard.html" class="btn btn-primary w-100 py-2 mb-3 fw-bold shadow-lg">
+                        <i class="bi bi-lock-fill me-2"></i> Pagar 3.00€
+                    </a>
+
+                    <div class="text-center">
+                        <p class="text-secondary small mb-2" style="font-size: 0.75rem;">
+                            Al continuar, aceptas nuestros <a href="#" class="text-success text-decoration-none">Términos</a> y la renovación automática.
+                        </p>
+                        <div class="d-flex justify-content-center gap-2 fs-5 text-secondary opacity-50">
+                            <i class="bi bi-credit-card-2-back"></i>
+                            <i class="bi bi-paypal"></i>
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="text-center text-secondary small py-4 border-top border-secondary mt-5">
+        © 2026 HashPass · Pagos procesados de forma segura con encriptación SSL de 256-bits.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Script simple para formatear el número de tarjeta con espacios
+        const cardInput = document.getElementById('cardNumber');
+        
+        cardInput.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Elimina todo lo que no sea número
+            let formattedValue = '';
+            
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += ' ';
+                }
+                formattedValue += value[i];
+            }
+            
+            e.target.value = formattedValue;
+        });
+
+        // Script para cambiar visualmente la opción de pago
+        function selectPayment(method, element) {
+            // Quitar clase active de todos
+            document.querySelectorAll('.payment-option').forEach(el => {
+                el.classList.remove('active');
+                el.querySelector('input').checked = false;
+            });
+
+            // Activar el clickeado
+            element.classList.add('active');
+            element.querySelector('input').checked = true;
+
+            // Lógica simple para ocultar/mostrar formulario tarjeta (opcional)
+            // En un caso real, aquí cambiarías la vista
+            if(method === 'paypal') {
+                // Podrías ocultar los inputs de tarjeta
+            }
+        }
+    </script>
+
+</body>
+
+</html>
