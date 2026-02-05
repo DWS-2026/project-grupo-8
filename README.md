@@ -62,14 +62,14 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 ![Diagrama de Navegación](images/navigation-diagram.png)
 
-> [Descripción opcional del flujo de navegación: Ej: "El usuario puede acceder desde la página principal a todas las secciones mediante el menú de navegación. Los usuarios anónimos solo tienen acceso a las páginas públicas, mientras que los registrados pueden acceder a su perfil y panel de usuario."]
+> [En el diagrama se observa la navegación dividida por roles: los usuarios anónimos acceden a las páginas públicas (azul), los registrados gestionan su información en el área privada (amarillo), y los administradores tienen un flujo exclusivo (verde) para la gestión global de usuarios.]
 
 ### **Capturas de Pantalla y Descripción de Páginas**
 
 #### **1. Página Principal / Home**
 ![Página Principal](images/home-page.png)
 
-> [Descripción breve: Ej: "Página de inicio que muestra los productos destacados, categorías principales y un banner promocional. Incluye barra de navegación y acceso a registro/login para usuarios no autenticados."]
+> [Página de inicio que muestra la seguridad que ofrece el gestor con una previsualización del perfil de usuario. Incluye botones de navegación como el de los planes y acceso a registro/login para usuarios no autenticados."]
 
 #### **AQUÍ AÑADIR EL RESTO DE PÁGINAS**
 
@@ -91,15 +91,15 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 #### **Alumno 2 - Yago Contreras Nevares**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Creación de la parte del usuario donde almacena las contraseñas y la configuración]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Creación de la pantalla de entradas](https://github.com/DWS-2026/dws-2026-project-base/commit/0e19e25d5fdb976d29cb0764e4750d590c21b338#diff-506553736ec2a7007edf02fc6f203dc94a6f62054042f9148957f96270a7db22)  | [styles.css](https://github.com/DWS-2026/dws-2026-project-base/commit/0e19e25d5fdb976d29cb0764e4750d590c21b338#diff-506553736ec2a7007edf02fc6f203dc94a6f62054042f9148957f96270a7db22), [passwords.html](https://github.com/DWS-2026/dws-2026-project-base/commit/0e19e25d5fdb976d29cb0764e4750d590c21b338#diff-506553736ec2a7007edf02fc6f203dc94a6f62054042f9148957f96270a7db22)  |
+|2| [Añadido entradas de ejemplo en la pantalla de contraseñas](https://github.com/DWS-2026/dws-2026-project-base/commit/2a11f647af0b0f7517fdb30ed8473713b9613435)  | [styles.css](https://github.com/DWS-2026/dws-2026-project-base/commit/2a11f647af0b0f7517fdb30ed8473713b9613435), [passwords.html](https://github.com/DWS-2026/dws-2026-project-base/commit/2a11f647af0b0f7517fdb30ed8473713b9613435)  |
+|3| [Añadido el menu de configuración y creada la página de configuración de usuario](https://github.com/DWS-2026/dws-2026-project-base/commit/cdd80172c1835e7a6b7558f203317788f3515a6c)  | [styles.css](https://github.com/DWS-2026/dws-2026-project-base/commit/cdd80172c1835e7a6b7558f203317788f3515a6c), [passwords.html](https://github.com/DWS-2026/dws-2026-project-base/commit/cdd80172c1835e7a6b7558f203317788f3515a6c),[security_user.html](https://github.com/DWS-2026/dws-2026-project-base/commit/cdd80172c1835e7a6b7558f203317788f3515a6c), [config_user.html](https://github.com/DWS-2026/dws-2026-project-base/commit/cdd80172c1835e7a6b7558f203317788f3515a6c), [dashboard.html](https://github.com/DWS-2026/dws-2026-project-base/commit/cdd80172c1835e7a6b7558f203317788f3515a6c)     |
+|4| [Añadido avatar en la parte superior con menú](https://github.com/DWS-2026/dws-2026-project-base/commit/fe6f6fcedde5e4532285d7cf8498b43e29378862)  | [styles.css](https://github.com/DWS-2026/dws-2026-project-base/commit/fe6f6fcedde5e4532285d7cf8498b43e29378862), [add-password.html](https://github.com/DWS-2026/dws-2026-project-base/commit/fe6f6fcedde5e4532285d7cf8498b43e29378862),[config_user](https://github.com/DWS-2026/dws-2026-project-base/commit/fe6f6fcedde5e4532285d7cf8498b43e29378862), [dashboard.html](https://github.com/DWS-2026/dws-2026-project-base/commit/fe6f6fcedde5e4532285d7cf8498b43e29378862), [password-login.html](https://github.com/DWS-2026/dws-2026-project-base/commit/fe6f6fcedde5e4532285d7cf8498b43e29378862),[passwords.html](https://github.com/DWS-2026/dws-2026-project-base/commit/fe6f6fcedde5e4532285d7cf8498b43e29378862), [security_user.html](https://github.com/DWS-2026/dws-2026-project-base/commit/fe6f6fcedde5e4532285d7cf8498b43e29378862)  |
+|5| [Añadida pantalla de edición de las entradas](https://github.com/DWS-2026/dws-2026-project-base/commit/4767f1a7c9c9a87f9aab8881bdc97824ef8e62b5)  | [info-passwords.html](https://github.com/DWS-2026/dws-2026-project-base/commit/4767f1a7c9c9a87f9aab8881bdc97824ef8e62b5), [passwords.html](https://github.com/DWS-2026/dws-2026-project-base/commit/4767f1a7c9c9a87f9aab8881bdc97824ef8e62b5)  |
 
 ---
 
