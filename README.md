@@ -21,12 +21,12 @@ Indicar las entidades principales que gestionará la aplicación y las relacione
 1. **[Entidad 1]**: Usuario
 2. **[Entidad 2]**: Credencial (Contraseña)
 3. **[Entidad 3]**: Plan (Suscripción)
-4. **[Entidad 4]**: Registro de Actividad (Log)
+4. **[Entidad 4]**: Reviews
 
 **Relaciones entre entidades:**
 - Un **Usuario** puede tener muchas **Credenciales** (1:N).
 - Un **Usuario** tiene asignado un único **Plan** activo (1:1).
-- Un **Usuario** genera múltiples **Registros de Actividad** (1:N).
+- Un **Usuario** puede generar múltiples **reviews** (1:N).
 
 ### **Permisos de los Usuarios**
 Describir los permisos de cada tipo de usuario e indicar de qué entidades es dueño:
