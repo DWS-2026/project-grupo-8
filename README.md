@@ -136,6 +136,16 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 > Vista técnica de un usuario para que el administrador gestione bloqueos sin acceder a la sesión personal.
 
+#### **15. Reseñas y Comentarios**
+![Página Principal](images/reviews.png)
+
+> Sección de comentarios donde se pueden añadir reseñas.
+
+#### **16. Página de Pago**
+![Página Principal](images/payment.png)
+
+> Pantalla de Pago con targeta
+
 ### **Participación de Miembros en la Práctica 1**
 
 #### **Alumno 1 - Iván Tabares Rico**
