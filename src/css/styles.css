@@ -149,6 +149,12 @@ h6,
   min-height: 420px;
 }
 
+.right-decor2 {
+  background: linear-gradient(180deg, #102238 0%,  #0f172a 100%);
+  border-radius: 12px;
+  min-height: 420px;
+}
+
 .decor-logo {
   display: inline-flex;
   align-items: center;
