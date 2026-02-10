@@ -21,12 +21,12 @@ Indicar las entidades principales que gestionará la aplicación y las relacione
 1. **[Entidad 1]**: Usuario
 2. **[Entidad 2]**: Credencial (Contraseña)
 3. **[Entidad 3]**: Plan (Suscripción)
-4. **[Entidad 4]**: Registro de Actividad (Log)
+4. **[Entidad 4]**: Reviews
 
 **Relaciones entre entidades:**
 - Un **Usuario** puede tener muchas **Credenciales** (1:N).
 - Un **Usuario** tiene asignado un único **Plan** activo (1:1).
-- Un **Usuario** genera múltiples **Registros de Actividad** (1:N).
+- Un **Usuario** puede generar múltiples **reviews** (1:N).
 
 ### **Permisos de los Usuarios**
 Describir los permisos de cada tipo de usuario e indicar de qué entidades es dueño:
@@ -54,7 +54,7 @@ Indicar qué entidades tendrán asociadas una o varias imágenes:
 ## 🛠 **Práctica 1: Maquetación de páginas con HTML y CSS**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube](https://youtu.be/qGqX444vHU0)**
+📹 **[Enlace al vídeo en YouTube](https://youtu.be/lHgOssbFNRo)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
 ### **Diagrama de Navegación**
@@ -150,7 +150,7 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 #### **Alumno 1 - Iván Tabares Rico**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Creacion de la pantalla de adminnistrador, ajustes de seguridad de usuario, y panel principal de usuario
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
@@ -164,7 +164,7 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 #### **Alumno 2 - Yago Contreras Nevares**
 
-[Creación de la parte del usuario donde almacena las contraseñas y la configuración]
+Creación de la parte del usuario donde almacena las contraseñas y la configuración
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
@@ -178,7 +178,7 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 #### **Alumno 3 - Iker Marín López**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Desarrollo de las páginas de login (tanto login inicial como password-login) y página de registro de nuevo usuario.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
