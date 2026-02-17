@@ -1,4 +1,4 @@
-package es.codeurjc.board.service;
+package com.hashpass.service;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

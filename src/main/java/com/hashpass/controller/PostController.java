@@ -1,4 +1,4 @@
-package es.codeurjc.board.controller;
+package com.hashpass.controller;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
-import es.codeurjc.board.model.Post;
-import es.codeurjc.board.service.ImageService;
-import es.codeurjc.board.service.PostService;
-import es.codeurjc.board.service.UserSession;
+import com.hashpass.model.Post;
+import com.hashpass.service.ImageService;
+import com.hashpass.service.PostService;
+import com.hashpass.service.UserSession;
 
 @Controller
 public class PostController {

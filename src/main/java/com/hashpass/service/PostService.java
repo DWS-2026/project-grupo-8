@@ -1,4 +1,4 @@
-package es.codeurjc.board.service;
+package com.hashpass.service;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,8 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
 
-import es.codeurjc.board.model.Post;
-
+import com.hashpass.model.Post;
 @Service
 public class PostService {
 

@@ -1,4 +1,4 @@
-package es.codeurjc.board.model;
+package com.hashpass.model;
 
 public class Post {
 
