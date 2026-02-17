@@ -1,4 +1,4 @@
-package es.codeurjc.board.service;
+package com.hashpass.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
