@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+    <nav th:fragment="navbarPublic" class="navbar navbar-dark navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">
+                <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menu">
+                <div class="d-flex ms-auto align-items-center gap-3">
+                    <a class="btn btn-outline-light rounded-pill" th:href="@{/register}">Registrate ya !</a>
+                    <a class="btn btn-primary rounded-pill" th:href="@{/login}">Acceder a mi Bóveda</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <nav th:fragment="navbarPrivate" class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold" th:href="@{/}">
+                <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
+            </a>
+            <div class="dropdown ms-auto">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle no-arrow pe-0" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="Usuario" class="avatar-img-nav rounded-circle">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end mt-3 shadow-lg border-0" aria-labelledby="userDropdown" style="min-width: 220px;">
+                    <li>
+                        <h6 class="dropdown-header text-white-50 fw-normal py-2">
+                            Conectado como <br><span class="text-white fw-bold">usuario@ejemplo.com</span>
+                        </h6>
+                    </li>
+                    <li><hr class="dropdown-divider border-secondary opacity-25 mx-2"></li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-3 py-2" th:href="@{/config-user}">
+                            <i class="bi bi-person-gear fs-5 text-secondary"></i><span>Configuración de la cuenta</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-3 py-2" th:href="@{/security-user}">
+                            <i class="bi bi-shield-lock fs-5 text-secondary"></i><span>Seguridad</span>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider border-secondary opacity-25 mx-2 my-2"></li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-3 py-2" th:href="@{/password-login}">
+                            <i class="bi bi-lock fs-5 text-secondary"></i><span>Bloquear</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-3 py-2 text-danger icon-link-hover-danger" th:href="@{/login}">
+                            <i class="bi bi-box-arrow-right fs-5"></i><span>Cerrar sesión</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+</body>
+</html>

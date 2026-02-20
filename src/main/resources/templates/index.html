@@ -1,37 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - HashPass</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../static/css/styles.css">
-</head>
+<head th:replace="~{fragments/head :: head('Inicio - HashPass')}"></head>
 
 <body>
 
-    <nav class="navbar navbar-dark navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">
-                <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
-            </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="menu">
-                <div class="d-flex ms-auto align-items-center gap-3">
-                    <a class="btn btn-outline-light rounded-pill" href="register.html">Registrate ya !</a>
-                    <a class="btn btn-primary rounded-pill" href="login.html">
-                        Acceder a mi Bóveda
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <nav th:replace="~{fragments/navbar :: navbarPublic}"></nav>
 
 
     <header class="hero-section">
@@ -47,7 +21,7 @@
                         Protege tus credenciales con cifrado de alto grado.
                     </p>
                     <div class="d-flex gap-3">
-                        <a href="register.html" class="btn btn-primary btn-lg rounded-pill px-5">Empezar ahora</a>
+                        <a th:href="@{/register}" class="btn btn-primary btn-lg rounded-pill px-5">Empezar ahora</a>
                         <a href="#features" class="btn btn-outline-light btn-lg rounded-pill px-5">Saber más</a>
                     </div>
 
@@ -60,7 +34,7 @@
 
                 <div class="col-lg-6">
                     <div class="hero-img-container text-center">
-                        <img src="../../images/dashboard.png" alt="HashPass Dashboard" class="img-fluid hero-img">
+                        <img th:src="@{/images/dashboard.png}" alt="HashPass Dashboard" class="img-fluid hero-img">
                     </div>
                 </div>
             </div>
@@ -173,7 +147,7 @@
             </div>
 
             <div class="text-center mt-5">
-                <a href="reviews.html" class="btn btn-outline-light rounded-pill px-5 hover-scale">
+                <a th:href="@{/reviews}" class="btn btn-outline-light rounded-pill px-5 hover-scale">
                     Ver más opiniones <i class="bi bi-arrow-right ms-2"></i>
                 </a>
             </div>
@@ -182,44 +156,7 @@
     </section>
 
 
-    <footer class="pt-5 pb-3 border-top border-secondary border-opacity-10 mt-5">
-        <div class="container">
-            <div class="row g-4 mb-4">
-                <div class="col-lg-4">
-                    <a class="navbar-brand fw-bold fs-4 d-block mb-3" href="#">
-                        <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
-                    </a>
-                    <p class="text-secondary small">
-                        Cifrado potente. Acceso fácil. Tranquilidad total.
-                    </p>
-                </div>
-                <div class="col-6 col-lg-2 offset-lg-1">
-                    <h6 class="fw-bold text-white mb-3">Producto</h6>
-                    <ul class="list-unstyled text-secondary small d-flex flex-column gap-2">
-                        <li><a href="plan.html" class="text-decoration-none text-secondary hover-white">Precios</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Generador</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-lg-2">
-                    <h6 class="fw-bold text-white mb-3">Compañía</h6>
-                    <ul class="list-unstyled text-secondary small d-flex flex-column gap-2">
-                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Sobre nosotros</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Contacto</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-lg-2">
-                    <h6 class="fw-bold text-white mb-3">Legal</h6>
-                    <ul class="list-unstyled text-secondary small d-flex flex-column gap-2">
-                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Privacidad</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Términos</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="text-center text-secondary small pt-4 border-top border-secondary border-opacity-10">
-                © 2026 HashPass · Seguridad sin compromisos
-            </div>
-        </div>
-    </footer>
+    <footer th:replace="~{fragments/footer :: footerPublic}"></footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>

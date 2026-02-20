@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <div th:fragment="sidebar" id="sidebar"
+        class="col-md-3 col-lg-2 d-none d-md-block border-end border-secondary border-opacity-25 pt-4 transition-all"
+        style="min-height: 100vh;">
+
+        <div class="d-flex justify-content-between align-items-center mb-3 px-3">
+            <h6 class="text-uppercase text-white-50 small fw-bold m-0">MENU</h6>
+
+            <button class="btn btn-link text-white text-decoration-none p-0 d-md-none" onclick="toggleSidebar()">
+                <i class="bi bi-x-lg fs-5"></i>
+            </button>
+        </div>
+
+        <div class="nav flex-column nav-pills gap-1 px-2">
+
+            <a class="nav-link " th:href="@{/dashboard}">
+                <i class="bi bi-grid me-2"></i> Panel Principal
+            </a>
+
+            <a class="nav-link text-secondary" th:href="@{/passwords}">
+                <i class="bi bi-shield-lock me-2"></i> Bóveda
+            </a>
+
+            <a class="nav-link " th:href="@{/user}">
+                <i class="bi bi-person-vcard me-2"></i> Información de usuario
+            </a>
+            
+            <a class="nav-link text-secondary" th:href="@{/plan}">
+                <i class="bi bi-currency-dollar me-2"></i> Planes
+            </a>
+        </div>
+        
+        <a class="nav-link text-secondary d-flex justify-content-between align-items-center px-3 py-3"
+            data-bs-toggle="collapse" href="#configMenu" role="button" aria-expanded="false" aria-controls="configMenu">
+
+            <span>
+                <i class="bi bi-gear me-2"></i> Configuración
+            </span>
+            <i class="bi bi-chevron-down" style="font-size: 0.8rem;"></i>
+        </a>
+
+        <div class="collapse" id="configMenu">
+            <div class="nav flex-column ms-3 mt-1 border-start border-secondary border-opacity-25 ps-2">
+
+                <a class="nav-link text-secondary py-1 small hover-effect-link" th:href="@{/config-user}">
+                    Configuración de Usuario
+                </a>
+
+                <a class="nav-link text-secondary py-1 small hover-effect-link" th:href="@{/security-user}">
+                    Seguridad
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
