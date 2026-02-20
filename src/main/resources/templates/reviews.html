@@ -5,26 +5,7 @@
 
 <body>
 
-    <nav class="navbar navbar-dark navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">
-                <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
-            </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="menu">
-                <div class="d-flex ms-auto align-items-center gap-3">
-                    <a class="btn btn-outline-light rounded-pill" href="register.html">Registrate ya !</a>
-                    <a class="btn btn-primary rounded-pill" href="login.html">
-                        Acceder a mi Bóveda
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <nav th:replace="~{fragments/navbar :: navbarPublic}"></nav>
 
     <div class="container py-5 text-center">
         <h1 class="display-5 fw-bold mb-3">Lo que dice la comunidad</h1>

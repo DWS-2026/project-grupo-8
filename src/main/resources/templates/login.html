@@ -32,7 +32,7 @@
 
 						<div class="d-flex gap-2">
 							<button id="loginBtn" class="btn btn-primary w-100" type="submit">Acceder</button>
-							<button id="createBtn" class="btn btn-outline-light w-100" type="button" onclick="window.location.href='register.html'">Regístrate ya!</button>
+							<button id="createBtn" class="btn btn-outline-light w-100" type="button" th:onclick="|window.location.href='@{/register}'|">Regístrate ya!</button>
 						</div>
 					</form>
 

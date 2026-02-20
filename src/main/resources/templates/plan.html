@@ -53,7 +53,7 @@
                         <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Generador básico</li>
                     </ul>
 
-                    <button class="btn btn-dark-custom w-100 mt-3" onclick="window.location.href='register.html'">
+                    <button class="btn btn-dark-custom w-100 mt-3" th:onclick="|window.location.href='@{/register}'|">
                         Continuar gratis
                     </button>
                 </div>
@@ -89,7 +89,7 @@
                         </li>
                     </ul>
 
-                    <button class="btn btn-primary w-100 mt-3" onclick="window.location.href='payment.html'">
+                    <button class="btn btn-primary w-100 mt-3" th:onclick="|window.location.href='@{/payment}'|">
                         Actualizar a Premium
                     </button>
                 </div>
@@ -115,7 +115,7 @@
                         <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Soporte 24/7</li>
                     </ul>
 
-                    <button class="btn btn-dark-custom w-100 mt-3" onclick="window.location.href='payment.html'">
+                    <button class="btn btn-dark-custom w-100 mt-3" th:onclick="|window.location.href='@{/payment}'|">
                         Elegir Platinum
                     </button>
                 </div>
