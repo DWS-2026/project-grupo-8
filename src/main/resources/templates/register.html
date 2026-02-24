@@ -19,13 +19,16 @@
 				<div class="card p-4" style="min-height: 750px;">
 					<h3 class="mb-3 text-center">Crear nueva cuenta</h3>
 
-					<div id="alert" class="alert d-none" role="alert"></div>
+					{{#error}}
+					<div class="alert alert-danger" role="alert">{{error}}</div>
+					{{/error}}
 
-					<form id="registerForm" method="post" action="#">
+					<form id="registerForm" method="post" action="/register">
+
 						<div class="mb-3">
 							<label for="fullname" class="form-label">Nombre completo</label>
 							<div class="input-group">
-								<input type="text" id="fullname" name="fullname" class="form-control login-email-input"
+								<input type="text" id="fullname" name="name" class="form-control login-email-input"
 									placeholder="Ej: Michel Oyarzabal" required>
 							</div>
 						</div>
@@ -98,7 +101,8 @@
 							<div class="progress" style="height: 6px;">
 								<div id="strengthBar" class="progress-bar"></div>
 							</div>
-							<small id="strengthText" class="form-text text-white-50">Mínimo 8 caracteres, con mayúsculas,
+							<small id="strengthText" class="form-text text-white-50">Mínimo 8 caracteres, con
+								mayúsculas,
 								números y símbolos.</small>
 						</div>
 
@@ -124,9 +128,10 @@
 						</div>
 
 						<div class="d-grid gap-2">
-							<button id="registerBtn" class="btn btn-primary w-100 fw-bold" type="submit"
-								href="passwords.html" disabled style="font-weight: 800;">Crear cuenta</button>
+							<button id="registerBtn" class="btn btn-primary w-100 fw-bold" type="submit" disabled
+								style="font-weight: 800;">Crear cuenta</button>
 						</div>
+
 					</form>
 
 					<div class="mt-4 text-center">
@@ -135,7 +140,8 @@
 
 					<!-- Recuadro con logo similar a password-login -->
 					<div style="margin-top:36px;margin-bottom:25px;text-align:center;">
-						<a class="navbar-brand brand-logo-large lower-logo" style="display:inline-flex;align-items:center;justify-content:center;">
+						<a class="navbar-brand brand-logo-large lower-logo"
+							style="display:inline-flex;align-items:center;justify-content:center;">
 							<i class="bi bi-shield-lock-fill text-success"></i>
 							<span>HashPass</span>
 						</a>

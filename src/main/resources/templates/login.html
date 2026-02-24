@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 {{> fragments/head}}
+
 <body>
 
 	<nav class="navbar navbar-expand-lg navbar-dark">
@@ -19,20 +20,13 @@
 
 					<div id="alert" class="alert d-none" role="alert"></div>
 
-					<form id="loginForm" method="get" action="/paassword-login">
+					<form id="loginForm" method="get" action="/password-login">
 						<div class="mb-3">
 							<label for="email" class="form-label">Introduzca su correo</label>
 							<div class="input-group">
-								<input type="email" id="email" name="email" class="form-control" placeholder="Correo electrónico" required>
-								<!--button class="btn btn-outline-secondary" type="button" id="togglePwd" title="Mostrar/ocultar">
-									<i class="bi bi-eye-slash" id="toggleIcon"></i>
-								</button>-->
+								<input type="email" id="email" name="email" class="form-control"
+									placeholder="Correo electrónico" required>
 							</div>
-						</div>
-
-						<div class="d-flex gap-2">
-							<button id="loginBtn" class="btn btn-primary w-100" type="submit">Acceder</button>
-							<button id="createBtn" class="btn btn-outline-light w-100" type="button" onclick="window.location.href=\'/register\'">Regístrate ya!</button>
 						</div>
 					</form>
 
@@ -48,5 +42,5 @@
 	<script src="../js/auth.js" defer></script>
 
 </body>
-</html>
 
+</html>
