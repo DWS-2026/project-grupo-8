@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
-<head th:replace="~{fragments/head :: head('Inicio - HashPass')}"></head>
+{{> fragments/head}}
 <body>
 
 	<nav class="navbar navbar-expand-lg navbar-dark">
 		<div class="container">
-			<a class="navbar-brand fw-bold" th:href="@{/}">
+			<a class="navbar-brand fw-bold" href="/">
 				<i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
 			</a>
 		</div>
@@ -19,7 +19,7 @@
 
 					<div id="alert" class="alert d-none" role="alert"></div>
 
-					<form id="loginForm" method="get" th:action="@{/paassword-login}">
+					<form id="loginForm" method="get" action="/paassword-login">
 						<div class="mb-3">
 							<label for="email" class="form-label">Introduzca su correo</label>
 							<div class="input-group">
@@ -32,7 +32,7 @@
 
 						<div class="d-flex gap-2">
 							<button id="loginBtn" class="btn btn-primary w-100" type="submit">Acceder</button>
-							<button id="createBtn" class="btn btn-outline-light w-100" type="button" th:onclick="|window.location.href='@{/register}'|">Regístrate ya!</button>
+							<button id="createBtn" class="btn btn-outline-light w-100" type="button" onclick="window.location.href=\'/register\'">Regístrate ya!</button>
 						</div>
 					</form>
 
@@ -42,7 +42,7 @@
 		</div>
 	</main>
 
-	<footer th:replace="~{fragments/footer :: footerPrivate}"></footer>
+	{{> fragments/footerPrivate}}
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="../js/auth.js" defer></script>

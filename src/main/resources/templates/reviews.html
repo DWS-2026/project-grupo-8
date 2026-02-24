@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head th:replace="~{fragments/head :: head('Inicio - HashPass')}"></head>
+{{> fragments/head}}
 
 <body>
 
-    <nav th:replace="~{fragments/navbar :: navbarPublic}"></nav>
+    {{> fragments/navbarPublic}}
 
     <div class="container py-5 text-center">
         <h1 class="display-5 fw-bold mb-3">Lo que dice la comunidad</h1>
@@ -166,7 +166,7 @@
         </div>
     </div>
 
-    <footer th:replace="~{fragments/footer :: footerPublic}"></footer>
+    {{> fragments/footerPublic}}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" async></script>

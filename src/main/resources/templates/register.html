@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head th:replace="~{fragments/head :: head('Inicio - HashPass')}"></head>
+{{> fragments/head}}
 
 <body>
 
 	<nav class="navbar navbar-expand-lg navbar-dark">
 		<div class="container">
-			<a class="navbar-brand fw-bold" th:href="@{/}">
+			<a class="navbar-brand fw-bold" href="/">
 				<i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
 			</a>
 		</div>
@@ -130,7 +130,7 @@
 					</form>
 
 					<div class="mt-4 text-center">
-						<p>¿Ya tienes cuenta? <a th:href="@{/login}" class="muted-link">Inicia sesión aquí</a></p>
+						<p>¿Ya tienes cuenta? <a href="/login" class="muted-link">Inicia sesión aquí</a></p>
 					</div>
 
 					<!-- Recuadro con logo similar a password-login -->
@@ -145,7 +145,7 @@
 		</div>
 	</main>
 
-	<footer th:replace="~{fragments/footer :: footerPrivate}"></footer>
+	{{> fragments/footerPrivate}}
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.js"></script>

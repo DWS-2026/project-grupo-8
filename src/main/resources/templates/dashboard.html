@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head th:replace="~{fragments/head :: head('Inicio - HashPass')}"></head>
+{{> fragments/head}}
 
 
 <body>
 
-    <nav th:replace="~{fragments/navbar :: navbarPrivate}"></nav>
+    {{> fragments/navbarPrivate}}
 
     <div class="container-fluid">
         <div class="row">
 
-            <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+            {{> fragments/sidebar}}
 
             <main id="main-content" class="col-md-9 col-lg-10 pt-4 px-4 transition-all">
                 <div class="mb-4">
@@ -140,7 +140,7 @@
         }
     </script>
 
-    <footer th:replace="~{fragments/footer :: footerPrivate}"></footer>
+    {{> fragments/footerPrivate}}
 
 </body>
 

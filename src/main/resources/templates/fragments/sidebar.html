@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
-<body>
-
-    <div th:fragment="sidebar" id="sidebar"
+    <div id="sidebar"
         class="col-md-3 col-lg-2 d-none d-md-block border-end border-secondary border-opacity-25 pt-4 transition-all"
         style="min-height: 100vh;">
 
@@ -17,19 +12,19 @@
 
         <div class="nav flex-column nav-pills gap-1 px-2">
 
-            <a class="nav-link " th:href="@{/dashboard}">
+            <a class="nav-link " href="/dashboard">
                 <i class="bi bi-grid me-2"></i> Panel Principal
             </a>
 
-            <a class="nav-link text-secondary" th:href="@{/passwords}">
+            <a class="nav-link text-secondary" href="/passwords">
                 <i class="bi bi-shield-lock me-2"></i> Bóveda
             </a>
 
-            <a class="nav-link " th:href="@{/user}">
+            <a class="nav-link " href="/user">
                 <i class="bi bi-person-vcard me-2"></i> Información de usuario
             </a>
             
-            <a class="nav-link text-secondary" th:href="@{/plan}">
+            <a class="nav-link text-secondary" href="/plan">
                 <i class="bi bi-currency-dollar me-2"></i> Planes
             </a>
         </div>
@@ -46,18 +41,14 @@
         <div class="collapse" id="configMenu">
             <div class="nav flex-column ms-3 mt-1 border-start border-secondary border-opacity-25 ps-2">
 
-                <a class="nav-link text-secondary py-1 small hover-effect-link" th:href="@{/config-user}">
+                <a class="nav-link text-secondary py-1 small hover-effect-link" href="/config-user">
                     Configuración de Usuario
                 </a>
 
-                <a class="nav-link text-secondary py-1 small hover-effect-link" th:href="@{/security-user}">
+                <a class="nav-link text-secondary py-1 small hover-effect-link" href="/security-user">
                     Seguridad
                 </a>
 
             </div>
         </div>
     </div>
-
-</body>
-
-</html>

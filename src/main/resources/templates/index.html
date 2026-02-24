@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head th:replace="~{fragments/head :: head('Inicio - HashPass')}"></head>
+{{> fragments/head}}
 
 <body>
 
-    <nav th:replace="~{fragments/navbar :: navbarPublic}"></nav>
+    {{> fragments/navbarPublic}}
 
 
     <header class="hero-section">
@@ -21,7 +21,7 @@
                         Protege tus credenciales con cifrado de alto grado.
                     </p>
                     <div class="d-flex gap-3">
-                        <a th:href="@{/register}" class="btn btn-primary btn-lg rounded-pill px-5">Empezar ahora</a>
+                        <a href="/register" class="btn btn-primary btn-lg rounded-pill px-5">Empezar ahora</a>
                         <a href="#features" class="btn btn-outline-light btn-lg rounded-pill px-5">Saber más</a>
                     </div>
 
@@ -34,7 +34,7 @@
 
                 <div class="col-lg-6">
                     <div class="hero-img-container text-center">
-                        <img th:src="@{/images/dashboard.png}" alt="HashPass Dashboard" class="img-fluid hero-img">
+                        <img src="/images/dashboard.png" alt="HashPass Dashboard" class="img-fluid hero-img">
                     </div>
                 </div>
             </div>
@@ -147,7 +147,7 @@
             </div>
 
             <div class="text-center mt-5">
-                <a th:href="@{/reviews}" class="btn btn-outline-light rounded-pill px-5 hover-scale">
+                <a href="/reviews" class="btn btn-outline-light rounded-pill px-5 hover-scale">
                     Ver más opiniones <i class="bi bi-arrow-right ms-2"></i>
                 </a>
             </div>
@@ -156,7 +156,7 @@
     </section>
 
 
-    <footer th:replace="~{fragments/footer :: footerPublic}"></footer>
+    {{> fragments/footerPublic}}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>

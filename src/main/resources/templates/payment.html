@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head th:replace="~{fragments/head :: head('Inicio - HashPass')}"></head>
+{{> fragments/head}}
 
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark border-bottom border-secondary border-opacity-10">
         <div class="container">
-            <a class="navbar-brand fw-bold" th:href="@{/}">
+            <a class="navbar-brand fw-bold" href="/">
                 <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
             </a>
             <div class="ms-auto text-secondary small">
@@ -126,7 +126,7 @@
                         <div class="fs-4 fw-bold texto-gradient">3.00€</div>
                     </div>
 
-                    <a th:href="@{/dashboard}" class="btn btn-primary w-100 py-2 mb-3 fw-bold shadow-lg">
+                    <a href="/dashboard" class="btn btn-primary w-100 py-2 mb-3 fw-bold shadow-lg">
                         <i class="bi bi-lock-fill me-2"></i> Pagar 3.00€
                     </a>
 
@@ -147,7 +147,7 @@
         </div>
     </main>
 
-    <footer th:replace="~{fragments/footer :: footerPrivate}"></footer>
+    {{> fragments/footerPrivate}}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     
