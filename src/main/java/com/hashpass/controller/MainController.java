@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,6 +22,12 @@ public class MainController {
 
     @Autowired
     private UserSession userSession;
+
+    // Make current user available to all views (mustache fragments expect it)
+    @ModelAttribute("user")
+    public User populateUser() {
+        return userSession.getUser();
+    }
 
     @GetMapping("/")
     public String index() {
@@ -55,59 +62,68 @@ public class MainController {
         return "dashboard";
     }
 
+    // helper to require login and automatically supply user via @ModelAttribute
+    private String requireLogin(Model model, String view) {
+        if (!userSession.isLogged()) {
+            return "redirect:/login";
+        }
+        // user already added by populateUser()
+        return view;
+    }
+
     @GetMapping("/passwords")
-    public String passwords() {
-        return "passwords";
+    public String passwords(Model model) {
+        return requireLogin(model, "passwords");
     }
 
     @GetMapping("/add-password")
-    public String addPassword() {
-        return "add-password";
+    public String addPassword(Model model) {
+        return requireLogin(model, "add-password");
     }
 
     @GetMapping("/info-passwords")
-    public String infoPasswords() {
-        return "info-passwords";
+    public String infoPasswords(Model model) {
+        return requireLogin(model, "info-passwords");
     }
 
     @GetMapping("/plan")
-    public String plan() {
-        return "plan";
+    public String plan(Model model) {
+        return requireLogin(model, "plan");
     }
 
     @GetMapping("/payment")
-    public String payment() {
-        return "payment";
+    public String payment(Model model) {
+        return requireLogin(model, "payment");
     }
 
     @GetMapping("/user")
-    public String user() {
-        return "user";
+    public String user(Model model) {
+        return requireLogin(model, "user");
     }
 
     @GetMapping("/config-user")
-    public String configUser() {
-        return "config_user";
+    public String configUser(Model model) {
+        return requireLogin(model, "config_user");
     }
 
     @GetMapping("/security-user")
-    public String securityUser() {
-        return "security_user";
+    public String securityUser(Model model) {
+        return requireLogin(model, "security_user");
     }
 
     @GetMapping("/reviews")
-    public String reviews() {
-        return "reviews";
+    public String reviews(Model model) {
+        return requireLogin(model, "reviews");
     }
 
     @GetMapping("/admin")
-    public String admin() {
-        return "admin";
+    public String admin(Model model) {
+        return requireLogin(model, "admin");
     }
 
     @GetMapping("/admin-user-detail")
-    public String adminUserDetail() {
-        return "admin_user_detail";
+    public String adminUserDetail(Model model) {
+        return requireLogin(model, "admin_user_detail");
     }
 
     // --- LÓGICA DE REGISTRO ---
