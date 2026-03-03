@@ -43,7 +43,15 @@ public class MainController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(Model model) {
+        // 1. Comprobar si hay un usuario en sesión
+        if (!userSession.isLogged()) {
+            return "redirect:/login"; // Si no está logueado, patada a la pantalla de login
+        }
+
+        // 2. Si está logueado, pasamos el objeto User completo a la vista de Mustache
+        model.addAttribute("user", userSession.getUser());
+        
         return "dashboard";
     }
 
