@@ -1,20 +1,16 @@
 package com.hashpass.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hashpass.model.User;
-import com.hashpass.repository.UserRepository;
 import com.hashpass.service.UserSession;
 
 @Controller
 public class MainController {
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private UserSession userSession;
@@ -110,61 +106,6 @@ public class MainController {
     @GetMapping("/admin-user-detail")
     public String adminUserDetail(Model model) {
         return requireLogin(model, "admin_user_detail");
-    }
-
-    // --- LÓGICA DE REGISTRO ---
-    @PostMapping("/register")
-    public String processRegister(@RequestParam String name,
-            @RequestParam String email,
-            @RequestParam String password,
-            Model model) {
-
-        // Comprobar si el correo ya existe
-        if (userRepository.existsByEmail(email)) {
-            model.addAttribute("error", "El correo ya está registrado.");
-            return "register";
-        }
-
-        // Crear el nuevo usuario
-        User newUser = new User();
-        newUser.setName(name);
-        newUser.setEmail(email);
-
-        // Cambiar más adelante por un hash real
-        newUser.setPasswordHash(password);
-
-        // Guardar en MySQL
-        userRepository.save(newUser);
-
-        return "redirect:/login"; // Si va bien, lo mandamos a que haga login
-    }
-
-    // --- LÓGICA DE LOGIN ---
-    @PostMapping("/login")
-    public String processLogin(@RequestParam String email,
-            @RequestParam String password,
-            Model model) {
-
-        // Buscar al usuario por correo
-        Optional<User> userOpt = userRepository.findByEmail(email);
-
-        // Si existe y la contraseña coincide
-        if (userOpt.isPresent() && userOpt.get().getPasswordHash().equals(password)) {
-            // Guardamos el usuario en la sesión
-            userSession.setUser(userOpt.get());
-            return "redirect:/dashboard"; // Lo llevamos a su panel
-        } else {
-            // Falla el login
-            model.addAttribute("error", "Correo o contraseña incorrectos.");
-            return "login";
-        }
-    }
-
-    // --- LÓGICA DE LOGOUT ---
-    @GetMapping("/logout")
-    public String logout() {
-        userSession.setUser(null);
-        return "redirect:/";
     }
 
 }
