@@ -5,15 +5,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hashpass.model.User;
+import com.hashpass.model.Credential;
 import com.hashpass.service.UserSession;
+import com.hashpass.service.EntryService;
 
 @Controller
 public class MainController {
 
     @Autowired
     private UserSession userSession;
+
+    @Autowired
+    private EntryService entryService;
 
     // Make current user available to all views (mustache fragments expect it)
     @ModelAttribute("user")
@@ -55,12 +62,36 @@ public class MainController {
 
     @GetMapping("/passwords")
     public String passwords(Model model) {
-        return requireLogin(model, "passwords");
+        if (!userSession.isLogged()) {
+            return "redirect:/login";
+        }
+        model.addAttribute("credentials", entryService.listCurrentUser());
+        return "passwords";
     }
 
     @GetMapping("/add-password")
     public String addPassword(Model model) {
         return requireLogin(model, "add-password");
+    }
+
+    @PostMapping("/add-password")
+    public String savePassword(
+            @RequestParam String service,
+            @RequestParam String username,
+            @RequestParam String password,
+            @RequestParam(required = false) String url,
+            @RequestParam(required = false) String note
+    ) {
+        if (!userSession.isLogged()) {
+            return "redirect:/login";
+        }
+        Credential c = new Credential();
+        c.setSiteName(service);
+        c.setUsername(username);
+        c.setSiteUrl(url);
+        c.setNote(note);
+        entryService.save(c, password);
+        return "redirect:/passwords";
     }
 
     @GetMapping("/info-passwords")
