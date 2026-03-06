@@ -135,4 +135,52 @@ public class User {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
+	// Computed properties for dynamic dashboard stats
+	public String getSecurity() {
+		if (credentials.isEmpty()) {
+			return "Excelente";
+		}
+		
+		long weakCount = credentials.stream()
+				.filter(c -> c.getPasswordEncrypted().length() < 8)
+				.count();
+		
+		double weakPercentage = (double) weakCount / credentials.size() * 100;
+		
+		if (weakPercentage == 0) {
+			return "Excelente";
+		} else if (weakPercentage <= 25) {
+			return "Buena";
+		} else if (weakPercentage <= 50) {
+			return "Regular";
+		} else {
+			return "Débil";
+		}
+	}
+
+	public String getTenure() {
+		if (createdAt == null) {
+			return "N/A";
+		}
+		
+		long monthsDiff = java.time.temporal.ChronoUnit.MONTHS.between(createdAt, LocalDateTime.now());
+		
+		if (monthsDiff == 0) {
+			return "Reciente";
+		} else if (monthsDiff < 12) {
+			return monthsDiff + " mes" + (monthsDiff > 1 ? "es" : "");
+		} else {
+			long yearsDiff = monthsDiff / 12;
+			return yearsDiff + " año" + (yearsDiff > 1 ? "s" : "");
+		}
+	}
+
+	public String getTwoFactorAuth() {
+		return "Desactivo";
+	}
+
+	public String getPaymentStatus() {
+		return "Activo";
+	}
 }

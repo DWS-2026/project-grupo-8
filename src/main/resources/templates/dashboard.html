@@ -23,21 +23,21 @@
                     <div class="col-md-4 mb-3">
                         <div class="tarjeta-dato text-center p-4">
                             <h6 class="text-secondary text-uppercase small fw-bold">Contraseñas guardadas</h6>
-                            <h3 class="display-5 text-white-stats mb-0">7</h3>
+                            <h3 class="display-5 text-white-stats mb-0">{{totalCredentials}}</h3>
                         </div>
                     </div>
 
                     <div class="col-md-4 mb-3">
                         <div class="tarjeta-dato text-center p-4">
                             <h6 class="text-secondary text-uppercase small fw-bold">Contraseñas poco seguras</h6>
-                            <h3 class="display-5 text-white-stats mb-0">2</h3>
+                            <h3 class="display-5 text-white-stats mb-0">{{weakCredentials}}</h3>
                         </div>
                     </div>
 
                     <div class="col-md-4 mb-3">
                         <div class="tarjeta-dato text-center p-4">
                             <h6 class="text-secondary text-uppercase small fw-bold">Accesos mensuales</h6>
-                            <h3 class="display-5 text-white-stats mb-0">14</h3>
+                            <h3 class="display-5 text-white-stats mb-0">{{monthlyAccesses}}</h3>
                         </div>
                     </div>
                 </div>
@@ -57,48 +57,23 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {{#recentActivity}}
                                         <tr>
-                                            <td class="py-3"><span
-                                                    class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25">Creada</span>
+                                            <td class="py-3">
+                                                <span
+                                                    class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25">Guardada</span>
                                             </td>
-                                            <td class="py-3 text-white text-center">netflix.com</td>
-                                            <td class="py-3 text-end text-secondary">03 Feb 2026</td>
+                                            <td class="py-3 text-white text-center">{{siteName}}</td>
+                                            <td class="py-3 text-end text-secondary">{{updatedAt}}</td>
                                         </tr>
+                                        {{/recentActivity}}
+
+                                        {{^recentActivity}}
                                         <tr>
-                                            <td class="py-3"><span
-                                                    class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25">Editada</span>
-                                            </td>
-                                            <td class="py-3 text-white text-center">google.com</td>
-                                            <td class="py-3 text-end text-secondary">03 Feb 2026</td>
+                                            <td colspan="3" class="text-center py-4 text-secondary">Aún no tienes
+                                                contraseñas guardadas en tu bóveda.</td>
                                         </tr>
-                                        <tr>
-                                            <td class="py-3"><span
-                                                    class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25">Eliminada</span>
-                                            </td>
-                                            <td class="py-3 text-white text-center">spotify.com</td>
-                                            <td class="py-3 text-end text-secondary">22 Ene 2026</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="py-3"><span
-                                                    class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25">Alerta</span>
-                                            </td>
-                                            <td class="py-3 text-white text-center">amazon.es</td>
-                                            <td class="py-3 text-end text-secondary">20 Ene 2026</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="py-3"><span
-                                                    class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25">Creada</span>
-                                            </td>
-                                            <td class="py-3 text-white text-center">facebook.com</td>
-                                            <td class="py-3 text-end text-secondary">18 Ene 2026</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="py-3"><span
-                                                    class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25">Editada</span>
-                                            </td>
-                                            <td class="py-3 text-white text-center">twitter.com</td>
-                                            <td class="py-3 text-end text-secondary">15 Ene 2026</td>
-                                        </tr>
+                                        {{/recentActivity}}
                                     </tbody>
                                 </table>
                             </div>

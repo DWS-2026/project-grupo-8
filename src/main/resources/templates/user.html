@@ -28,10 +28,10 @@
                                 alt="Avatar">
                         </div>
                         <div class="text-center text-md-start">
-                            <h2 class="fw-bold text-white mb-1">Usuario Ejemplo</h2>
+                            <h2 class="fw-bold text-white mb-1">{{user.name}}</h2>
                             <div
                                 class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 text-secondary mb-2">
-                                <i class="bi bi-envelope"></i> usuario@ejemplo.com
+                                <i class="bi bi-envelope"></i> {{user.email}}
                             </div>
                         </div>
                         <div class="ms-auto d-none d-md-block">
@@ -48,7 +48,7 @@
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div>
                                     <h6 class="text-secondary text-uppercase small fw-bold">Plan Actual</h6>
-                                    <h4 class="text-white mb-0">Gratuito</h4>
+                                    <h4 class="text-white mb-0">{{user.plan}}</h4>
                                 </div>
                                 <div class="p-2 bg-secondary bg-opacity-25 rounded text-white">
                                     <i class="bi bi-box-seam"></i>
@@ -62,7 +62,7 @@
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div>
                                     <h6 class="text-secondary text-uppercase small fw-bold">Seguridad</h6>
-                                    <h4 class="text-white mb-0">Media</h4>
+                                    <h4 class="text-white mb-0">{{user.security}}</h4>
                                 </div>
                                 <div class="p-2 bg-warning bg-opacity-25 rounded text-warning">
                                     <i class="bi bi-shield-check"></i>
@@ -76,7 +76,7 @@
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div>
                                     <h6 class="text-secondary text-uppercase small fw-bold">Antigüedad</h6>
-                                    <h4 class="text-white mb-0">1 Mes</h4>
+                                    <h4 class="text-white mb-0">{{user.tenure}}</h4>
                                 </div>
                                 <div class="p-2 bg-info bg-opacity-25 rounded text-info">
                                     <i class="bi bi-calendar-event"></i>
@@ -95,14 +95,14 @@
                                     (2FA)</label>
                                 <div class="d-flex align-items-center gap-2 mt-1">
                                     <i class="bi bi-x-circle-fill text-danger"></i>
-                                    <span class="text-white">Desactivado</span>
+                                    <span class="text-white">{{user.twoFactorAuth}}</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label text-secondary small">Estado del Pago</label>
                                 <div class="d-flex align-items-center gap-2 mt-1">
                                     <i class="bi bi-check-circle-fill text-success"></i>
-                                    <span class="text-white">N/A (Plan Gratuito)</span>
+                                    <span class="text-white">{{user.paymentStatus}}</span>
                                 </div>
                             </div>
                         </div>

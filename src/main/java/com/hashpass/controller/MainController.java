@@ -1,5 +1,7 @@
 package com.hashpass.controller;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +12,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.hashpass.model.Credential;
 import com.hashpass.model.User;
+import com.hashpass.repository.CredentialRepository;
 import com.hashpass.repository.UserRepository;
 import com.hashpass.service.UserSession;
 
 @Controller
 public class MainController {
 
+    @Autowired
+    private CredentialRepository credentialRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -51,14 +57,35 @@ public class MainController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
-        // 1. Comprobar si hay un usuario en sesión
+        
         if (!userSession.isLogged()) {
-            return "redirect:/login"; // Si no está logueado, patada a la pantalla de login
+            return "redirect:/login";
         }
 
-        // 2. Si está logueado, pasamos el objeto User completo a la vista de Mustache
-        model.addAttribute("user", userSession.getUser());
-        
+        User currentUser = userSession.getUser();
+        model.addAttribute("user", currentUser);
+
+        // 1. Obtener todas las contraseñas de este usuario
+        List<Credential> userCredentials = credentialRepository.findByUserId(currentUser.getId());
+
+        // Total de contraseñas guardadas
+        model.addAttribute("totalCredentials", userCredentials.size());
+
+        // Calcular contraseñas débiles (menos de 8 caracteres)
+        long weakCredentials = userCredentials.stream()
+                .filter(c -> c.getPasswordEncrypted().length() < 8)
+                .count();
+        model.addAttribute("weakCredentials", weakCredentials);
+
+        // Calcular accesos/modificaciones en los últimos 30 días
+        LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
+        long monthlyAccesses = userCredentials.stream()
+                .filter(c -> c.getUpdatedAt().isAfter(thirtyDaysAgo))
+                .count();
+        model.addAttribute("monthlyAccesses", monthlyAccesses);
+
+        model.addAttribute("recentActivity", userCredentials);
+
         return "dashboard";
     }
 
