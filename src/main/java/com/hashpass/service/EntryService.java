@@ -43,7 +43,7 @@ public class EntryService {
             throw new IllegalStateException("Debe iniciar sesión para guardar credenciales");
         }
         cred.setUser(u);
-        cred.setPasswordEncrypted(obfuscate(plainPassword));
+        cred.setPasswordEncrypted(encrypt(plainPassword));
         return credentialRepository.save(cred);
     }
 
@@ -56,20 +56,51 @@ public class EntryService {
     }
 
     // ------------------------------------------------------------------
-    // helpers simples para "cifrado"
+    // Helpers para cifrar y descifrar las contraseñas del usuario
     // ------------------------------------------------------------------
 
-    private String obfuscate(String raw) {
-        if (raw == null) {
-            return null;
+    private String encrypt(String raw) {
+        if (raw == null) return null;
+        
+        // 1. Le pedimos la llave maestra al archivo temporal de la sesion, donde se ha guardado
+        String userKey = userSession.getEncryptionKey();
+        if (userKey == null) {
+            throw new IllegalStateException("No hay llave de cifrado en la sesión");
         }
-        return Base64.getEncoder().encodeToString(raw.getBytes(StandardCharsets.UTF_8));
+
+        try {
+            // 2. Cerramos el candado AES usando la llave personal del usuario
+            java.security.Key key = new javax.crypto.spec.SecretKeySpec(userKey.getBytes(java.nio.charset.StandardCharsets.UTF_8), "AES");
+            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES");
+            cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, key);
+            
+            byte[] encryptedBytes = cipher.doFinal(raw.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            return java.util.Base64.getEncoder().encodeToString(encryptedBytes);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al cifrar la contraseña", e);
+        }
     }
 
-    public String deobfuscate(String encoded) {
-        if (encoded == null) {
-            return null;
+    public String decrypt(String encrypted) {
+        if (encrypted == null) return null;
+        
+        // 1. Le pedimos la llave maestra al archivo temporal de la sesion, donde se ha guardado
+        String userKey = userSession.getEncryptionKey();
+        if (userKey == null) {
+            throw new IllegalStateException("No hay llave de descifrado en la sesión");
         }
-        return new String(Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8);
+
+        try {
+            // 2. Cerramos el candado AES usando la llave personal del usuario
+            java.security.Key key = new javax.crypto.spec.SecretKeySpec(userKey.getBytes(java.nio.charset.StandardCharsets.UTF_8), "AES");
+            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES");
+            cipher.init(javax.crypto.Cipher.DECRYPT_MODE, key);
+            
+            byte[] decodedBytes = java.util.Base64.getDecoder().decode(encrypted);
+            byte[] decryptedBytes = cipher.doFinal(decodedBytes);
+            return new String(decryptedBytes, java.nio.charset.StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al descifrar la contraseña. ¿Llave incorrecta?", e);
+        }
     }
 }

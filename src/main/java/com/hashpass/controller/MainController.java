@@ -64,8 +64,16 @@ public class MainController {
         model.addAttribute("totalCredentials", userCredentials.size());
 
         // Calcular contraseñas débiles (menos de 8 caracteres)
+        // NUEVO: Ahora desciframos cada contraseña temporalmente para medir su longitud real
         long weakCredentials = userCredentials.stream()
-                .filter(c -> c.getPasswordEncrypted().length() < 8)
+                .filter(c -> {
+                    try {
+                        String realPassword = entryService.decrypt(c.getPasswordEncrypted());
+                        return realPassword != null && realPassword.length() < 8;
+                    } catch (Exception e) {
+                        return false; // Si hay error al descifrar, la ignoramos para esta cuenta
+                    }
+                })
                 .count();
         model.addAttribute("weakCredentials", weakCredentials);
 
@@ -95,7 +103,22 @@ public class MainController {
         if (!userSession.isLogged()) {
             return "redirect:/login";
         }
-        model.addAttribute("credentials", entryService.listCurrentUser());
+        
+        // 1. Obtenemos la lista cifrada
+        List<Credential> encryptedList = entryService.listCurrentUser();
+        
+        // 2. NUEVO: Creamos una copia de la lista donde reemplazamos el texto cifrado por el texto real temporalmente
+        // Esto solo afecta a lo que se envía al HTML, en la base de datos sigue cifrado
+        encryptedList.forEach(cred -> {
+            try {
+                String plain = entryService.decrypt(cred.getPasswordEncrypted());
+                cred.setPasswordEncrypted(plain); // Reutilizamos el campo solo para mostrárselo al HTML
+            } catch (Exception e) {
+                cred.setPasswordEncrypted("Error al descifrar");
+            }
+        });
+        
+        model.addAttribute("credentials", encryptedList);
         return "passwords";
     }
 
