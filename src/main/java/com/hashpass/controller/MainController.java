@@ -34,7 +34,12 @@ public class MainController {
     // Make current user available to all views (mustache fragments expect it)
     @ModelAttribute("user")
     public User populateUser() {
-        return userSession.getUser();
+        User u = userSession.getUser();
+        if (u == null) {
+            return null;
+        }
+        // Reload user from DB to ensure lazy collections are available for views
+        return userRepository.findById(u.getId()).orElse(null);
     }
 
     @GetMapping("/")
@@ -125,8 +130,30 @@ public class MainController {
     }
 
     @GetMapping("/info-passwords")
-    public String infoPasswords(Model model) {
-        return requireLogin(model, "info-passwords");
+    public String infoPasswords(Model model, @RequestParam(required = false) Long id) {
+        if (!userSession.isLogged()) {
+            return "redirect:/login";
+        }
+
+        if (id != null) {
+            Optional<Credential> credOpt = entryService.findById(id);
+            if (credOpt.isPresent()) {
+                Credential cred = credOpt.get();
+                // ensure the credential belongs to current user
+                User current = userSession.getUser();
+                if (cred.getUser() != null && cred.getUser().getId().equals(current.getId())) {
+                    model.addAttribute("credential", cred);
+                    model.addAttribute("decryptedPassword", entryService.deobfuscate(cred.getPasswordEncrypted()));
+                } else {
+                    return "redirect:/passwords";
+                }
+            } else {
+                return "redirect:/passwords";
+            }
+        }
+
+        model.addAttribute("credentials", entryService.listCurrentUser());
+        return "info-passwords";
     }
 
     @GetMapping("/plan")
@@ -167,6 +194,55 @@ public class MainController {
     @GetMapping("/admin-user-detail")
     public String adminUserDetail(Model model) {
         return requireLogin(model, "admin_user_detail");
+    }
+
+    @PostMapping("/delete-password")
+    public String deletePassword(@RequestParam Long id) {
+        if (!userSession.isLogged()) {
+            return "redirect:/login";
+        }
+        Optional<Credential> credOpt = entryService.findById(id);
+        if (credOpt.isPresent()) {
+            Credential cred = credOpt.get();
+            User current = userSession.getUser();
+            if (cred.getUser() != null && cred.getUser().getId().equals(current.getId())) {
+                entryService.delete(id);
+            }
+        }
+        return "redirect:/passwords";
+    }
+
+    @PostMapping("/save-password-edit")
+    public String savePasswordEdit(
+            @RequestParam Long id,
+            @RequestParam String service,
+            @RequestParam String username,
+            @RequestParam String password,
+            @RequestParam(required = false) String url,
+            @RequestParam(required = false) String note
+    ) {
+        if (!userSession.isLogged()) {
+            return "redirect:/login";
+        }
+
+        Optional<Credential> existing = entryService.findById(id);
+        if (existing.isEmpty()) {
+            return "redirect:/passwords";
+        }
+
+        Credential c = existing.get();
+        User current = userSession.getUser();
+        if (c.getUser() == null || !c.getUser().getId().equals(current.getId())) {
+            return "redirect:/passwords";
+        }
+
+        c.setSiteName(service);
+        c.setUsername(username);
+        c.setSiteUrl(url);
+        c.setNote(note);
+
+        entryService.save(c, password);
+        return "redirect:/passwords";
     }
 
 }
