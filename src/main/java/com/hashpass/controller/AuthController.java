@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hashpass.service.AuthService;
 
@@ -45,14 +46,17 @@ public class AuthController {
     @PostMapping("/login")
     public String processLogin(@RequestParam String email,
             @RequestParam String password,
-            Model model) {
+            RedirectAttributes redirectAttributes) {
 
         if (authService.login(email, password)) {
             return "redirect:/dashboard";
         }
 
-        model.addAttribute("error", "Correo o contraseña incorrectos.");
-        return "login";
+        redirectAttributes.addAttribute("email", email);
+
+        redirectAttributes.addFlashAttribute("error", "Contraseña incorrecta. Inténtelo de nuevo.");
+
+        return "redirect:/password-login";
     }
 
     @PostMapping("/logout")
