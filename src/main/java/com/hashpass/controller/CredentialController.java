@@ -1,4 +1,5 @@
 package com.hashpass.controller;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,7 @@ import com.hashpass.service.UserSession;
 import com.hashpass.service.EntryService;
 
 @Controller
-public class MainController {
+public class CredentialController {
     @Autowired
     private CredentialRepository credentialRepository;
     @Autowired
@@ -53,12 +54,14 @@ public class MainController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
+    public String dashboard(Model model, Principal principal) {
         
         if (!userSession.isLogged()) {
             return "redirect:/login";
         }
 
+        principal.getName(); // Esto va con el Principal de SpringSecurity
+        
         User currentUser = userSession.getUser(); // Esto va con el Principal de SpringSecurity
         model.addAttribute("user", currentUser);
 
@@ -177,46 +180,6 @@ public class MainController {
 
         model.addAttribute("credentials", entryService.listCurrentUser());
         return "info-passwords";
-    }
-
-    @GetMapping("/plan")
-    public String plan(Model model) {
-        return requireLogin(model, "plan");
-    }
-
-    @GetMapping("/payment")
-    public String payment(Model model) {
-        return requireLogin(model, "payment");
-    }
-
-    @GetMapping("/user")
-    public String user(Model model) {
-        return requireLogin(model, "user");
-    }
-
-    @GetMapping("/config-user")
-    public String configUser(Model model) {
-        return requireLogin(model, "config_user");
-    }
-
-    @GetMapping("/security-user")
-    public String securityUser(Model model) {
-        return requireLogin(model, "security_user");
-    }
-
-    @GetMapping("/reviews")
-    public String reviews(Model model) {
-        return requireLogin(model, "reviews");
-    }
-
-    @GetMapping("/admin")
-    public String admin(Model model) {
-        return requireLogin(model, "admin");
-    }
-
-    @GetMapping("/admin-user-detail")
-    public String adminUserDetail(Model model) {
-        return requireLogin(model, "admin_user_detail");
     }
 
     @PostMapping("/delete-password")
