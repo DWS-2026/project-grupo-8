@@ -8,14 +8,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hashpass.service.AuthService;
+import com.hashpass.service.UserSession;
 
 @Controller
-public class AuthController {
+public class UserController {
 
     private final AuthService authService;
+    private final UserSession userSession;
 
-    public AuthController(AuthService authService) {
+    public UserController(AuthService authService, UserSession userSession) {
         this.authService = authService;
+        this.userSession = userSession;
     }
 
     @GetMapping("/login")
@@ -63,5 +66,39 @@ public class AuthController {
     public String logout() {
         authService.logout();
         return "redirect:/";
+    }
+
+    @GetMapping("/user")
+    public String user(Model model) {
+        return requireLogin(model, "user");
+    }
+
+    @GetMapping("/config-user")
+    public String configUser(Model model) {
+        return requireLogin(model, "config_user");
+    }
+
+    @GetMapping("/security-user")
+    public String securityUser(Model model) {
+        return requireLogin(model, "security_user");
+    }
+
+    @GetMapping("/admin")
+    public String admin(Model model) {
+        return requireLogin(model, "admin");
+    }
+
+    @GetMapping("/admin-user-detail")
+    public String adminUserDetail(Model model) {
+        return requireLogin(model, "admin_user_detail");
+    }
+
+    // helper to require login and automatically supply user via @ModelAttribute
+    private String requireLogin(Model model, String view) {
+        if (!userSession.isLogged()) {
+            return "redirect:/login";
+        }
+        // user already added by populateUser()
+        return view;
     }
 }
