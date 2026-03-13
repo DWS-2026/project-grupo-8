@@ -46,28 +46,6 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @PostMapping("/login")
-    public String processLogin(@RequestParam String email,
-            @RequestParam String password,
-            RedirectAttributes redirectAttributes) {
-
-        if (authService.login(email, password)) {
-            return "redirect:/dashboard";
-        }
-
-        redirectAttributes.addAttribute("email", email);
-
-        redirectAttributes.addFlashAttribute("error", "Contraseña incorrecta. Inténtelo de nuevo.");
-
-        return "redirect:/password-login";
-    }
-
-    @PostMapping("/logout")
-    public String logout() {
-        authService.logout();
-        return "redirect:/";
-    }
-
     @GetMapping("/user")
     public String user(Model model) {
         return requireLogin(model, "user");

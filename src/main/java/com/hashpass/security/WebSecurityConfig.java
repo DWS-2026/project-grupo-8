@@ -3,12 +3,16 @@ package com.hashpass.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.hashpass.service.UserSession;
 
 @Configuration
 @EnableWebSecurity
@@ -17,9 +21,17 @@ public class WebSecurityConfig {
 	@Autowired
 	RepositoryUserDetailsService userDetailsService;
 
+	@Autowired
+	UserSession userSession;
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+		return authConfig.getAuthenticationManager();
 	}
 
 	@Bean
@@ -68,13 +80,13 @@ public class WebSecurityConfig {
 
                         .formLogin(formLogin -> formLogin
 						.loginPage("/login")
-                        .loginPage("/password-login")
-						.failureUrl("/loginerror")
-						.defaultSuccessUrl("/")
+						.failureUrl("/password-login")
+						.defaultSuccessUrl("/dashboard")
 						.permitAll())
 				.logout(logout -> logout
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/")
+						.addLogoutHandler((request, response, auth) -> userSession.logout())
 						.permitAll());
 
         http.csrf(csrf -> csrf.disable());

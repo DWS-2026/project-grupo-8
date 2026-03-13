@@ -2,6 +2,11 @@ package com.hashpass.service;
 
 import java.util.Optional;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.hashpass.model.User;
@@ -12,10 +17,12 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final UserSession userSession;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthService(UserRepository userRepository, UserSession userSession) {
+    public AuthService(UserRepository userRepository, UserSession userSession, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.userSession = userSession;
+        this.authenticationManager = authenticationManager;
     }
 
     public boolean isEmailRegistered(String email) {
@@ -32,24 +39,32 @@ public class AuthService {
     }
 
     public boolean login(String email, String password) {
-        Optional<User> userOpt = userRepository.findByEmail(email);
-        // Comparamos el hash de la contraseña ingresada con el hash almacenado en la
-        // base de datos
-        if (userOpt.isPresent() && userOpt.get().getPasswordHash().equals(hashPassword(password))) {
-
-            userSession.setUser(userOpt.get());
-            // Ajustamos la contraseña y la guardamos como llave maestra
+        try {
+            // Derivar la clave de encriptación antes de autenticar
             String secretKey = deriveKey(password);
-
             userSession.setEncryptionKey(secretKey);
 
+            // Autenticar con Spring Security
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Obtener el usuario y setear en userSession
+            Optional<User> userOpt = userRepository.findByEmail(email);
+            if (userOpt.isPresent()) {
+                userSession.setUser(userOpt.get());
+            }
+
             return true;
+        } catch (AuthenticationException e) {
+            return false;
         }
-        return false;
     }
 
     public void logout() {
         userSession.logout();
+        // Spring Security maneja el SecurityContext automáticamente
     }
 
     // ------------------------------------------------------------------
