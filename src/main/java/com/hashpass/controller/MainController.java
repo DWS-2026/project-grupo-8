@@ -166,7 +166,7 @@ public class MainController {
                 User current = userSession.getUser();
                 if (cred.getUser() != null && cred.getUser().getId().equals(current.getId())) {
                     model.addAttribute("credential", cred);
-                    model.addAttribute("decryptedPassword", entryService.deobfuscate(cred.getPasswordEncrypted()));
+                    model.addAttribute("decryptedPassword", entryService.decrypt(cred.getPasswordEncrypted()));
                 } else {
                     return "redirect:/passwords";
                 }
