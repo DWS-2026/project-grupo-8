@@ -59,7 +59,7 @@ public class MainController {
             return "redirect:/login";
         }
 
-        User currentUser = userSession.getUser();
+        User currentUser = userSession.getUser(); // Esto va con el Principal de SpringSecurity
         model.addAttribute("user", currentUser);
 
         // 1. Obtener todas las contraseñas de este usuario
