@@ -52,6 +52,12 @@ public class User {
 	@Column(nullable = false)
 	private LocalDateTime updatedAt;
 
+	@Column
+	private Integer loginCount;
+
+	@Column
+	private LocalDateTime loginCountWindowStart;
+
 	@PrePersist
 	void onCreate() {
 		LocalDateTime now = LocalDateTime.now();
@@ -134,6 +140,22 @@ public class User {
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public Integer getLoginCount() {
+		return loginCount;
+	}
+
+	public void setLoginCount(Integer loginCount) {
+		this.loginCount = loginCount;
+	}
+
+	public LocalDateTime getLoginCountWindowStart() {
+		return loginCountWindowStart;
+	}
+
+	public void setLoginCountWindowStart(LocalDateTime loginCountWindowStart) {
+		this.loginCountWindowStart = loginCountWindowStart;
 	}
 
 	// Computed properties for dynamic dashboard stats

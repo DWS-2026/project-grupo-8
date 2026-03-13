@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.hashpass.service.UserSession;
-import com.hashpass.model.User;
+import java.time.LocalDateTime;
 import com.hashpass.repository.UserRepository;
 
 @Configuration
@@ -99,6 +99,16 @@ public class WebSecurityConfig {
 							userRepository.findByEmail(email).ifPresent(user -> {
 								userSession.setUser(user);
 								userSession.setEncryptionKey(deriveKey(password));
+
+								// Actualizar contador de logins de 30 días (simple, persistente en User)
+								LocalDateTime now = LocalDateTime.now();
+								if (user.getLoginCountWindowStart() == null || user.getLoginCountWindowStart().isBefore(now.minusDays(30))) {
+									user.setLoginCount(1);
+									user.setLoginCountWindowStart(now);
+								} else {
+									user.setLoginCount((user.getLoginCount() == null ? 0 : user.getLoginCount()) + 1);
+								}
+								userRepository.save(user);
 							});
 							response.sendRedirect("/dashboard");
 						})

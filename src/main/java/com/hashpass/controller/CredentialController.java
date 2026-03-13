@@ -1,6 +1,5 @@
 package com.hashpass.controller;
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,12 +84,9 @@ public class CredentialController {
                 .count();
         model.addAttribute("weakCredentials", weakCredentials);
 
-        // Calcular accesos/modificaciones en los últimos 30 días
-        LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
-        long monthlyAccesses = userCredentials.stream()
-                .filter(c -> c.getUpdatedAt().isAfter(thirtyDaysAgo))
-                .count();
-        model.addAttribute("monthlyAccesses", monthlyAccesses);
+        // Usar contador de logins almacenado en User para accesos últimos 30 días
+        Integer cnt = currentUser.getLoginCount();
+        model.addAttribute("monthlyAccesses", cnt == null ? 0 : cnt);
 
         model.addAttribute("recentActivity", userCredentials);
 
