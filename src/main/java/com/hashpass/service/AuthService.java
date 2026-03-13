@@ -2,11 +2,7 @@ package com.hashpass.service;
 
 import java.util.Optional;
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hashpass.model.User;
@@ -17,12 +13,12 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final UserSession userSession;
-    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthService(UserRepository userRepository, UserSession userSession, AuthenticationManager authenticationManager) {
+    public AuthService(UserRepository userRepository, UserSession userSession, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userSession = userSession;
-        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public boolean isEmailRegistered(String email) {
@@ -33,33 +29,15 @@ public class AuthService {
         User newUser = new User();
         newUser.setName(name);
         newUser.setEmail(email);
-        // Guardamos un hash de la contraseña, no la contraseña en texto plano
-        newUser.setPasswordHash(hashPassword(password));
+        // Guardamos un hash de la contraseña usando BCrypt
+        newUser.setPasswordHash(passwordEncoder.encode(password));
         userRepository.save(newUser);
     }
 
     public boolean login(String email, String password) {
-        try {
-            // Derivar la clave de encriptación antes de autenticar
-            String secretKey = deriveKey(password);
-            userSession.setEncryptionKey(secretKey);
-
-            // Autenticar con Spring Security
-            Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            // Obtener el usuario y setear en userSession
-            Optional<User> userOpt = userRepository.findByEmail(email);
-            if (userOpt.isPresent()) {
-                userSession.setUser(userOpt.get());
-            }
-
-            return true;
-        } catch (AuthenticationException e) {
-            return false;
-        }
+        // Este método ya no se usa, ya que Spring Security maneja el login
+        // Pero se mantiene por compatibilidad
+        return false;
     }
 
     public void logout() {
