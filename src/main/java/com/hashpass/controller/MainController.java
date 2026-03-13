@@ -1,4 +1,5 @@
 package com.hashpass.controller;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -53,12 +54,14 @@ public class MainController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
+    public String dashboard(Model model, Principal principal) {
         
         if (!userSession.isLogged()) {
             return "redirect:/login";
         }
 
+        principal.getName(); // Esto va con el Principal de SpringSecurity
+        
         User currentUser = userSession.getUser(); // Esto va con el Principal de SpringSecurity
         model.addAttribute("user", currentUser);
 
