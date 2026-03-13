@@ -39,6 +39,7 @@ public class WebSecurityConfig {
 				.authorizeHttpRequests(authorize -> authorize
 						// PUBLIC PAGES
 						.requestMatchers("/").permitAll()
+                        .requestMatchers("/register").permitAll()
 						.requestMatchers("/css/**").permitAll()
 						.requestMatchers("/images/**").permitAll()
 						.requestMatchers("/reviews/**").permitAll()
@@ -46,7 +47,6 @@ public class WebSecurityConfig {
                         .requestMatchers("/head/*").permitAll()
                         .requestMatchers("/navbarPublic/*").permitAll()
                         .requestMatchers("/assets/**").permitAll() // Allow access to static resources
-						.requestMatchers("/favicon.ico").permitAll()
 						// PRIVATE PAGES
 						.requestMatchers("/add-passwords").hasAnyRole("USER")
 						.requestMatchers("/config_user").hasAnyRole("USER")
