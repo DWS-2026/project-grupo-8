@@ -23,7 +23,7 @@
 					<div class="alert alert-danger" role="alert">{{error}}</div>
 					{{/error}}
 
-					<form id="registerForm" method="post" action="/register">
+					<form id="registerForm" method="post" action="/register" enctype="multipart/form-data">
 
 						<div class="mb-3">
 							<label for="fullname" class="form-label">Nombre completo</label>
@@ -124,7 +124,7 @@
 						</div>
 						<div class="mb-3">
 							<label for="avatar" class="form-label">Foto de perfil (Opcional)</label>
-							<input type="file" class="form-control login-email-input" id="avatar" accept="image/*">
+							<input type="file" class="form-control login-email-input" id="avatar" name="avatar" accept="image/*">
 						</div>
 
 						<div class="d-grid gap-2">

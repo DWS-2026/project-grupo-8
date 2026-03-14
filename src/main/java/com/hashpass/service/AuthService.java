@@ -25,13 +25,13 @@ public class AuthService {
         return userRepository.existsByEmail(email);
     }
 
-    public void registerUser(String name, String email, String password) {
+    public User registerUser(String name, String email, String password) {
         User newUser = new User();
         newUser.setName(name);
         newUser.setEmail(email);
         // Guardamos un hash de la contraseña usando BCrypt
         newUser.setPasswordHash(passwordEncoder.encode(password));
-        userRepository.save(newUser);
+        return userRepository.save(newUser);
     }
 
     public boolean login(String email, String password) {

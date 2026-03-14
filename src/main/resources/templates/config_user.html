@@ -13,7 +13,6 @@
             {{> fragments/sidebar}}
 
             <main id="main-content" class="col-md-9 col-lg-10 pt-4 px-4 transition-all">
-                <main id="main-content" class="col-md-9 col-lg-10 pt-4 px-4 transition-all">
 
                     <div class="mb-4">
                         <button class="btn btn-dark-custom border-0" id="toggle-btn" onclick="toggleSidebar()">
@@ -21,7 +20,7 @@
                         </button>
                     </div>
 
-                    <h3 class="text-white fw-bold mb-4">Cambiar correo electrónico</h3>
+                    <h3 class="text-white fw-bold mb-4">Configuración de usuario</h3>
 
                     {{#error}}
                     <div class="alert alert-danger">{{error}}</div>
@@ -30,63 +29,58 @@
                     <div class="alert alert-success">{{success}}</div>
                     {{/success}}
 
-                    <form method="post" action="/config-user">
-                        <div class="row">
-                            <div class="col-12 col-lg-7">
-
+                    <div class="row">
+                        <div class="col-12 col-lg-7">
+                            <h5 class="text-white mb-3">Cambiar correo electrónico</h5>
+                            <form method="post" action="/config-user">
                                 <div class="mb-3">
-                                    <label for="masterPass" class="form-label text-secondary small">Contraseña
-                                        maestra (requerido)</label>
+                                    <label for="masterPass" class="form-label text-secondary small">Contraseña maestra (requerido)</label>
                                     <div class="input-group">
-                                        <input type="password" name="masterPass"
-                                            class="form-control bg-transparent text-white border-secondary" id="masterPass" required>
-                                        <button class="btn btn-outline-secondary border-secondary" type="button"
-                                            onclick="togglePasswordVisibility('masterPass', this)" aria-label="Mostrar u ocultar contraseña">
+                                        <input type="password" name="masterPass" class="form-control bg-transparent text-white border-secondary" id="masterPass" required>
+                                        <button class="btn btn-outline-secondary border-secondary" type="button" onclick="togglePasswordVisibility('masterPass', this)" aria-label="Mostrar u ocultar contraseña">
                                             <i class="bi bi-eye"></i>
                                         </button>
                                     </div>
                                 </div>
 
                                 <div class="mb-4">
-                                    <label for="newEmail" class="form-label text-secondary small">Nuevo correo
-                                        electrónico (requerido)</label>
-                                    <input type="email" name="newEmail" class="form-control bg-transparent text-white border-secondary"
-                                        id="newEmail" required>
+                                    <label for="newEmail" class="form-label text-secondary small">Nuevo correo electrónico (requerido)</label>
+                                    <input type="email" name="newEmail" class="form-control bg-transparent text-white border-secondary" id="newEmail" required>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary px-4">Guardar</button>
-                            </div>
-                        </form>
-
-                        <div class="col-12 col-lg-5 mt-4 mt-lg-0 ps-lg-5">
-
-                            <div class="d-flex align-items-center gap-3 mb-4">
-
-                                <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff"
-                                    id="avatarPreview"
-                                    class="avatar-img rounded-circle border border-2 border-secondary"
-                                    alt="Foto de perfil">
-
-                                <div>
-                                    <input type="file" id="avatarInput" class="d-none" accept="image/*"
-                                        onchange="previewImage(this)">
-
-                                    <button class="btn btn-outline-light btn-sm rounded-pill px-3 mb-1 hover-scale"
-                                        onclick="document.getElementById('avatarInput').click()">
-                                        <i class="bi bi-camera me-2"></i>Seleccionar imagen
-                                    </button>
-
-                                    <div class="text-white-50 small" style="font-size: 0.75rem;">
-                                        Máx. 2MB (JPG, PNG)
-                                    </div>
-                                </div>
-                            </div>
-
-
+                                <button type="submit" class="btn btn-primary px-4">Guardar correo</button>
+                            </form>
                         </div>
 
-                        <div style="height: 100px;"></div>
+                        <div class="col-12 col-lg-5 mt-4 mt-lg-0 ps-lg-5">
+                            <h5 class="text-white mb-3">Foto de perfil</h5>
 
+                            <form method="post" action="/config-user/avatar" enctype="multipart/form-data">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <img src="{{#profileImageUrl}}{{profileImageUrl}}{{/profileImageUrl}}{{^profileImageUrl}}https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff{{/profileImageUrl}}"
+                                        id="avatarPreview"
+                                        class="avatar-img rounded-circle border border-2 border-secondary"
+                                        alt="Foto de perfil">
+
+                                    <div>
+                                        <input type="file" id="avatarInput" name="avatar" class="d-none" accept="image/*" onchange="previewImage(this)" required>
+
+                                        <button type="button" class="btn btn-outline-light btn-sm rounded-pill px-3 mb-1 hover-scale" onclick="document.getElementById('avatarInput').click()">
+                                            <i class="bi bi-camera me-2"></i>Seleccionar imagen
+                                        </button>
+
+                                        <div class="text-white-50 small" style="font-size: 0.75rem;">
+                                            Máx. 2MB (JPG, PNG, WEBP)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary px-4">Guardar foto</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div style="height: 100px;"></div>
                 </main>
         </div>
     </div>

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hashpass.model.Credential;
 import com.hashpass.model.User;
@@ -17,6 +18,7 @@ import com.hashpass.repository.CredentialRepository;
 import com.hashpass.repository.UserRepository;
 import com.hashpass.service.UserSession;
 import com.hashpass.service.EntryService;
+import com.hashpass.service.ImageService;
 
 @Controller
 public class CredentialController {
@@ -31,6 +33,9 @@ public class CredentialController {
     @Autowired
     private EntryService entryService;
 
+    @Autowired
+    private ImageService imageService;
+
     // Make current user available to all views (mustache fragments expect it)
     @ModelAttribute("user")
     public User populateUser() {
@@ -40,6 +45,11 @@ public class CredentialController {
         }
         // Reload user from DB to ensure lazy collections are available for views
         return userRepository.findById(u.getId()).orElse(null);
+    }
+
+    @ModelAttribute("profileImageUrl")
+    public String populateProfileImageUrl() {
+        return imageService.getProfileImageUrl(userSession.getUser());
     }
 
     @GetMapping("/")
@@ -134,6 +144,7 @@ public class CredentialController {
             } catch (Exception e) {
                 cred.setPasswordEncrypted("Error al descifrar");
             }
+            cred.setImageUrl(imageService.getCredentialImageUrl(cred.getId()));
         });
         
         model.addAttribute("credentials", encryptedList);
@@ -151,7 +162,9 @@ public class CredentialController {
             @RequestParam String username,
             @RequestParam String password,
             @RequestParam(required = false) String url,
-            @RequestParam(required = false) String note
+            @RequestParam(required = false) String note,
+            @RequestParam(required = false, name = "credentialImage") MultipartFile credentialImage,
+            Model model
     ) {
         if (!userSession.isLogged()) {
             return "redirect:/login";
@@ -161,7 +174,12 @@ public class CredentialController {
         c.setUsername(username);
         c.setSiteUrl(url);
         c.setNote(note);
-        entryService.save(c, password);
+        Credential saved = entryService.save(c, password);
+        String imageError = imageService.saveCredentialImage(saved.getId(), credentialImage, userSession.getUser());
+        if (imageError != null) {
+            model.addAttribute("error", imageError);
+            return "add-password";
+        }
         return "redirect:/passwords";
     }
 
@@ -180,6 +198,7 @@ public class CredentialController {
                 if (cred.getUser() != null && cred.getUser().getId().equals(current.getId())) {
                     model.addAttribute("credential", cred);
                     model.addAttribute("decryptedPassword", entryService.decrypt(cred.getPasswordEncrypted()));
+                    model.addAttribute("credentialImageUrl", imageService.getCredentialImageUrl(cred.getId()));
                 } else {
                     return "redirect:/passwords";
                 }
@@ -202,6 +221,7 @@ public class CredentialController {
             Credential cred = credOpt.get();
             User current = userSession.getUser();
             if (cred.getUser() != null && cred.getUser().getId().equals(current.getId())) {
+                imageService.deleteCredentialImage(id);
                 entryService.delete(id);
             }
         }
@@ -215,7 +235,9 @@ public class CredentialController {
             @RequestParam String username,
             @RequestParam String password,
             @RequestParam(required = false) String url,
-            @RequestParam(required = false) String note
+                @RequestParam(required = false) String note,
+                @RequestParam(required = false, name = "credentialImage") MultipartFile credentialImage,
+                Model model
     ) {
         if (!userSession.isLogged()) {
             return "redirect:/login";
@@ -237,7 +259,16 @@ public class CredentialController {
         c.setSiteUrl(url);
         c.setNote(note);
 
-        entryService.save(c, password);
+        Credential saved = entryService.save(c, password);
+        String imageError = imageService.saveCredentialImage(saved.getId(), credentialImage, current);
+        if (imageError != null) {
+            model.addAttribute("credential", saved);
+            model.addAttribute("decryptedPassword", password);
+            model.addAttribute("credentialImageUrl", imageService.getCredentialImageUrl(saved.getId()));
+            model.addAttribute("error", imageError);
+            return "info-passwords";
+        }
+
         return "redirect:/passwords";
     }
 

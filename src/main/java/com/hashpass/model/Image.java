@@ -9,37 +9,32 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
-@Table(name = "credentials")
-public class Credential {
+@Table(name = "images")
+public class Image {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, length = 120)
-	private String siteName;
+	@Column(nullable = false, length = 200)
+	private String filename;
 
-	@Column(length = 255)
-	private String siteUrl;
+	@Column(nullable = false, length = 100)
+	private String contentType;
 
-	@Column(nullable = false, length = 120)
-	private String username;
+	@Lob
+	@Column(nullable = false, columnDefinition = "LONGBLOB")
+	private byte[] data;
 
-	@Column(nullable = false, length = 255)
-	private String passwordEncrypted;
-
-	@Column(length = 1000)
-	private String note;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false, unique = true)
 	private User user;
 
 	@Column(nullable = false)
@@ -47,9 +42,6 @@ public class Credential {
 
 	@Column(nullable = false)
 	private LocalDateTime updatedAt;
-
-	@Transient
-	private String imageUrl;
 
 	@PrePersist
 	void onCreate() {
@@ -71,44 +63,28 @@ public class Credential {
 		this.id = id;
 	}
 
-	public String getSiteName() {
-		return siteName;
+	public String getFilename() {
+		return filename;
 	}
 
-	public void setSiteName(String siteName) {
-		this.siteName = siteName;
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 
-	public String getSiteUrl() {
-		return siteUrl;
+	public String getContentType() {
+		return contentType;
 	}
 
-	public void setSiteUrl(String siteUrl) {
-		this.siteUrl = siteUrl;
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
-	public String getUsername() {
-		return username;
+	public byte[] getData() {
+		return data;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPasswordEncrypted() {
-		return passwordEncrypted;
-	}
-
-	public void setPasswordEncrypted(String passwordEncrypted) {
-		this.passwordEncrypted = passwordEncrypted;
-	}
-
-	public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
+	public void setData(byte[] data) {
+		this.data = data;
 	}
 
 	public User getUser() {
@@ -133,13 +109,5 @@ public class Credential {
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
 	}
 }

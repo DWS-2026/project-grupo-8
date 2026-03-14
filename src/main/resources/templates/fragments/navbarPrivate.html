@@ -5,7 +5,7 @@
         </a>
         <div class="dropdown ms-auto">
             <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle no-arrow pe-0" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="Usuario" class="avatar-img-nav rounded-circle">
+                <img src="{{#profileImageUrl}}{{profileImageUrl}}{{/profileImageUrl}}{{^profileImageUrl}}https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff{{/profileImageUrl}}" alt="Usuario" class="avatar-img-nav rounded-circle">
             </a>
             <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end mt-3 shadow-lg border-0" aria-labelledby="userDropdown" style="min-width: 220px;">
                 <li>

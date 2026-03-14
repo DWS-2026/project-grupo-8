@@ -46,6 +46,9 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> reviews = new ArrayList<>();
 
+	@jakarta.persistence.OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private Image profileImage;
+
 	@Column(nullable = false)
 	private LocalDateTime createdAt;
 
@@ -124,6 +127,14 @@ public class User {
 
 	public void setReviews(List<Review> reviews) {
 		this.reviews = reviews;
+	}
+
+	public Image getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(Image profileImage) {
+		this.profileImage = profileImage;
 	}
 
 	public LocalDateTime getCreatedAt() {

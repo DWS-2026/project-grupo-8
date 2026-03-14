@@ -73,7 +73,7 @@ public class WebSecurityConfig {
 					.requestMatchers("/add-password", "/add-password/**").hasAnyRole("USER")
 					.requestMatchers("/delete-password", "/delete-password/**").hasAnyRole("USER")
 					.requestMatchers("/save-password-edit", "/save-password-edit/**").hasAnyRole("USER")
-						.requestMatchers("/config-user").hasAnyRole("USER")
+						.requestMatchers("/config-user", "/config-user/**").hasAnyRole("USER")
 						.requestMatchers("/dashboard", "/dashboard/**").hasAnyRole("USER")
                         .requestMatchers("/info-passwords", "/info-passwords/**").hasAnyRole("USER")
                         .requestMatchers("/index", "/index/**").hasAnyRole("USER")

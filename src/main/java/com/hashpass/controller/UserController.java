@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -13,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.hashpass.model.User;
 import com.hashpass.service.AuthService;
+import com.hashpass.service.ImageService;
 import com.hashpass.service.UserSession;
 
 @Controller
@@ -20,15 +23,22 @@ public class UserController {
 
     private final AuthService authService;
     private final UserSession userSession;
+    private final ImageService imageService;
 
     @ModelAttribute("user")
     public User populateUser() {
         return userSession.getUser();
     }
 
-    public UserController(AuthService authService, UserSession userSession) {
+    @ModelAttribute("profileImageUrl")
+    public String populateProfileImageUrl() {
+        return imageService.getProfileImageUrl(userSession.getUser());
+    }
+
+    public UserController(AuthService authService, UserSession userSession, ImageService imageService) {
         this.authService = authService;
         this.userSession = userSession;
+        this.imageService = imageService;
     }
 
     @GetMapping("/login")
@@ -53,6 +63,7 @@ public class UserController {
     public String processRegister(@RequestParam String name,
             @RequestParam String email,
             @RequestParam String password,
+            @RequestParam(required = false, name = "avatar") MultipartFile avatar,
             Model model) {
 
         if (authService.isEmailRegistered(email)) {
@@ -60,7 +71,12 @@ public class UserController {
             return "register";
         }
 
-        authService.registerUser(name, email, password);
+        User registeredUser = authService.registerUser(name, email, password);
+
+        if (avatar != null && !avatar.isEmpty()) {
+            imageService.saveProfileImage(registeredUser, avatar);
+        }
+
         return "redirect:/login";
     }
 
@@ -72,6 +88,19 @@ public class UserController {
     @GetMapping("/config-user")
     public String configUser(Model model) {
         return requireLogin(model, "config_user");
+    }
+
+    @PostMapping("/config-user/avatar")
+    public String uploadAvatar(@RequestParam("avatar") MultipartFile avatar,
+                               RedirectAttributes redirectAttributes) {
+        User currentUser = userSession.getUser();
+        String error = imageService.saveProfileImage(currentUser, avatar);
+        if (error == null) {
+            redirectAttributes.addFlashAttribute("success", "Foto de perfil actualizada correctamente.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", error);
+        }
+        return "redirect:/config-user";
     }
 
     @PostMapping("/config-user")
