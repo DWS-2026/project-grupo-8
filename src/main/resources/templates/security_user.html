@@ -146,9 +146,21 @@
                                 Eliminar tu cuenta borrará permanentemente todas tus contraseñas. Esta acción
                                 no se puede deshacer.
                             </p>
-                            <button type="button" class="btn btn-outline-danger w-100">
-                                Eliminar cuenta definitivamente
-                            </button>
+                            <form method="post" action="/security-user/delete-account">
+                                <div class="mb-3">
+                                    <label for="deleteAccountPass" class="form-label text-white small fw-bold">Confirma tu contraseña maestra</label>
+                                    <div class="input-group">
+                                        <input type="password" name="deleteAccountPass"
+                                            class="form-control bg-transparent text-white shadow-none border-danger" id="deleteAccountPass" required>
+                                        <button class="btn btn-ojito border-danger" type="button"
+                                            onclick="togglePasswordVisibility('deleteAccountPass', this)" aria-label="Mostrar u ocultar contraseña"><i class="bi bi-eye"></i></button>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-outline-danger w-100"
+                                    onclick="return confirm('Esta acción eliminará tu cuenta y todas tus contraseñas de forma permanente. ¿Quieres continuar?');">
+                                    Eliminar cuenta definitivamente
+                                </button>
+                            </form>
                         </div>
 
                     </div>

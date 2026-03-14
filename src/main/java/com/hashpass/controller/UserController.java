@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import com.hashpass.model.User;
 import com.hashpass.service.AuthService;
 import com.hashpass.service.UserSession;
@@ -28,7 +32,10 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(@RequestParam(required = false) String deleted, Model model) {
+        if (deleted != null) {
+            model.addAttribute("success", "Tu cuenta se ha eliminado definitivamente.");
+        }
         return "login";
     }
 
@@ -96,6 +103,23 @@ public class UserController {
             model.addAttribute("error", error);
         }
         return "security_user";
+    }
+
+    @PostMapping("/security-user/delete-account")
+    public String deleteAccount(@RequestParam String deleteAccountPass,
+                                Model model,
+                                HttpServletRequest request) {
+        User currentUser = userSession.getUser();
+        String error = authService.deleteAccount(currentUser, deleteAccountPass);
+        if (error != null) {
+            model.addAttribute("error", error);
+            return "security_user";
+        }
+
+        userSession.logout();
+        SecurityContextHolder.clearContext();
+        request.getSession().invalidate();
+        return "redirect:/login?deleted=1";
     }
 
     @GetMapping("/admin")

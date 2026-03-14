@@ -20,6 +20,10 @@
 
 					<div id="alert" class="alert d-none" role="alert"></div>
 
+					{{#success}}
+					<div class="alert alert-success" role="alert">{{success}}</div>
+					{{/success}}
+
 					<form id="loginForm" method="get" action="/password-login">
 						<div class="mb-3">
 							<label for="email" class="form-label">Introduzca su correo</label>

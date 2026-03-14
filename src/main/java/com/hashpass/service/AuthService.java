@@ -79,4 +79,21 @@ public class AuthService {
         userRepository.save(user);
         return null; // Éxito
     }
+
+    public String deleteAccount(User user, String currentPassword) {
+        if (user == null) {
+            return "No hay ninguna sesión activa.";
+        }
+        if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
+            return "La contraseña actual es incorrecta.";
+        }
+
+        User persistedUser = userRepository.findById(user.getId()).orElse(null);
+        if (persistedUser == null) {
+            return "No se ha encontrado la cuenta que se quiere eliminar.";
+        }
+
+        userRepository.delete(persistedUser);
+        return null;
+    }
 }
