@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import com.hashpass.service.UserSession;
 import java.time.LocalDateTime;
@@ -91,7 +93,14 @@ public class WebSecurityConfig {
 						.loginPage("/login")
 						.usernameParameter("email")
 						.passwordParameter("password")
-						.failureUrl("/password-login")
+						.failureHandler((request, response, exception) -> {
+							String email = request.getParameter("email");
+							if (email == null) {
+								email = "";
+							}
+							String encodedEmail = URLEncoder.encode(email, StandardCharsets.UTF_8);
+							response.sendRedirect("/password-login?email=" + encodedEmail + "&error=1");
+						})
 						.defaultSuccessUrl("/dashboard")
 						.successHandler((request, response, auth) -> {
 							String password = request.getParameter("password");

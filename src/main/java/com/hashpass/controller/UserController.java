@@ -32,9 +32,14 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(@RequestParam(required = false) String deleted, Model model) {
+    public String login(@RequestParam(required = false) String deleted,
+                        @RequestParam(required = false) String error,
+                        Model model) {
         if (deleted != null) {
             model.addAttribute("success", "Tu cuenta se ha eliminado definitivamente.");
+        }
+        if (error != null) {
+            model.addAttribute("error", "No existe ninguna cuenta con ese correo.");
         }
         return "login";
     }

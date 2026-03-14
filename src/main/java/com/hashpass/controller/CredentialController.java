@@ -48,7 +48,21 @@ public class CredentialController {
     }
 
     @GetMapping("/password-login")
-    public String passwordLogin() {
+    public String passwordLogin(@RequestParam(required = false) String email,
+                                @RequestParam(required = false) String error,
+                                Model model) {
+        if (email == null || email.isBlank()) {
+            return "redirect:/login";
+        }
+        if (userRepository.findByEmail(email).isEmpty()) {
+            return "redirect:/login?error=1";
+        }
+
+        model.addAttribute("email", email);
+
+        if (error != null) {
+            model.addAttribute("error", "Contraseña maestra incorrecta.");
+        }
         return "password-login";
     }
 
