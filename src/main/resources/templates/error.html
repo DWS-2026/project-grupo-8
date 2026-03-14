@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{{> fragments/head}}
+
+<body>
+
+    {{> fragments/navbarPublic}}
+
+    <main class="hero-section">
+        <div class="hero-bg-glow"></div>
+        <div class="container">
+            <div class="row justify-content-center align-items-center g-5">
+                <div class="col-lg-5 text-center text-lg-start">
+                        <div class="error-status-badge mb-4">
+                            {{#statusCode}}Error {{statusCode}}{{/statusCode}}
+                            {{^statusCode}}{{#status}}Error {{status}}{{/status}}{{/statusCode}}
+                        </div>
+                        <h1 class="display-4 fw-bold mb-3">
+                            {{#errorTitle}}{{errorTitle}}{{/errorTitle}}
+                            {{^errorTitle}}{{#error}}{{error}}{{/error}}{{/errorTitle}}
+                        </h1>
+                        <p class="lead text-secondary mb-4">
+                            {{#errorMessage}}{{errorMessage}}{{/errorMessage}}
+                            {{^errorMessage}}
+                            {{#message}}{{message}}{{/message}}
+                            {{^message}}La aplicación no ha podido completar tu solicitud en este momento.{{/message}}
+                            {{/errorMessage}}
+                        </p>
+                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+                            {{#primaryActionHref}}
+                        <a href="{{primaryActionHref}}" class="btn btn-primary btn-lg rounded-pill px-5">{{primaryActionText}}</a>
+                            {{/primaryActionHref}}
+                            <a href="/" class="btn btn-outline-light btn-lg rounded-pill px-5">Inicio</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="card error-card border-0">
+                        <div class="card-body p-4 p-md-5 text-center">
+                            <div class="error-icon-wrap mx-auto mb-4">
+                                <i class="bi {{#errorIcon}}{{errorIcon}}{{/errorIcon}}{{^errorIcon}}bi-exclamation-octagon{{/errorIcon}}"></i>
+                            </div>
+                            <h3 class="fw-bold mb-3">HashPass ha bloqueado esta navegación</h3>
+                            <p class="text-secondary mb-0">
+                                Si has llegado aquí por un enlace antiguo, una sesión caducada o una acción no permitida,
+                                vuelve a una sección válida desde los accesos principales.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {{> fragments/footerPublic}}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

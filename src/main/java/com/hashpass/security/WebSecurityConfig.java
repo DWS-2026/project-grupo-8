@@ -61,6 +61,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/password-login").permitAll()
+						.requestMatchers("/error", "/error/**").permitAll()
 						.requestMatchers("/css/**").permitAll()
 						.requestMatchers("/images/**").permitAll()
 						.requestMatchers("/reviews/**").permitAll()
@@ -122,6 +123,8 @@ public class WebSecurityConfig {
 							response.sendRedirect("/dashboard");
 						})
 						.permitAll())
+				.exceptionHandling(exceptionHandling -> exceptionHandling
+						.accessDeniedPage("/error/403"))
 				.logout(logout -> logout
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/")

@@ -559,6 +559,42 @@ h6,
   transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
 }
 
+.error-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.1rem;
+  border-radius: 999px;
+  color: var(--verde-principal);
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.error-card {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.error-icon-wrap {
+  width: 110px;
+  height: 110px;
+  border-radius: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.08));
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.18);
+}
+
+.error-icon-wrap i {
+  font-size: 3rem;
+  color: var(--verde-principal);
+}
+
 @keyframes float {
   0% {
     transform: translateY(0px);
