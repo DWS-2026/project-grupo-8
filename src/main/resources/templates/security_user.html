@@ -39,15 +39,23 @@
                                 por ti.
                             </p>
 
-                            <form class="d-flex flex-column flex-grow-1 justify-content-between">
+                            {{#error}}
+                            <div class="alert alert-danger" role="alert">{{error}}</div>
+                            {{/error}}
+                            {{#success}}
+                            <div class="alert alert-success" role="alert">{{success}}</div>
+                            {{/success}}
+
+                            <form method="post" action="/security-user" class="d-flex flex-column flex-grow-1 justify-content-between">
 
                                 <div class="mb-3">
                                     <label for="currentPass" class="form-label text-white small fw-bold">Contraseña
                                         actual</label>
                                     <div class="input-group">
-                                        <input type="password"
-                                            class="form-control bg-transparent text-white shadow-none" id="currentPass">
-                                        <button class="btn btn-ojito" type="button"><i class="bi bi-eye"></i></button>
+                                        <input type="password" name="currentPass"
+                                            class="form-control bg-transparent text-white shadow-none" id="currentPass" required>
+                                        <button class="btn btn-ojito" type="button"
+                                            onclick="togglePasswordVisibility('currentPass', this)" aria-label="Mostrar u ocultar contraseña"><i class="bi bi-eye"></i></button>
                                     </div>
                                 </div>
 
@@ -55,9 +63,10 @@
                                     <label for="newPass" class="form-label text-white small fw-bold">Nueva
                                         contraseña</label>
                                     <div class="input-group">
-                                        <input type="password"
-                                            class="form-control bg-transparent text-white shadow-none" id="newPass">
-                                        <button class="btn btn-ojito" type="button"><i class="bi bi-eye"></i></button>
+                                        <input type="password" name="newPass"
+                                            class="form-control bg-transparent text-white shadow-none" id="newPass" required>
+                                        <button class="btn btn-ojito" type="button"
+                                            onclick="togglePasswordVisibility('newPass', this)" aria-label="Mostrar u ocultar contraseña"><i class="bi bi-eye"></i></button>
                                     </div>
                                 </div>
 
@@ -65,14 +74,15 @@
                                     <label for="confirmPass" class="form-label text-white small fw-bold">Confirmar nueva
                                         contraseña</label>
                                     <div class="input-group">
-                                        <input type="password"
-                                            class="form-control bg-transparent text-white shadow-none" id="confirmPass">
-                                        <button class="btn btn-ojito" type="button"><i class="bi bi-eye"></i></button>
+                                        <input type="password" name="confirmPass"
+                                            class="form-control bg-transparent text-white shadow-none" id="confirmPass" required>
+                                        <button class="btn btn-ojito" type="button"
+                                            onclick="togglePasswordVisibility('confirmPass', this)" aria-label="Mostrar u ocultar contraseña"><i class="bi bi-eye"></i></button>
                                     </div>
                                 </div>
 
                                 <div class="d-grid mt-2">
-                                    <button type="button" class="btn btn-primary">Actualizar contraseña</button>
+                                    <button type="submit" class="btn btn-primary">Actualizar contraseña</button>
                                 </div>
                             </form>
                         </div>
@@ -187,6 +197,18 @@
                         icon.classList.remove('bi-list');
                         icon.classList.add('bi-arrow-right-short');
                     }
+                }
+            </script>
+
+            <script>
+                function togglePasswordVisibility(inputId, button) {
+                    const input = document.getElementById(inputId);
+                    const icon = button.querySelector('i');
+                    const isHidden = input.type === 'password';
+
+                    input.type = isHidden ? 'text' : 'password';
+                    icon.classList.toggle('bi-eye', !isHidden);
+                    icon.classList.toggle('bi-eye-slash', isHidden);
                 }
             </script>
 

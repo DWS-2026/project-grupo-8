@@ -62,9 +62,40 @@ public class UserController {
         return requireLogin(model, "config_user");
     }
 
+    @PostMapping("/config-user")
+    public String changeEmail(@RequestParam String masterPass,
+                              @RequestParam String newEmail,
+                              Model model) {
+        User currentUser = userSession.getUser();
+        String error = authService.changeEmail(currentUser, masterPass, newEmail);
+        if (error == null) {
+            // Actualizar el user en sesión con el nuevo email
+            currentUser.setEmail(newEmail);
+            model.addAttribute("success", "Correo electrónico cambiado exitosamente.");
+        } else {
+            model.addAttribute("error", error);
+        }
+        return "config_user";
+    }
+
     @GetMapping("/security-user")
     public String securityUser(Model model) {
         return requireLogin(model, "security_user");
+    }
+
+    @PostMapping("/security-user")
+    public String changeMasterPassword(@RequestParam String currentPass,
+                                       @RequestParam String newPass,
+                                       @RequestParam String confirmPass,
+                                       Model model) {
+        User currentUser = userSession.getUser();
+        String error = authService.changeMasterPassword(currentUser, currentPass, newPass, confirmPass);
+        if (error == null) {
+            model.addAttribute("success", "Contraseña maestra actualizada correctamente.");
+        } else {
+            model.addAttribute("error", error);
+        }
+        return "security_user";
     }
 
     @GetMapping("/admin")

@@ -48,4 +48,35 @@ public class AuthService {
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    public String changeEmail(User user, String currentPassword, String newEmail) {
+        if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
+            return "Contraseña incorrecta.";
+        }
+        if (isEmailRegistered(newEmail)) {
+            return "El correo electrónico ya está registrado.";
+        }
+        user.setEmail(newEmail);
+        userRepository.save(user);
+        return null; // Éxito
+    }
+
+    public String changeMasterPassword(User user, String currentPassword, String newPassword, String confirmPassword) {
+        if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
+            return "La contraseña actual es incorrecta.";
+        }
+        if (newPassword == null || newPassword.isBlank()) {
+            return "La nueva contraseña no puede estar vacía.";
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            return "La confirmación de la nueva contraseña no coincide.";
+        }
+        if (passwordEncoder.matches(newPassword, user.getPasswordHash())) {
+            return "La nueva contraseña debe ser distinta a la actual.";
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return null; // Éxito
+    }
 }
