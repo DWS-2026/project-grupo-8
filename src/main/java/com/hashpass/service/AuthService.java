@@ -69,7 +69,7 @@ public class AuthService {
             return "La nueva contraseña no puede estar vacía.";
         }
         if (!newPassword.equals(confirmPassword)) {
-            return "La confirmación de la nueva contraseña no coincide.";
+            return "Las contraseñas no coinciden.";
         }
         if (passwordEncoder.matches(newPassword, user.getPasswordHash())) {
             return "La nueva contraseña debe ser distinta a la actual.";
@@ -85,7 +85,7 @@ public class AuthService {
             return "No hay ninguna sesión activa.";
         }
         if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
-            return "La contraseña actual es incorrecta.";
+            return "La contraseña es incorrecta.";
         }
 
         User persistedUser = userRepository.findById(user.getId()).orElse(null);
