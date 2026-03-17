@@ -190,6 +190,7 @@ public class UserController {
                         @RequestParam(required = false) String plan,
                         @RequestParam(required = false) String payment,
                         @RequestParam(required = false, name = "regOrder") String regOrder,
+                        @RequestParam(required = false, name = "sortUser") String sortUser,
                         Model model) {
         if (!userSession.isLogged()) {
             return "redirect:/login";
@@ -227,16 +228,24 @@ public class UserController {
 
         java.util.List<com.hashpass.model.User> filtered = stream.collect(java.util.stream.Collectors.toList());
 
-        // sort by registration date
+        // sort: optionally by user (email) or by registration date
         java.util.Comparator<java.time.LocalDateTime> nullsLastDate = java.util.Comparator
-            .nullsLast(java.time.LocalDateTime::compareTo);
+            .nullsLast(java.util.Comparator.naturalOrder());
         java.util.Comparator<com.hashpass.model.User> byCreatedAt = java.util.Comparator
             .comparing((com.hashpass.model.User u) -> u.getCreatedAt(), nullsLastDate);
 
-        if (regOrder == null || regOrder.isBlank() || regOrder.equalsIgnoreCase("desc")) {
-            filtered.sort(byCreatedAt.reversed());
-        } else if (regOrder.equalsIgnoreCase("asc")) {
-            filtered.sort(byCreatedAt);
+        if (sortUser != null && !sortUser.isBlank()) {
+            if (sortUser.equalsIgnoreCase("asc")) {
+                filtered.sort(java.util.Comparator.comparing(u -> u.getEmail() == null ? "" : u.getEmail().toLowerCase()));
+            } else if (sortUser.equalsIgnoreCase("desc")) {
+                filtered.sort(java.util.Comparator.comparing((com.hashpass.model.User u) -> u.getEmail() == null ? "" : u.getEmail().toLowerCase()).reversed());
+            }
+        } else {
+            if (regOrder == null || regOrder.isBlank() || regOrder.equalsIgnoreCase("desc")) {
+                filtered.sort(byCreatedAt.reversed());
+            } else if (regOrder.equalsIgnoreCase("asc")) {
+                filtered.sort(byCreatedAt);
+            }
         }
 
         var list = filtered.stream().map(u -> {
