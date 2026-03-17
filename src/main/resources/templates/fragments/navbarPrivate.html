@@ -15,15 +15,26 @@
                 </li>
                 <li><hr class="dropdown-divider border-secondary opacity-25 mx-2"></li>
                 <li>
+                    {{^user.admin}}
                     <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="/config-user">
                         <i class="bi bi-person-gear fs-5 text-secondary"></i><span>Configuración de la cuenta</span>
                     </a>
+                    {{/user.admin}}
                 </li>
                 <li>
+                    {{^user.admin}}
                     <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="/security-user">
                         <i class="bi bi-shield-lock fs-5 text-secondary"></i><span>Seguridad</span>
                     </a>
+                    {{/user.admin}}
                 </li>
+                {{#user.admin}}
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="/admin">
+                        <i class="bi bi-shield-lock-fill fs-5 text-secondary"></i><span>Panel Admin</span>
+                    </a>
+                </li>
+                {{/user.admin}}
                 <li><hr class="dropdown-divider border-secondary opacity-25 mx-2 my-2"></li>
                 <li>
                         <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="/password-login?email={{user.email}}">

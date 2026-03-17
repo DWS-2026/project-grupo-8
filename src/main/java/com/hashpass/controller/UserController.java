@@ -186,17 +186,60 @@ public class UserController {
     }
 
     @GetMapping("/admin")
-    public String admin(Model model) {
+    public String admin(@RequestParam(required = false) String q,
+                        @RequestParam(required = false) String plan,
+                        @RequestParam(required = false) String payment,
+                        @RequestParam(required = false, name = "regOrder") String regOrder,
+                        Model model) {
         if (!userSession.isLogged()) {
             return "redirect:/login";
         }
         if (!userSession.getUser().isAdmin()) {
             return "redirect:/error/403";
         }
-
         var users = userRepository.findAll();
 
-        var list = users.stream().map(u -> {
+        // total credentials across all users
+        int passwordsCount = users.stream()
+                .mapToInt(u -> u.getCredentials() == null ? 0 : u.getCredentials().size())
+                .sum();
+
+        // apply filters
+        java.util.stream.Stream<com.hashpass.model.User> stream = users.stream();
+        if (q != null && !q.isBlank()) {
+            String qq = q.toLowerCase();
+            stream = stream.filter(u -> (u.getEmail() != null && u.getEmail().toLowerCase().contains(qq))
+                    || (u.getName() != null && u.getName().toLowerCase().contains(qq)));
+        }
+        if (plan != null && !plan.isBlank() && !plan.equalsIgnoreCase("todos")) {
+            String planLower = plan.toLowerCase();
+            stream = stream.filter(u -> u.getPlan() != null && u.getPlan().getName() != null
+                    && u.getPlan().getName().toLowerCase().contains(planLower));
+        }
+        if (payment != null && !payment.isBlank() && !payment.equalsIgnoreCase("todos")) {
+            String paymentLower = payment.toLowerCase();
+            // currently paymentStatus is derived/static; filter against computed string
+            stream = stream.filter(u -> {
+                String status = "Activo"; // placeholder logic
+                return status.toLowerCase().contains(paymentLower);
+            });
+        }
+
+        java.util.List<com.hashpass.model.User> filtered = stream.collect(java.util.stream.Collectors.toList());
+
+        // sort by registration date
+        java.util.Comparator<java.time.LocalDateTime> nullsLastDate = java.util.Comparator
+            .nullsLast(java.time.LocalDateTime::compareTo);
+        java.util.Comparator<com.hashpass.model.User> byCreatedAt = java.util.Comparator
+            .comparing((com.hashpass.model.User u) -> u.getCreatedAt(), nullsLastDate);
+
+        if (regOrder == null || regOrder.isBlank() || regOrder.equalsIgnoreCase("desc")) {
+            filtered.sort(byCreatedAt.reversed());
+        } else if (regOrder.equalsIgnoreCase("asc")) {
+            filtered.sort(byCreatedAt);
+        }
+
+        var list = filtered.stream().map(u -> {
             java.util.Map<String, Object> m = new java.util.HashMap<>();
             m.put("id", u.getId());
             m.put("email", u.getEmail());
@@ -210,6 +253,11 @@ public class UserController {
 
         model.addAttribute("usersList", list);
         model.addAttribute("usersCount", list.size());
+        model.addAttribute("passwordsCount", passwordsCount);
+        model.addAttribute("q", q == null ? "" : q);
+        model.addAttribute("selectedPlan", plan == null ? "todos" : plan);
+        model.addAttribute("selectedPayment", payment == null ? "todos" : payment);
+        model.addAttribute("regOrder", regOrder == null ? "desc" : regOrder);
 
         return "admin";
     }
@@ -239,6 +287,7 @@ public class UserController {
         model.addAttribute("detailPlan", u.getPlan() == null ? "Gratuito" : u.getPlan().getName());
         model.addAttribute("detailCreatedAt", u.getCreatedAt() == null ? "-" : u.getCreatedAt().toLocalDate().toString());
         model.addAttribute("detailCredentialsCount", u.getCredentials() == null ? 0 : u.getCredentials().size());
+        model.addAttribute("detailProfileImageUrl", imageService.getProfileImageUrl(u));
 
         return "admin_user_detail";
     }

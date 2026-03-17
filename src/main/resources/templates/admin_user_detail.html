@@ -35,7 +35,7 @@
                 <div class="card border-0 bg-transparent mb-5">
                     <div class="d-flex align-items-center gap-4 flex-wrap">
                         <div class="position-relative">
-                            <img src="https://ui-avatars.com/api/?name=Nombre+Apellido&background=random&size=128"
+                            <img src="{{#detailProfileImageUrl}}{{detailProfileImageUrl}}{{/detailProfileImageUrl}}{{^detailProfileImageUrl}}https://ui-avatars.com/api/?name={{detailName}}&background=random&size=128{{/detailProfileImageUrl}}"
                                 class="rounded-circle border border-2 border-secondary shadow-lg" width="100"
                                 height="100" alt="Avatar">
                         </div>

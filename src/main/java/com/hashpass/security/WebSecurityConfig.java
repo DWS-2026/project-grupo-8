@@ -121,7 +121,18 @@ public class WebSecurityConfig {
 								}
 								userRepository.save(user);
 							});
-							response.sendRedirect("/dashboard");
+							// redirect based on role: admins go to /admin
+							userRepository.findByEmail(email).ifPresent(user -> {
+								try {
+									if (user.isAdmin()) {
+										response.sendRedirect("/admin");
+									} else {
+										response.sendRedirect("/dashboard");
+									}
+								} catch (java.io.IOException e) {
+									throw new RuntimeException(e);
+								}
+							});
 						})
 						.permitAll())
 				.exceptionHandling(exceptionHandling -> exceptionHandling
