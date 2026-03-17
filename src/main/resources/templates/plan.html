@@ -5,21 +5,12 @@
 
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-dark">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="/">
-                <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
-            </a>
-
-            <div class="d-flex ms-auto align-items-center gap-3">
-                <a class="btn btn-outline-light rounded-pill" href="/plan">Planes</a>
-                <a class="btn btn-primary rounded-pill" href="/login">
-                    Acceder a mi Bóveda
-                </a>
-            </div>
-        </div>
-    </nav>
+    {{#isLogged}}
+    {{> fragments/navbarPrivate}}
+    {{/isLogged}}
+    {{^isLogged}}
+    {{> fragments/navbarPublic}}
+    {{/isLogged}}
 
 
     <!-- HERO -->

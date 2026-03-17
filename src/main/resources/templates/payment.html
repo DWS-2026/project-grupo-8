@@ -5,16 +5,12 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark border-bottom border-secondary border-opacity-10">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="/">
-                <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
-            </a>
-            <div class="ms-auto text-secondary small">
-                <i class="bi bi-lock-fill me-1"></i> Pago 100% Seguro
-            </div>
-        </div>
-    </nav>
+    {{#isLogged}}
+    {{> fragments/navbarPrivate}}
+    {{/isLogged}}
+    {{^isLogged}}
+    {{> fragments/navbarPublic}}
+    {{/isLogged}}
 
     <main class="container py-5">
         <div class="row g-5">

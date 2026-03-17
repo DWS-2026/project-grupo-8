@@ -5,7 +5,12 @@
 
 <body>
 
+    {{#isLogged}}
+    {{> fragments/navbarPrivate}}
+    {{/isLogged}}
+    {{^isLogged}}
     {{> fragments/navbarPublic}}
+    {{/isLogged}}
 
     <main class="hero-section">
         <div class="hero-bg-glow"></div>

@@ -52,6 +52,11 @@ public class CredentialController {
         return imageService.getProfileImageUrl(userSession.getUser());
     }
 
+    @ModelAttribute("isLogged")
+    public boolean populateIsLogged() {
+        return userSession.isLogged();
+    }
+
     @GetMapping("/")
     public String index() {
         return "index";

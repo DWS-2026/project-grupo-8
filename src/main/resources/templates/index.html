@@ -5,7 +5,12 @@
 
 <body>
 
+    {{#isLogged}}
+    {{> fragments/navbarPrivate}}
+    {{/isLogged}}
+    {{^isLogged}}
     {{> fragments/navbarPublic}}
+    {{/isLogged}}
 
 
     <header class="hero-section">

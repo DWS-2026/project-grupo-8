@@ -5,7 +5,12 @@
 
 <body>
 
+    {{#isLogged}}
+    {{> fragments/navbarPrivate}}
+    {{/isLogged}}
+    {{^isLogged}}
     {{> fragments/navbarPublic}}
+    {{/isLogged}}
 
     <div class="container py-5 text-center">
         <h1 class="display-5 fw-bold mb-3">Lo que dice la comunidad</h1>
