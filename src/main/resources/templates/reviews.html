@@ -20,6 +20,9 @@
     </div>
 
     <div class="container pb-5">
+        {{#reviewSuccess}}
+        <div class="alert alert-success mb-4" role="alert">{{reviewSuccess}}</div>
+        {{/reviewSuccess}}
 
         <div class="d-flex justify-content-end mb-4">
             {{#isLogged}}
@@ -36,110 +39,39 @@
         </div>
 
         <div class="row g-4" data-masonry='{"percentPosition": true }'>
-
+            {{#reviewsList}}
             <div class="col-md-6 col-lg-4">
                 <div class="card p-4 h-100 border border-secondary border-opacity-25 bg-dark">
                     <div class="d-flex align-items-center mb-3">
-                        <img src="https://ui-avatars.com/api/?name=Laura+G&background=random"
-                            class="rounded-circle me-3" width="45">
+                        <img src="{{avatarUrl}}" alt="Avatar de {{authorName}}" class="rounded-circle me-3"
+                            width="45" height="45" style="object-fit: cover;">
                         <div>
-                            <h6 class="text-white mb-0 fw-bold">Laura García</h6>
+                            <h6 class="text-white mb-0 fw-bold">{{authorName}}</h6>
                             <div class="text-warning small">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i>
+                                {{#stars}}
+                                {{#filled}}<i class="bi bi-star-fill"></i>{{/filled}}
+                                {{^filled}}<i class="bi bi-star"></i>{{/filled}}
+                                {{/stars}}
                             </div>
                         </div>
                     </div>
-                    <p class="text-secondary mb-0">"Antes usaba el mismo password para todo. HashPass me ha salvado de
-                        varios intentos de hackeo. Imprescindible."</p>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-                <div class="card p-4 h-100 border border-secondary border-opacity-25 bg-dark">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://ui-avatars.com/api/?name=Carlos+M&background=random"
-                            class="rounded-circle me-3" width="45">
-                        <div>
-                            <h6 class="text-white mb-0 fw-bold">Carlos Martínez</h6>
-                            <div class="text-warning small">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i>
-                            </div>
-                        </div>
+                    <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
+                        <h5 class="text-white fs-6 fw-bold mb-0">{{title}}</h5>
+                        <span class="text-secondary small">{{createdAt}}</span>
                     </div>
-                    <p class="text-secondary mb-0">"La interfaz es increíblemente limpia y rápida. Me encanta el modo
-                        oscuro y lo fácil que es compartir claves."</p>
+                    <p class="text-secondary mb-0">{{comment}}</p>
                 </div>
             </div>
+            {{/reviewsList}}
 
-            <div class="col-md-6 col-lg-4">
-                <div class="card p-4 h-100 border border-secondary border-opacity-25 bg-dark">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://ui-avatars.com/api/?name=Ana+R&background=random" class="rounded-circle me-3"
-                            width="45">
-                        <div>
-                            <h6 class="text-white mb-0 fw-bold">Ana Rodríguez</h6>
-                            <div class="text-warning small">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-half"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="text-secondary mb-0">"El plan gratuito es muy generoso, pero me pasé al Premium solo por
-                        apoyar el proyecto. Excelente trabajo."</p>
+            {{^reviewsList}}
+            <div class="col-12">
+                <div class="card p-5 border border-secondary border-opacity-25 bg-dark text-center">
+                    <h5 class="text-white mb-2">Todavía no hay reseñas publicadas</h5>
+                    <p class="text-secondary mb-0">Sé el primero en compartir tu experiencia con HashPass.</p>
                 </div>
             </div>
-
-            <div class="col-md-6 col-lg-4">
-                <div class="card p-4 h-100 border border-secondary border-opacity-25 bg-dark">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://ui-avatars.com/api/?name=Dev+Ops&background=0D8ABC&color=fff"
-                            class="rounded-circle me-3" width="45">
-                        <div>
-                            <h6 class="text-white mb-0 fw-bold">Marc D.</h6>
-                        </div>
-                    </div>
-                    <p class="text-secondary mb-0">"Como desarrollador, valoro mucho la arquitectura Zero-Knowledge. He
-                        revisado el funcionamiento y es sólido."</p>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-                <div class="card p-4 h-100 border border-secondary border-opacity-25 bg-dark">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://ui-avatars.com/api/?name=Lucia+M&background=random"
-                            class="rounded-circle me-3" width="45">
-                        <div>
-                            <h6 class="text-white mb-0 fw-bold">Lucía M.</h6>
-                            <div class="text-warning small">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="text-secondary mb-0">"Lo instalé a mis padres y por fin han dejado de llamarme porque
-                        olvidan la contraseña del correo. ¡Salvavidas!"</p>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-                <div class="card p-4 h-100 border border-secondary border-opacity-25 bg-dark">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://ui-avatars.com/api/?name=Hash+Team&background=10b981&color=fff"
-                            class="rounded-circle me-3" width="45">
-                        <div>
-                            <h6 class="text-white mb-0 fw-bold">Equipo HashPass</h6>
-                        </div>
-                    </div>
-                    <p class="text-secondary mb-0">"¡Gracias a todos por el feedback! Estamos trabajando en la nueva
-                        versión con soporte para llaves de seguridad físicas."</p>
-                </div>
-            </div>
+            {{/reviewsList}}
 
         </div>
     </div>
@@ -155,25 +87,33 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    {{#reviewError}}
+                    <div class="alert alert-danger" role="alert">{{reviewError}}</div>
+                    {{/reviewError}}
+                    <form action="/reviews" method="post">
+                        <div class="mb-3">
+                            <label class="form-label text-white small">Título</label>
+                            <input type="text" name="title" class="form-control bg-dark text-white border-secondary"
+                                maxlength="120" value="{{reviewTitle}}" placeholder="Resume tu experiencia" required>
+                        </div>
                         <div class="mb-3">
                             <label class="form-label text-white small">Puntuación</label>
-                            <div class="text-warning fs-4">
-                                <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i
-                                    class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i
-                                    class="bi bi-star"></i>
-                            </div>
+                            <select name="rating" class="form-select bg-dark text-white border-secondary" required>
+                                {{#ratingOptions}}
+                                <option value="{{value}}" {{#selected}}selected{{/selected}}>{{value}} / 5</option>
+                                {{/ratingOptions}}
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label text-white small">Comentario</label>
-                            <textarea class="form-control bg-dark text-white border-secondary" rows="4"
-                                placeholder="¿Qué te parece la app?"></textarea>
+                            <textarea name="comment" class="form-control bg-dark text-white border-secondary" rows="4"
+                                maxlength="1000" placeholder="¿Qué te parece la app?" required>{{reviewComment}}</textarea>
+                        </div>
+                        <div class="modal-footer border-secondary border-opacity-25 px-0 pb-0">
+                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Publicar</button>
                         </div>
                     </form>
-                </div>
-                <div class="modal-footer border-secondary border-opacity-25">
-                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Publicar</button>
                 </div>
             </div>
         </div>
@@ -184,6 +124,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" async></script>
+    {{#openReviewModal}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const reviewModal = document.getElementById('modalOpinion');
+            if (reviewModal) {
+                new bootstrap.Modal(reviewModal).show();
+            }
+        });
+    </script>
+    {{/openReviewModal}}
 </body>
 
 </html>

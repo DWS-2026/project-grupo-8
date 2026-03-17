@@ -95,60 +95,30 @@
         <div class="container">
             <h3 class="text-center fw-bold mb-5">Lo que dicen nuestros usuarios</h3>
             <div class="row g-4">
+                {{#topReviews}}
                 <div class="col-md-4">
                     <div class="card p-4 h-100 border-0 bg-dark shadow-sm">
                         <div class="mb-3 text-warning">
-                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-fill"></i>
+                            {{#stars}}
+                            {{#filled}}<i class="bi bi-star-fill"></i>{{/filled}}
+                            {{^filled}}<i class="bi bi-star"></i>{{/filled}}
+                            {{/stars}}
                         </div>
-                        <p class="mb-4 fst-italic">"Antes usaba el mismo password para todo. HashPass me ha salvado de
-                            varios intentos de hackeo. Imprescindible."</p>
+                        <p class="mb-4 fst-italic">"{{comment}}"</p>
                         <div class="d-flex align-items-center gap-3">
-                            <img src="https://ui-avatars.com/api/?name=Laura+G&background=random" class="rounded-circle"
-                                width="40">
+                            <img src="{{avatarUrl}}" class="rounded-circle" width="40" height="40" style="object-fit:cover;">
                             <div>
-                                <h6 class="mb-0 fw-bold text-white">Laura García</h6>
+                                <h6 class="mb-0 fw-bold text-white">{{authorName}}</h6>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card p-4 h-100 border-0 bg-dark shadow-sm">
-                        <div class="mb-3 text-warning">
-                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-fill"></i>
-                        </div>
-                        <p class="mb-4 fst-italic">"La interfaz es increíblemente limpia y rápida. Me encanta el modo
-                            oscuro y lo fácil que es compartir claves."</p>
-                        <div class="d-flex align-items-center gap-3">
-                            <img src="https://ui-avatars.com/api/?name=Carlos+M&background=random"
-                                class="rounded-circle" width="40">
-                            <div>
-                                <h6 class="mb-0 fw-bold text-white">Carlos Martínez</h6>
-                            </div>
-                        </div>
-                    </div>
+                {{/topReviews}}
+                {{^hasTopReviews}}
+                <div class="col-12 text-center text-secondary py-4">
+                    <p class="mb-0">Todavía no hay reseñas. <a href="/reviews" class="text-light">¡Sé el primero!</a></p>
                 </div>
-                <div class="col-md-4">
-                    <div class="card p-4 h-100 border-0 bg-dark shadow-sm">
-                        <div class="mb-3 text-warning">
-                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-half"></i>
-                        </div>
-                        <p class="mb-4 fst-italic">"El plan gratuito es muy generoso, pero me pasé al Premium solo por
-                            apoyar el proyecto. Excelente trabajo."</p>
-                        <div class="d-flex align-items-center gap-3">
-                            <img src="https://ui-avatars.com/api/?name=Ana+R&background=random" class="rounded-circle"
-                                width="40">
-                            <div>
-                                <h6 class="mb-0 fw-bold text-white">Ana Rodríguez</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {{/hasTopReviews}}
             </div>
 
             <div class="text-center mt-5">

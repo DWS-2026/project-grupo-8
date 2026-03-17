@@ -12,9 +12,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.hashpass.model.Credential;
 import com.hashpass.model.User;
 import com.hashpass.repository.CredentialRepository;
+import com.hashpass.repository.ReviewRepository;
 import com.hashpass.repository.UserRepository;
 import com.hashpass.service.UserSession;
 import com.hashpass.service.EntryService;
@@ -35,6 +43,11 @@ public class CredentialController {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    private static final DateTimeFormatter INDEX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     // Make current user available to all views (mustache fragments expect it)
     @ModelAttribute("user")
@@ -58,7 +71,35 @@ public class CredentialController {
     }
 
     @GetMapping("/")
-    public String index() {
+    public String index(Model model) {
+        List<Map<String, Object>> topReviews = reviewRepository.findTop3ByOrderByRatingDescCreatedAtDesc()
+                .stream().map(review -> {
+                    Map<String, Object> m = new HashMap<>();
+                    User reviewUser = review.getUser();
+                    String authorName = (reviewUser != null && reviewUser.getName() != null && !reviewUser.getName().isBlank())
+                            ? reviewUser.getName()
+                            : (reviewUser != null ? reviewUser.getEmail() : "Usuario de HashPass");
+                    String avatarUrl = imageService.getProfileImageUrl(reviewUser);
+                    if (avatarUrl == null) {
+                        avatarUrl = "https://ui-avatars.com/api/?name="
+                                + URLEncoder.encode(authorName, StandardCharsets.UTF_8)
+                                + "&background=random";
+                    }
+                    List<Map<String, Object>> stars = new ArrayList<>();
+                    int safeRating = review.getRating() == null ? 0 : Math.max(0, Math.min(5, review.getRating()));
+                    for (int i = 1; i <= 5; i++) {
+                        Map<String, Object> star = new HashMap<>();
+                        star.put("filled", i <= safeRating);
+                        stars.add(star);
+                    }
+                    m.put("comment", review.getComment());
+                    m.put("authorName", authorName);
+                    m.put("avatarUrl", avatarUrl);
+                    m.put("stars", stars);
+                    return m;
+                }).toList();
+        model.addAttribute("topReviews", topReviews);
+        model.addAttribute("hasTopReviews", !topReviews.isEmpty());
         return "index";
     }
 
