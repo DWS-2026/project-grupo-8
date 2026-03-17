@@ -87,8 +87,8 @@ public class WebSecurityConfig {
 						.requestMatchers("/sidebar", "/sidebar/**").hasAnyRole("USER")
 
 
-                        .requestMatchers("/admin_user_detail/*").hasAnyRole("ADMIN")
-                        .requestMatchers("/admin/*").hasAnyRole("ADMIN"))
+						.requestMatchers("/admin-user-detail", "/admin-user-detail/**").hasAnyRole("ADMIN")
+						.requestMatchers("/admin", "/admin/**").hasAnyRole("ADMIN"))
 
                         .formLogin(formLogin -> formLogin
 						.loginPage("/login")

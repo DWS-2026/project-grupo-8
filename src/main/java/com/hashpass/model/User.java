@@ -50,6 +50,9 @@ public class User {
 	private Image profileImage;
 
 	@Column(nullable = false)
+	private boolean admin = false;
+
+	@Column(nullable = false)
 	private LocalDateTime createdAt;
 
 	@Column(nullable = false)
@@ -178,6 +181,14 @@ public class User {
 
 	public void setSecurityTimeoutMinutes(Integer securityTimeoutMinutes) {
 		this.securityTimeoutMinutes = securityTimeoutMinutes;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 
 	// Computed properties for dynamic dashboard stats

@@ -187,20 +187,88 @@ public class UserController {
 
     @GetMapping("/admin")
     public String admin(Model model) {
-        return requireLogin(model, "admin");
+        if (!userSession.isLogged()) {
+            return "redirect:/login";
+        }
+        if (!userSession.getUser().isAdmin()) {
+            return "redirect:/error/403";
+        }
+
+        var users = userRepository.findAll();
+
+        var list = users.stream().map(u -> {
+            java.util.Map<String, Object> m = new java.util.HashMap<>();
+            m.put("id", u.getId());
+            m.put("email", u.getEmail());
+            m.put("name", u.getName());
+            m.put("credentialsCount", u.getCredentials() == null ? 0 : u.getCredentials().size());
+            m.put("plan", u.getPlan() == null ? "Gratuito" : u.getPlan().getName());
+            m.put("createdAt", u.getCreatedAt() == null ? "-" : u.getCreatedAt().toLocalDate().toString());
+            m.put("paymentStatus", "Activo");
+            return m;
+        }).toList();
+
+        model.addAttribute("usersList", list);
+        model.addAttribute("usersCount", list.size());
+
+        return "admin";
     }
 
     @GetMapping("/admin-user-detail")
-    public String adminUserDetail(Model model) {
-        return requireLogin(model, "admin_user_detail");
+    public String adminUserDetail(@RequestParam(required = false) Long id, Model model) {
+        if (!userSession.isLogged()) {
+            return "redirect:/login";
+        }
+        if (!userSession.getUser().isAdmin()) {
+            return "redirect:/error/403";
+        }
+
+        if (id == null) {
+            return "redirect:/admin";
+        }
+
+        var opt = userRepository.findById(id);
+        if (opt.isEmpty()) {
+            return "redirect:/admin";
+        }
+
+        var u = opt.get();
+        model.addAttribute("detailId", u.getId());
+        model.addAttribute("detailName", u.getName());
+        model.addAttribute("detailEmail", u.getEmail());
+        model.addAttribute("detailPlan", u.getPlan() == null ? "Gratuito" : u.getPlan().getName());
+        model.addAttribute("detailCreatedAt", u.getCreatedAt() == null ? "-" : u.getCreatedAt().toLocalDate().toString());
+        model.addAttribute("detailCredentialsCount", u.getCredentials() == null ? 0 : u.getCredentials().size());
+
+        return "admin_user_detail";
     }
 
-    // helper to require login and automatically supply user via @ModelAttribute
+    @PostMapping("/admin/delete-user")
+    public String deleteUser(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+        if (!userSession.isLogged() || !userSession.getUser().isAdmin()) {
+            return "redirect:/error/403";
+        }
+
+        Long currentId = userSession.getUser().getId();
+        if (currentId != null && currentId.equals(id)) {
+            redirectAttributes.addFlashAttribute("error", "No puedes eliminar tu propia cuenta.");
+            return "redirect:/admin";
+        }
+
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("success", "Usuario eliminado correctamente.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Usuario no encontrado.");
+        }
+
+        return "redirect:/admin";
+    }
+
     private String requireLogin(Model model, String view) {
         if (!userSession.isLogged()) {
             return "redirect:/login";
         }
-        // user already added by populateUser()
         return view;
     }
 }
