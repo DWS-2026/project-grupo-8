@@ -26,7 +26,12 @@
                         Protege tus credenciales con cifrado de alto grado.
                     </p>
                     <div class="d-flex gap-3">
+                        {{#isLogged}}
+                        <a href="/dashboard" class="btn btn-primary btn-lg rounded-pill px-5">Empezar ahora</a>
+                        {{/isLogged}}
+                        {{^isLogged}}
                         <a href="/register" class="btn btn-primary btn-lg rounded-pill px-5">Empezar ahora</a>
+                        {{/isLogged}}
                         <a href="#features" class="btn btn-outline-light btn-lg rounded-pill px-5">Saber más</a>
                     </div>
 

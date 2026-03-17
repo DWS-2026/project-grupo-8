@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,8 +45,6 @@ public class CredentialController {
 
     @Autowired
     private ReviewRepository reviewRepository;
-
-    private static final DateTimeFormatter INDEX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     // Make current user available to all views (mustache fragments expect it)
     @ModelAttribute("user")

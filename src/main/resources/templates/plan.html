@@ -7,12 +7,131 @@
 
     {{#isLogged}}
     {{> fragments/navbarPrivate}}
+    <div class="container-fluid">
+        <div class="row">
+            {{> fragments/sidebar}}
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- HERO -->
+                <section class="py-5 text-center">
+                    <h1 class="display-5 fw-bold mb-3">Planes diseñados para tu seguridad</h1>
+                    <p class="lead text-secondary">
+                        Control total de tus credenciales con cifrado fuerte y auditoría continua.
+                    </p>
+                </section>
+
+                <!-- PLANES -->
+                <section class="pb-5">
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+
+                        <!-- GRATUITO -->
+                        <div class="col">
+                            <div class="card h-100 p-4">
+                                <div class="text-center mb-3">
+                                    <i class="bi bi-unlock-fill fs-1 texto-gradient"></i>
+                                    <h4 class="fw-bold mt-3">Gratuito</h4>
+                                    <p class="small text-secondary">Para empezar</p>
+                                </div>
+
+                                <h2 class="display-6 fw-bold text-center mb-3">€0</h2>
+                                <p class="text-center text-secondary mb-4">Gratis para siempre</p>
+
+                                <ul class="list-unstyled small flex-grow-1">
+                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Hasta 10
+                                        credenciales</li>
+                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>1 dispositivo
+                                    </li>
+                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Cifrado AES-256
+                                    </li>
+                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Generador básico
+                                    </li>
+                                </ul>
+
+                                <button class="btn btn-dark-custom w-100 mt-3"
+                                    onclick="window.location.href='/dashboard'">
+                                    Continuar gratis
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- PREMIUM -->
+                        <div class="col">
+                            <div class="card h-100 p-4 border border-success position-relative">
+
+                                <span class="badge bg-success position-absolute top-0 start-50 translate-middle">
+                                    Recomendado
+                                </span>
+
+                                <div class="text-center mb-3 mt-3">
+                                    <i class="bi bi-shield-check fs-1 texto-gradient"></i>
+                                    <h4 class="fw-bold mt-3">Premium</h4>
+                                    <p class="small text-secondary">Uso diario avanzado</p>
+                                </div>
+
+                                <h2 class="display-6 fw-bold text-center mb-3">€4.99</h2>
+                                <p class="text-center text-secondary mb-4">por mes</p>
+
+                                <ul class="list-unstyled small flex-grow-1">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Credenciales
+                                        ilimitadas</li>
+                                    <li class="mb-2"><i
+                                            class="bi bi-check-circle-fill texto-gradient me-2"></i>Dispositivos
+                                        ilimitados</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Auditoría
+                                        de
+                                        contraseñas</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Alertas
+                                        de brechas
+                                    </li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Soporte
+                                        prioritario
+                                    </li>
+                                </ul>
+
+                                <button class="btn btn-primary w-100 mt-3" onclick="window.location.href='/payment'">
+                                    Actualizar a Premium
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- PLATINUM -->
+                        <div class="col">
+                            <div class="card h-100 p-4">
+                                <div class="text-center mb-3">
+                                    <i class="bi bi-gem fs-1 texto-gradient"></i>
+                                    <h4 class="fw-bold mt-3">Platinum</h4>
+                                    <p class="small text-secondary">Seguridad profesional</p>
+                                </div>
+
+                                <h2 class="display-6 fw-bold text-center mb-3">€9.99</h2>
+                                <p class="text-center text-secondary mb-4">por mes</p>
+
+                                <ul class="list-unstyled small flex-grow-1">
+                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Todo Premium</li>
+                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>2FA avanzado</li>
+                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Compartición
+                                        segura</li>
+                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Acceso de
+                                        emergencia</li>
+                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Soporte 24/7</li>
+                                </ul>
+
+                                <button class="btn btn-dark-custom w-100 mt-3"
+                                    onclick="window.location.href='/payment'">
+                                    Elegir Platinum
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+                {{> fragments/footerPrivate}}
+            </main>
+        </div>
+    </div>
     {{/isLogged}}
+    
     {{^isLogged}}
     {{> fragments/navbarPublic}}
-    {{/isLogged}}
-
-
     <!-- HERO -->
     <section class="container py-5 text-center">
         <h1 class="display-5 fw-bold mb-3">Planes diseñados para tu seguridad</h1>
@@ -114,12 +233,6 @@
 
         </div>
     </section>
-
-    <!-- FOOTER -->
-    {{#isLogged}}
-    {{> fragments/footerPrivate}}
-    {{/isLogged}}
-    {{^isLogged}}
     {{> fragments/footerPublic}}
     {{/isLogged}}
 
