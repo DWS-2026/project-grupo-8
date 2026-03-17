@@ -21,7 +21,8 @@ import com.hashpass.repository.UserRepository;
 @Service
 public class ImageService {
 
-	private static final long MAX_IMAGE_BYTES = 2L * 1024L * 1024L;
+	private static final long MAX_IMAGE_BYTES = 10L * 1024L * 1024L;
+	private static final long MAX_IMAGE_MB = MAX_IMAGE_BYTES / (1024L * 1024L);
 
 	private final ImageRepository imageRepository;
 	private final UserRepository userRepository;
@@ -48,7 +49,7 @@ public class ImageService {
 		}
 
 		if (file.getSize() > MAX_IMAGE_BYTES) {
-			return "La imagen supera el tamaño máximo de 2MB.";
+			return "La imagen supera el tamaño máximo de " + MAX_IMAGE_MB + "MB.";
 		}
 
 		String contentType = file.getContentType();
@@ -148,7 +149,7 @@ public class ImageService {
 		}
 
 		if (file.getSize() > MAX_IMAGE_BYTES) {
-			return "La imagen supera el tamaño máximo de 2MB.";
+			return "La imagen supera el tamaño máximo de " + MAX_IMAGE_MB + "MB.";
 		}
 
 		String normalizedType = normalizeImageContentType(file.getContentType(), file.getOriginalFilename());

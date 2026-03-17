@@ -126,9 +126,14 @@ public class WebSecurityConfig {
 						.permitAll())
 				.exceptionHandling(exceptionHandling -> exceptionHandling
 						.accessDeniedPage("/error/403"))
+				.sessionManagement(sessionManagement -> sessionManagement
+						.invalidSessionUrl("/login?expired=1"))
 				.logout(logout -> logout
 						.logoutUrl("/logout")
-						.logoutSuccessUrl("/")
+						.logoutSuccessUrl("/login?logout=1")
+						.invalidateHttpSession(true)
+						.clearAuthentication(true)
+						.deleteCookies("JSESSIONID")
 						.addLogoutHandler((request, response, auth) -> userSession.logout())
 						.permitAll());
 

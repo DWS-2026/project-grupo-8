@@ -46,10 +46,18 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(@RequestParam(required = false) String deleted,
+                        @RequestParam(required = false) String logout,
+                        @RequestParam(required = false) String expired,
                         @RequestParam(required = false) String error,
                         Model model) {
         if (deleted != null) {
             model.addAttribute("success", "Tu cuenta se ha eliminado definitivamente.");
+        }
+        if (logout != null) {
+            model.addAttribute("success", "Sesión cerrada correctamente.");
+        }
+        if (expired != null && logout == null) {
+            model.addAttribute("expired", "Tu sesión ha expirado por inactividad. Vuelve a iniciar sesión.");
         }
         if (error != null) {
             model.addAttribute("error", "No existe ninguna cuenta con ese correo.");
