@@ -109,6 +109,7 @@ public class WebSecurityConfig {
 							userRepository.findByEmail(email).ifPresent(user -> {
 								userSession.setUser(user);
 								userSession.setEncryptionKey(deriveKey(password));
+								request.getSession().setMaxInactiveInterval(user.getSecurityTimeoutMinutes() * 60);
 
 								// Actualizar contador de logins de 30 días (simple, persistente en User)
 								LocalDateTime now = LocalDateTime.now();

@@ -61,6 +61,9 @@ public class User {
 	@Column
 	private LocalDateTime loginCountWindowStart;
 
+	@Column
+	private Integer securityTimeoutMinutes;
+
 	@PrePersist
 	void onCreate() {
 		LocalDateTime now = LocalDateTime.now();
@@ -167,6 +170,14 @@ public class User {
 
 	public void setLoginCountWindowStart(LocalDateTime loginCountWindowStart) {
 		this.loginCountWindowStart = loginCountWindowStart;
+	}
+
+	public Integer getSecurityTimeoutMinutes() {
+		return securityTimeoutMinutes == null ? 5 : securityTimeoutMinutes;
+	}
+
+	public void setSecurityTimeoutMinutes(Integer securityTimeoutMinutes) {
+		this.securityTimeoutMinutes = securityTimeoutMinutes;
 	}
 
 	// Computed properties for dynamic dashboard stats

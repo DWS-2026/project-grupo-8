@@ -123,20 +123,27 @@
                                     confirmación.</small>
                             </div>
 
-                            <div class="mb-2">
+                            <form method="post" action="/security-user/timeout" class="mb-2">
                                 <label class="form-label text-white small fw-bold">Timeout de seguridad</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-transparent border-secondary text-secondary"><i
                                             class="bi bi-stopwatch"></i></span>
-                                    <input type="text"
+                                    <input type="number" min="1" max="120" name="timeoutMinutes"
                                         class="form-control bg-transparent text-white border-secondary shadow-none"
-                                        placeholder="Ej: 5">
+                                        value="{{user.securityTimeoutMinutes}}" required>
                                     <span
                                         class="input-group-text bg-transparent border-secondary text-secondary">minutos</span>
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
                                 </div>
                                 <div class="form-text text-secondary opacity-75 small">La sesión se cerrará
                                     automáticamente tras inactividad.</div>
-                            </div>
+                                {{#timeoutError}}
+                                <div class="alert alert-danger mt-2 mb-0" role="alert">{{timeoutError}}</div>
+                                {{/timeoutError}}
+                                {{#timeoutSuccess}}
+                                <div class="alert alert-success mt-2 mb-0" role="alert">{{timeoutSuccess}}</div>
+                                {{/timeoutSuccess}}
+                            </form>
                         </div>
 
                         <div class="tarjeta-dato p-4 border border-danger flex-grow-1">

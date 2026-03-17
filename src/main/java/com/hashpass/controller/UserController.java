@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.hashpass.model.User;
+import com.hashpass.repository.UserRepository;
 import com.hashpass.service.AuthService;
 import com.hashpass.service.ImageService;
 import com.hashpass.service.UserSession;
@@ -24,6 +25,7 @@ public class UserController {
     private final AuthService authService;
     private final UserSession userSession;
     private final ImageService imageService;
+    private final UserRepository userRepository;
 
     @ModelAttribute("user")
     public User populateUser() {
@@ -35,10 +37,11 @@ public class UserController {
         return imageService.getProfileImageUrl(userSession.getUser());
     }
 
-    public UserController(AuthService authService, UserSession userSession, ImageService imageService) {
+    public UserController(AuthService authService, UserSession userSession, ImageService imageService, UserRepository userRepository) {
         this.authService = authService;
         this.userSession = userSession;
         this.imageService = imageService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/login")
@@ -137,6 +140,24 @@ public class UserController {
             model.addAttribute("error", error);
         }
         return "security_user";
+    }
+
+    @PostMapping("/security-user/timeout")
+    public String updateSecurityTimeout(@RequestParam Integer timeoutMinutes,
+                                        HttpServletRequest request,
+                                        RedirectAttributes redirectAttributes) {
+        if (timeoutMinutes == null || timeoutMinutes < 1 || timeoutMinutes > 120) {
+            redirectAttributes.addFlashAttribute("timeoutError", "El timeout debe estar entre 1 y 120 minutos.");
+            return "redirect:/security-user";
+        }
+
+        User currentUser = userSession.getUser();
+        currentUser.setSecurityTimeoutMinutes(timeoutMinutes);
+        userRepository.save(currentUser);
+
+        request.getSession().setMaxInactiveInterval(timeoutMinutes * 60);
+        redirectAttributes.addFlashAttribute("timeoutSuccess", "Timeout de seguridad actualizado a " + timeoutMinutes + " minutos.");
+        return "redirect:/security-user";
     }
 
     @PostMapping("/security-user/delete-account")
