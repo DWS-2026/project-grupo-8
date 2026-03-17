@@ -96,16 +96,21 @@ public class WebSecurityConfig {
 						.passwordParameter("password")
 						.failureHandler((request, response, exception) -> {
 							String email = request.getParameter("email");
+							String redirectTo = sanitizeRedirectTarget(request.getParameter("redirectTo"));
 							if (email == null) {
 								email = "";
 							}
 							String encodedEmail = URLEncoder.encode(email, StandardCharsets.UTF_8);
-							response.sendRedirect("/password-login?email=" + encodedEmail + "&error=1");
+							String redirectParam = redirectTo.isBlank()
+									? ""
+									: "&redirectTo=" + URLEncoder.encode(redirectTo, StandardCharsets.UTF_8);
+							response.sendRedirect("/password-login?email=" + encodedEmail + "&error=1" + redirectParam);
 						})
 						.defaultSuccessUrl("/dashboard")
 						.successHandler((request, response, auth) -> {
 							String password = request.getParameter("password");
 							String email = auth.getName();
+							String redirectTo = sanitizeRedirectTarget(request.getParameter("redirectTo"));
 							userRepository.findByEmail(email).ifPresent(user -> {
 								userSession.setUser(user);
 								userSession.setEncryptionKey(deriveKey(password));
@@ -124,7 +129,9 @@ public class WebSecurityConfig {
 							// redirect based on role: admins go to /admin
 							userRepository.findByEmail(email).ifPresent(user -> {
 								try {
-									if (user.isAdmin()) {
+									if (!redirectTo.isBlank()) {
+										response.sendRedirect(redirectTo);
+									} else if (user.isAdmin()) {
 										response.sendRedirect("/admin");
 									} else {
 										response.sendRedirect("/dashboard");
@@ -150,6 +157,16 @@ public class WebSecurityConfig {
 
         http.csrf(csrf -> csrf.disable());
 		return http.build();
+	}
+
+	private String sanitizeRedirectTarget(String redirectTo) {
+		if (redirectTo == null || redirectTo.isBlank()) {
+			return "";
+		}
+		if (!redirectTo.startsWith("/") || redirectTo.startsWith("//")) {
+			return "";
+		}
+		return redirectTo;
 	}
 
 	private String deriveKey(String password) {

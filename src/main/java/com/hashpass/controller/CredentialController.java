@@ -64,6 +64,7 @@ public class CredentialController {
 
     @GetMapping("/password-login")
     public String passwordLogin(@RequestParam(required = false) String email,
+                                @RequestParam(required = false) String redirectTo,
                                 @RequestParam(required = false) String error,
                                 Model model) {
         if (email == null || email.isBlank()) {
@@ -74,6 +75,7 @@ public class CredentialController {
         }
 
         model.addAttribute("email", email);
+        model.addAttribute("redirectTo", sanitizeRedirectTarget(redirectTo));
 
         if (error != null) {
             model.addAttribute("error", "Contraseña maestra incorrecta.");
@@ -270,6 +272,16 @@ public class CredentialController {
         }
 
         return "redirect:/passwords";
+    }
+
+    private String sanitizeRedirectTarget(String redirectTo) {
+        if (redirectTo == null || redirectTo.isBlank()) {
+            return "";
+        }
+        if (!redirectTo.startsWith("/") || redirectTo.startsWith("//")) {
+            return "";
+        }
+        return redirectTo;
     }
 
 }

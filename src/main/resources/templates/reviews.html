@@ -22,10 +22,17 @@
     <div class="container pb-5">
 
         <div class="d-flex justify-content-end mb-4">
+            {{#isLogged}}
             <button class="btn btn-outline-light rounded-pill hover-scale" data-bs-toggle="modal"
                 data-bs-target="#modalOpinion">
                 <i class="bi bi-pencil-square me-2"></i>Escribir una reseña
             </button>
+            {{/isLogged}}
+            {{^isLogged}}
+            <a href="/login?redirectTo=/reviews" class="btn btn-outline-light rounded-pill hover-scale">
+                <i class="bi bi-pencil-square me-2"></i>Escribir una reseña
+            </a>
+            {{/isLogged}}
         </div>
 
         <div class="row g-4" data-masonry='{"percentPosition": true }'>
@@ -137,6 +144,7 @@
         </div>
     </div>
 
+    {{#isLogged}}
     <div class="modal fade" id="modalOpinion" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content"
@@ -170,6 +178,7 @@
             </div>
         </div>
     </div>
+    {{/isLogged}}
 
     {{> fragments/footerPublic}}
 

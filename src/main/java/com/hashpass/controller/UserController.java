@@ -50,6 +50,7 @@ public class UserController {
             @RequestParam(required = false) String logout,
             @RequestParam(required = false) String expired,
             @RequestParam(required = false) String error,
+            @RequestParam(required = false) String redirectTo,
             Model model) {
         if (deleted != null) {
             model.addAttribute("success", "Tu cuenta se ha eliminado definitivamente.");
@@ -63,6 +64,7 @@ public class UserController {
         if (error != null) {
             model.addAttribute("error", "No existe ninguna cuenta con ese correo.");
         }
+        model.addAttribute("redirectTo", sanitizeRedirectTarget(redirectTo));
         return "login";
     }
 
@@ -340,5 +342,15 @@ public class UserController {
             return "redirect:/login";
         }
         return view;
+    }
+
+    private String sanitizeRedirectTarget(String redirectTo) {
+        if (redirectTo == null || redirectTo.isBlank()) {
+            return "";
+        }
+        if (!redirectTo.startsWith("/") || redirectTo.startsWith("//")) {
+            return "";
+        }
+        return redirectTo;
     }
 }

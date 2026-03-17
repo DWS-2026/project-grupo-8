@@ -31,6 +31,7 @@
 					{{/error}}
 
 					<form id="loginForm" method="get" action="/password-login">
+						<input type="hidden" name="redirectTo" value="{{redirectTo}}">
 						<div class="mb-3">
 							<label for="email" class="form-label">Introduzca su correo</label>
 							<div class="input-group">
