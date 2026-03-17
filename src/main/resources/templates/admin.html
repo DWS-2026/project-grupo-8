@@ -41,7 +41,7 @@
                 <div class="col-6">
                     <div class="tarjeta-dato text-center p-3">
                         <h6 class="text-secondary text-uppercase small fw-bold">Contraseñas</h6>
-                        <h3 class="texto-gradient mb-0">&nbsp;</h3>
+                        <h3 class="texto-gradient mb-0">{{passwordsCount}}</h3>
                     </div>
                 </div>
 
@@ -68,10 +68,15 @@
                                             Usuario
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-dark">
-                                            <li><a class="dropdown-item ordenar-tabla" href="#" data-col="1"
-                                                    data-orden="asc" data-tipo="texto">A - Z (Ascendente)</a></li>
-                                            <li><a class="dropdown-item ordenar-tabla" href="#" data-col="1"
-                                                    data-orden="desc" data-tipo="texto">Z - A (Descendente)</a></li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="sortUser"
+                                                    data-value="asc">A - Z (Ascendente)</a></li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="sortUser"
+                                                    data-value="desc">Z - A (Descendente)</a></li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="sortUser"
+                                                    data-value="">Quitar orden</a></li>
                                         </ul>
                                     </div>
                                 </th>
@@ -85,15 +90,14 @@
                                             Plan
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-dark">
-                                            <li><a class="dropdown-item filtro-tabla" href="#" data-col="2"
-                                                    data-val="todos">Ver
-                                                    Todos</a></li>
-                                            <li><a class="dropdown-item filtro-tabla" href="#" data-col="2"
-                                                    data-val="gratuito">Gratuito</a></li>
-                                            <li><a class="dropdown-item filtro-tabla" href="#" data-col="2"
-                                                    data-val="premium">Premium</a></li>
-                                            <li><a class="dropdown-item filtro-tabla" href="#" data-col="2"
-                                                    data-val="platinum">Platinum</a></li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="plan"
+                                                    data-value="todos">Ver Todos</a></li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="plan"
+                                                    data-value="gratuito">Gratuito</a></li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="plan"
+                                                    data-value="premium">Premium</a></li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="plan"
+                                                    data-value="platinum">Platinum</a></li>
                                         </ul>
                                     </div>
                                 </th>
@@ -106,10 +110,15 @@
                                             Registro
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-dark">
-                                            <li><a class="dropdown-item ordenar-tabla" href="#" data-col="3"
-                                                    data-orden="asc" data-tipo="fecha">Más Antiguo</a></li>
-                                            <li><a class="dropdown-item ordenar-tabla" href="#" data-col="3"
-                                                    data-orden="desc" data-tipo="fecha">Más Reciente</a></li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="regOrder"
+                                                    data-value="asc">Más Antiguo</a></li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="regOrder"
+                                                    data-value="desc">Más Reciente</a></li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="regOrder"
+                                                    data-value="">Quitar orden</a></li>
                                         </ul>
                                     </div>
                                 </th>
@@ -122,15 +131,14 @@
                                             Pago
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-dark">
-                                            <li><a class="dropdown-item filtro-tabla" href="#" data-col="4"
-                                                    data-val="todos">Ver
-                                                    Todos</a></li>
-                                            <li><a class="dropdown-item filtro-tabla" href="#" data-col="4"
-                                                    data-val="activo">Activo</a></li>
-                                            <li><a class="dropdown-item filtro-tabla" href="#" data-col="4"
-                                                    data-val="pendiente">Pendiente</a></li>
-                                            <li><a class="dropdown-item filtro-tabla" href="#" data-col="4"
-                                                    data-val="suspendido">Suspendido</a></li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="payment"
+                                                    data-value="todos">Ver Todos</a></li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="payment"
+                                                    data-value="activo">Activo</a></li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="payment"
+                                                    data-value="pendiente">Pendiente</a></li>
+                                            <li><a class="dropdown-item filter-control" href="#" data-key="payment"
+                                                    data-value="suspendido">Suspendido</a></li>
                                         </ul>
                                     </div>
                                 </th>
@@ -141,27 +149,27 @@
                         </thead>
 
                         <tbody class="align-middle">
-                        {{#usersList}}
+                            {{#usersList}}
                             <tr>
-                            <td class="px-3"> <a href="/admin-user-detail?id={{id}}"
-                                class="text-decoration-none text-white">{{email}}</a>
-                            </td>
-                            <td>{{credentialsCount}}</td>
-                            <td><span
-                                class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 fw-normal">{{plan}}</span>
-                            </td>
-                            <td>{{createdAt}}</td>
-                            <td><span class="text-success small"><i class="bi bi-circle-fill me-1"
-                                    style="font-size: 8px;"></i>{{paymentStatus}}</span></td>
-                            <td class="text-center">
-                                <form method="post" action="/admin/delete-user" style="display:inline">
-                                <input type="hidden" name="id" value="{{id}}" />
-                                <button type="submit" class="btn btn-outline-danger btn-sm border-0"><i
-                                    class="bi bi-x-lg"></i></button>
-                                </form>
-                            </td>
+                                <td class="px-3"> <a href="/admin-user-detail?id={{id}}"
+                                        class="text-decoration-none text-white">{{email}}</a>
+                                </td>
+                                <td>{{credentialsCount}}</td>
+                                <td><span
+                                        class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 fw-normal">{{plan}}</span>
+                                </td>
+                                <td>{{createdAt}}</td>
+                                <td><span class="text-success small"><i class="bi bi-circle-fill me-1"
+                                            style="font-size: 8px;"></i>{{paymentStatus}}</span></td>
+                                <td class="text-center">
+                                    <form method="post" action="/admin/delete-user" style="display:inline">
+                                        <input type="hidden" name="id" value="{{id}}" />
+                                        <button type="submit" class="btn btn-outline-danger btn-sm border-0"><i
+                                                class="bi bi-x-lg"></i></button>
+                                    </form>
+                                </td>
                             </tr>
-                        {{/usersList}}
+                            {{/usersList}}
                         </tbody>
                     </table>
                 </div>
@@ -170,6 +178,66 @@
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Mantener los parámetros de búsqueda y filtros al cambiar de opción
+                const currentParams = new URLSearchParams(window.location.search);
+
+                document.querySelectorAll('.filter-control').forEach(link => {
+                    link.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const key = this.dataset.key;
+                        const value = this.dataset.value;
+
+                        if (value) {
+                            currentParams.set(key, value);
+                        } else {
+                            currentParams.delete(key);
+                        }
+
+                        // Opcional: Cuando se aplica un orden, quitar el otro para no tener conflictos
+                        if (key === 'sortUser' && value) {
+                            currentParams.delete('regOrder');
+                        } else if (key === 'regOrder' && value) {
+                            currentParams.delete('sortUser');
+                        }
+
+                        window.location.search = currentParams.toString();
+                    });
+                });
+
+                // Marcar como 'active' la opción seleccionada actualmente
+                const selectedPlan = '{{selectedPlan}}';
+                const selectedPayment = '{{selectedPayment}}';
+                const regOrder = '{{regOrder}}';
+                const sortUser = '{{sortUser}}';
+
+                document.querySelectorAll('.filter-control').forEach(link => {
+                    const key = link.dataset.key;
+                    const value = link.dataset.value;
+
+                    let isActive = false;
+                    switch (key) {
+                        case 'plan':
+                            isActive = (selectedPlan === value);
+                            break;
+                        case 'payment':
+                            isActive = (selectedPayment === value);
+                            break;
+                        case 'regOrder':
+                            isActive = (regOrder === value);
+                            break;
+                        case 'sortUser':
+                            isActive = (sortUser === value);
+                            break;
+                    }
+
+                    if (isActive) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        </script>
 </body>
 
 </html>

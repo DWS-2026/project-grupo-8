@@ -37,7 +37,8 @@ public class UserController {
         return imageService.getProfileImageUrl(userSession.getUser());
     }
 
-    public UserController(AuthService authService, UserSession userSession, ImageService imageService, UserRepository userRepository) {
+    public UserController(AuthService authService, UserSession userSession, ImageService imageService,
+            UserRepository userRepository) {
         this.authService = authService;
         this.userSession = userSession;
         this.imageService = imageService;
@@ -46,10 +47,10 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(@RequestParam(required = false) String deleted,
-                        @RequestParam(required = false) String logout,
-                        @RequestParam(required = false) String expired,
-                        @RequestParam(required = false) String error,
-                        Model model) {
+            @RequestParam(required = false) String logout,
+            @RequestParam(required = false) String expired,
+            @RequestParam(required = false) String error,
+            Model model) {
         if (deleted != null) {
             model.addAttribute("success", "Tu cuenta se ha eliminado definitivamente.");
         }
@@ -103,7 +104,7 @@ public class UserController {
 
     @PostMapping("/config-user/avatar")
     public String uploadAvatar(@RequestParam("avatar") MultipartFile avatar,
-                               RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         User currentUser = userSession.getUser();
         String error = imageService.saveProfileImage(currentUser, avatar);
         if (error == null) {
@@ -116,8 +117,8 @@ public class UserController {
 
     @PostMapping("/config-user")
     public String changeEmail(@RequestParam String masterPass,
-                              @RequestParam String newEmail,
-                              Model model) {
+            @RequestParam String newEmail,
+            Model model) {
         User currentUser = userSession.getUser();
         String error = authService.changeEmail(currentUser, masterPass, newEmail);
         if (error == null) {
@@ -137,9 +138,9 @@ public class UserController {
 
     @PostMapping("/security-user")
     public String changeMasterPassword(@RequestParam String currentPass,
-                                       @RequestParam String newPass,
-                                       @RequestParam String confirmPass,
-                                       Model model) {
+            @RequestParam String newPass,
+            @RequestParam String confirmPass,
+            Model model) {
         User currentUser = userSession.getUser();
         String error = authService.changeMasterPassword(currentUser, currentPass, newPass, confirmPass);
         if (error == null) {
@@ -152,8 +153,8 @@ public class UserController {
 
     @PostMapping("/security-user/timeout")
     public String updateSecurityTimeout(@RequestParam Integer timeoutMinutes,
-                                        HttpServletRequest request,
-                                        RedirectAttributes redirectAttributes) {
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
         if (timeoutMinutes == null || timeoutMinutes < 1 || timeoutMinutes > 120) {
             redirectAttributes.addFlashAttribute("timeoutError", "El timeout debe estar entre 1 y 120 minutos.");
             return "redirect:/security-user";
@@ -164,14 +165,15 @@ public class UserController {
         userRepository.save(currentUser);
 
         request.getSession().setMaxInactiveInterval(timeoutMinutes * 60);
-        redirectAttributes.addFlashAttribute("timeoutSuccess", "Timeout de seguridad actualizado a " + timeoutMinutes + " minutos.");
+        redirectAttributes.addFlashAttribute("timeoutSuccess",
+                "Timeout de seguridad actualizado a " + timeoutMinutes + " minutos.");
         return "redirect:/security-user";
     }
 
     @PostMapping("/security-user/delete-account")
     public String deleteAccount(@RequestParam String deleteAccountPass,
-                                Model model,
-                                HttpServletRequest request) {
+            Model model,
+            HttpServletRequest request) {
         User currentUser = userSession.getUser();
         String error = authService.deleteAccount(currentUser, deleteAccountPass);
         if (error != null) {
@@ -187,11 +189,11 @@ public class UserController {
 
     @GetMapping("/admin")
     public String admin(@RequestParam(required = false) String q,
-                        @RequestParam(required = false) String plan,
-                        @RequestParam(required = false) String payment,
-                        @RequestParam(required = false, name = "regOrder") String regOrder,
-                        @RequestParam(required = false, name = "sortUser") String sortUser,
-                        Model model) {
+            @RequestParam(required = false) String plan,
+            @RequestParam(required = false) String payment,
+            @RequestParam(required = false, name = "regOrder") String regOrder,
+            @RequestParam(required = false, name = "sortUser") String sortUser,
+            Model model) {
         if (!userSession.isLogged()) {
             return "redirect:/login";
         }
@@ -214,8 +216,10 @@ public class UserController {
         }
         if (plan != null && !plan.isBlank() && !plan.equalsIgnoreCase("todos")) {
             String planLower = plan.toLowerCase();
-            stream = stream.filter(u -> u.getPlan() != null && u.getPlan().getName() != null
-                    && u.getPlan().getName().toLowerCase().contains(planLower));
+            stream = stream.filter(u -> {
+                String userPlan = u.getPlan() == null ? "gratuito" : u.getPlan().getName().toLowerCase();
+                return userPlan.contains(planLower);
+            });
         }
         if (payment != null && !payment.isBlank() && !payment.equalsIgnoreCase("todos")) {
             String paymentLower = payment.toLowerCase();
@@ -230,23 +234,29 @@ public class UserController {
 
         // sort: optionally by user (email) or by registration date
         java.util.Comparator<java.time.LocalDateTime> nullsLastDate = java.util.Comparator
-            .nullsLast(java.util.Comparator.naturalOrder());
+                .nullsLast(java.util.Comparator.naturalOrder());
         java.util.Comparator<com.hashpass.model.User> byCreatedAt = java.util.Comparator
-            .comparing((com.hashpass.model.User u) -> u.getCreatedAt(), nullsLastDate);
+                .comparing((com.hashpass.model.User u) -> u.getCreatedAt(), nullsLastDate);
+
+        java.util.Comparator<com.hashpass.model.User> finalComp = null;
+        java.util.Comparator<com.hashpass.model.User> byEmail = java.util.Comparator
+                .comparing(u -> u.getEmail() == null ? "" : u.getEmail().toLowerCase());
 
         if (sortUser != null && !sortUser.isBlank()) {
-            if (sortUser.equalsIgnoreCase("asc")) {
-                filtered.sort(java.util.Comparator.comparing(u -> u.getEmail() == null ? "" : u.getEmail().toLowerCase()));
-            } else if (sortUser.equalsIgnoreCase("desc")) {
-                filtered.sort(java.util.Comparator.comparing((com.hashpass.model.User u) -> u.getEmail() == null ? "" : u.getEmail().toLowerCase()).reversed());
-            }
-        } else {
-            if (regOrder == null || regOrder.isBlank() || regOrder.equalsIgnoreCase("desc")) {
-                filtered.sort(byCreatedAt.reversed());
-            } else if (regOrder.equalsIgnoreCase("asc")) {
-                filtered.sort(byCreatedAt);
-            }
+            finalComp = sortUser.equalsIgnoreCase("asc") ? byEmail : byEmail.reversed();
         }
+
+        if (regOrder != null && !regOrder.isBlank()) {
+            java.util.Comparator<com.hashpass.model.User> regComp = regOrder.equalsIgnoreCase("asc") ? byCreatedAt
+                    : byCreatedAt.reversed();
+            finalComp = (finalComp == null) ? regComp : finalComp.thenComparing(regComp);
+        }
+
+        if (finalComp == null) {
+            finalComp = byCreatedAt.reversed();
+        }
+
+        filtered.sort(finalComp);
 
         var list = filtered.stream().map(u -> {
             java.util.Map<String, Object> m = new java.util.HashMap<>();
@@ -267,6 +277,7 @@ public class UserController {
         model.addAttribute("selectedPlan", plan == null ? "todos" : plan);
         model.addAttribute("selectedPayment", payment == null ? "todos" : payment);
         model.addAttribute("regOrder", regOrder == null ? "desc" : regOrder);
+        model.addAttribute("sortUser", sortUser == null ? "" : sortUser);
 
         return "admin";
     }
@@ -294,7 +305,8 @@ public class UserController {
         model.addAttribute("detailName", u.getName());
         model.addAttribute("detailEmail", u.getEmail());
         model.addAttribute("detailPlan", u.getPlan() == null ? "Gratuito" : u.getPlan().getName());
-        model.addAttribute("detailCreatedAt", u.getCreatedAt() == null ? "-" : u.getCreatedAt().toLocalDate().toString());
+        model.addAttribute("detailCreatedAt",
+                u.getCreatedAt() == null ? "-" : u.getCreatedAt().toLocalDate().toString());
         model.addAttribute("detailCredentialsCount", u.getCredentials() == null ? 0 : u.getCredentials().size());
         model.addAttribute("detailProfileImageUrl", imageService.getProfileImageUrl(u));
 
