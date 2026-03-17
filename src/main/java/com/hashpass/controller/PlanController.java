@@ -37,7 +37,7 @@ public class PlanController {
 
     @GetMapping("/plan")
     public String plan(Model model) {
-        return requireLogin(model, "plan");
+        return "plan";
     }
 
     @GetMapping("/payment")

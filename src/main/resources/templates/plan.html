@@ -44,7 +44,7 @@
                         <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Generador básico</li>
                     </ul>
 
-                    <button class="btn btn-dark-custom w-100 mt-3" onclick="window.location.href='/register'">
+                    <button class="btn btn-dark-custom w-100 mt-3" onclick="window.location.href='/dashboard'">
                         Continuar gratis
                     </button>
                 </div>
@@ -116,7 +116,12 @@
     </section>
 
     <!-- FOOTER -->
+    {{#isLogged}}
     {{> fragments/footerPrivate}}
+    {{/isLogged}}
+    {{^isLogged}}
+    {{> fragments/footerPublic}}
+    {{/isLogged}}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
