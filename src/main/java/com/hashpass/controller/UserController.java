@@ -311,6 +311,8 @@ public class UserController {
                 u.getCreatedAt() == null ? "-" : u.getCreatedAt().toLocalDate().toString());
         model.addAttribute("detailCredentialsCount", u.getCredentials() == null ? 0 : u.getCredentials().size());
         model.addAttribute("detailProfileImageUrl", imageService.getProfileImageUrl(u));
+        model.addAttribute("detailLastLogin", u.getLastLogin() != null ? u.getLastLogin().toString() : "Sin datos");
+        model.addAttribute("detailFailedAttempts", u.getFailedAttempts() != null ? u.getFailedAttempts() : 0);
 
         return "admin_user_detail";
     }

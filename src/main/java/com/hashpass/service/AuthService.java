@@ -96,4 +96,26 @@ public class AuthService {
         userRepository.delete(persistedUser);
         return null;
     }
+    public void actualizarUltimoLogin(String email) {
+    userRepository.findByEmail(email).ifPresent(u -> {
+        u.setLastLogin(java.time.LocalDateTime.now());
+        u.setFailedAttempts(0); // Si entra, reseteamos los fallos a 0
+        userRepository.save(u);
+    });
+}
+    public void loginSuccess(String email) {
+        userRepository.findByEmail(email).ifPresent(u -> {
+            u.setLastLogin(java.time.LocalDateTime.now());
+            u.setFailedAttempts(0); // Reiniciamos a 0 porque ha entrado
+            userRepository.save(u);
+        });
+    }
+
+    public void loginFailed(String email) {
+        userRepository.findByEmail(email).ifPresent(u -> {
+            int actual = (u.getFailedAttempts() != null) ? u.getFailedAttempts() : 0;
+            u.setFailedAttempts(actual + 1); // Sumamos uno al fallo
+            userRepository.save(u);
+        });
+    }
 }

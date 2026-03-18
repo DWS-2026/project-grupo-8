@@ -58,44 +58,50 @@ public class WebSecurityConfig {
 				.authorizeHttpRequests(authorize -> authorize
 						// PUBLIC PAGES
 						.requestMatchers("/").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/register").permitAll()
-                        .requestMatchers("/password-login").permitAll()
+						.requestMatchers("/login").permitAll()
+						.requestMatchers("/register").permitAll()
+						.requestMatchers("/password-login").permitAll()
 						.requestMatchers("/plan", "/plan/**").permitAll()
 						.requestMatchers("/error", "/error/**").permitAll()
 						.requestMatchers("/css/**").permitAll()
 						.requestMatchers("/images/**").permitAll()
 						.requestMatchers("/reviews/**").permitAll()
-                        .requestMatchers("/footerPublic/**").permitAll()
-                        .requestMatchers("/head/*").permitAll()
-                        .requestMatchers("/navbarPublic/*").permitAll()
-                        .requestMatchers("/assets/**").permitAll() // Allow access to static resources
+						.requestMatchers("/footerPublic/**").permitAll()
+						.requestMatchers("/head/*").permitAll()
+						.requestMatchers("/navbarPublic/*").permitAll()
+						.requestMatchers("/assets/**").permitAll() // Allow access to static resources
 						// PRIVATE PAGES
-					.requestMatchers("/add-password", "/add-password/**").hasAnyRole("USER")
-					.requestMatchers("/delete-password", "/delete-password/**").hasAnyRole("USER")
-					.requestMatchers("/save-password-edit", "/save-password-edit/**").hasAnyRole("USER")
+						.requestMatchers("/add-password", "/add-password/**").hasAnyRole("USER")
+						.requestMatchers("/delete-password", "/delete-password/**").hasAnyRole("USER")
+						.requestMatchers("/save-password-edit", "/save-password-edit/**").hasAnyRole("USER")
 						.requestMatchers("/config-user", "/config-user/**").hasAnyRole("USER")
 						.requestMatchers("/dashboard", "/dashboard/**").hasAnyRole("USER")
-                        .requestMatchers("/info-passwords", "/info-passwords/**").hasAnyRole("USER")
-                        .requestMatchers("/index", "/index/**").hasAnyRole("USER")
-                        .requestMatchers("/passwords", "/passwords/**").hasAnyRole("USER")
-                        .requestMatchers("/payment", "/payment/**").hasAnyRole("USER")
-                        .requestMatchers("/security-user", "/security-user/**").hasAnyRole("USER")
-                        .requestMatchers("/user", "/user/**").hasAnyRole("USER")
+						.requestMatchers("/info-passwords", "/info-passwords/**").hasAnyRole("USER")
+						.requestMatchers("/index", "/index/**").hasAnyRole("USER")
+						.requestMatchers("/passwords", "/passwords/**").hasAnyRole("USER")
+						.requestMatchers("/payment", "/payment/**").hasAnyRole("USER")
+						.requestMatchers("/security-user", "/security-user/**").hasAnyRole("USER")
+						.requestMatchers("/user", "/user/**").hasAnyRole("USER")
 						.requestMatchers("/footerPrivate", "/footerPrivate/**").hasAnyRole("USER")
 						.requestMatchers("/navbarPrivate", "/navbarPrivate/**").hasAnyRole("USER")
 						.requestMatchers("/sidebar", "/sidebar/**").hasAnyRole("USER")
 
-
 						.requestMatchers("/admin-user-detail", "/admin-user-detail/**").hasAnyRole("ADMIN")
 						.requestMatchers("/admin", "/admin/**").hasAnyRole("ADMIN"))
 
-                        .formLogin(formLogin -> formLogin
+				.formLogin(formLogin -> formLogin
 						.loginPage("/login")
 						.usernameParameter("email")
 						.passwordParameter("password")
 						.failureHandler((request, response, exception) -> {
 							String email = request.getParameter("email");
+							if (email != null) {
+								userRepository.findByEmail(email).ifPresent(user -> {
+									int actuales = (user.getFailedAttempts() == null) ? 0 : user.getFailedAttempts();
+									user.setFailedAttempts(actuales + 1);
+									userRepository.save(user);
+								});
+							}
 							String redirectTo = sanitizeRedirectTarget(request.getParameter("redirectTo"));
 							if (email == null) {
 								email = "";
@@ -115,10 +121,13 @@ public class WebSecurityConfig {
 								userSession.setUser(user);
 								userSession.setEncryptionKey(deriveKey(password));
 								request.getSession().setMaxInactiveInterval(user.getSecurityTimeoutMinutes() * 60);
+								user.setLastLogin(LocalDateTime.now()); // Fecha real de éxito
+								user.setFailedAttempts(0);
 
 								// Actualizar contador de logins de 30 días (simple, persistente en User)
 								LocalDateTime now = LocalDateTime.now();
-								if (user.getLoginCountWindowStart() == null || user.getLoginCountWindowStart().isBefore(now.minusDays(30))) {
+								if (user.getLoginCountWindowStart() == null
+										|| user.getLoginCountWindowStart().isBefore(now.minusDays(30))) {
 									user.setLoginCount(1);
 									user.setLoginCountWindowStart(now);
 								} else {
@@ -155,7 +164,7 @@ public class WebSecurityConfig {
 						.addLogoutHandler((request, response, auth) -> userSession.logout())
 						.permitAll());
 
-        http.csrf(csrf -> csrf.disable());
+		http.csrf(csrf -> csrf.disable());
 		return http.build();
 	}
 
@@ -176,7 +185,8 @@ public class WebSecurityConfig {
 			StringBuilder hexString = new StringBuilder();
 			for (byte b : hash) {
 				String hex = Integer.toHexString(0xff & b);
-				if (hex.length() == 1) hexString.append('0');
+				if (hex.length() == 1)
+					hexString.append('0');
 				hexString.append(hex);
 			}
 			return hexString.toString().substring(0, 32);

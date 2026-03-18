@@ -297,8 +297,19 @@ h6,
 .tabla-contenedor {
   background-color: var(--fondo-tarjeta);
   border-radius: 12px;
-  overflow: hidden;
-  /* Importante para que las esquinas de la tabla se recorten */
+  overflow: visible !important; 
+}
+/* Evita que el scroll horizontal de Bootstrap corte los menús desplegables */
+.table-responsive {
+  overflow: visible !important;
+}
+.table tr {
+  position: relative;
+}
+
+/* Asegura que el dropdown siempre esté por encima de otras filas */
+.dropdown-menu {
+  z-index: 1060 !important; 
 }
 
 /* 4. Efecto Focus en el Buscador (El brillo verde) */

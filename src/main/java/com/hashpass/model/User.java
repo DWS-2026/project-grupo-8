@@ -67,6 +67,12 @@ public class User {
 	@Column
 	private Integer securityTimeoutMinutes;
 
+	@Column
+	private LocalDateTime lastLogin;
+
+	@Column(nullable = false)
+	private Integer failedAttempts = 0;
+
 	@PrePersist
 	void onCreate() {
 		LocalDateTime now = LocalDateTime.now();
@@ -196,13 +202,13 @@ public class User {
 		if (credentials.isEmpty()) {
 			return "Excelente";
 		}
-		
+
 		long weakCount = credentials.stream()
 				.filter(c -> c.getPasswordEncrypted().length() < 8)
 				.count();
-		
+
 		double weakPercentage = (double) weakCount / credentials.size() * 100;
-		
+
 		if (weakPercentage == 0) {
 			return "Excelente";
 		} else if (weakPercentage <= 25) {
@@ -218,9 +224,9 @@ public class User {
 		if (createdAt == null) {
 			return "N/A";
 		}
-		
+
 		long monthsDiff = java.time.temporal.ChronoUnit.MONTHS.between(createdAt, LocalDateTime.now());
-		
+
 		if (monthsDiff == 0) {
 			return "Reciente";
 		} else if (monthsDiff < 12) {
@@ -237,5 +243,21 @@ public class User {
 
 	public String getPaymentStatus() {
 		return "Activo";
+	}
+
+	public LocalDateTime getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(LocalDateTime lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+
+	public Integer getFailedAttempts() {
+		return failedAttempts == null ? 0 : failedAttempts;
+	}
+
+	public void setFailedAttempts(Integer failedAttempts) {
+		this.failedAttempts = failedAttempts;
 	}
 }
