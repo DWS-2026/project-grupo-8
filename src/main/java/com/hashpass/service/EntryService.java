@@ -50,7 +50,11 @@ public class EntryService {
     }
 
     public void delete(Long id) {
-        credentialRepository.deleteById(id);
+        Optional<Credential> credOpt = credentialRepository.findById(id);
+        if (credOpt.isPresent()) {
+            credentialRepository.deleteById(id);
+            credentialRepository.flush();
+        }
     }
 
     // ------------------------------------------------------------------
