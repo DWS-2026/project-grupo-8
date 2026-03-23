@@ -239,6 +239,49 @@ h6,
   border-color: rgba(255, 255, 255, 0.1);
 }
 
+/* CTA de planes más llamativos */
+.plan-cta {
+  border: 0;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  padding: 0.65rem 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.plan-cta:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+.plan-cta-free {
+  color: #e2e8f0;
+  background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.35);
+}
+
+.plan-cta-premium {
+  color: #08110e;
+  background: linear-gradient(135deg, #34d399 0%, #10b981 55%, #059669 100%);
+  box-shadow: 0 10px 24px rgba(16, 185, 129, 0.35);
+}
+
+.plan-cta-platinum {
+  color: #0f172a;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 45%, #cbd5e1 100%);
+  box-shadow: 0 10px 24px rgba(148, 163, 184, 0.3);
+}
+
+/* Campos de pago en vista oscura */
+#cardForm .form-control,
+#cardForm .form-select {
+  color: #f8f9fa !important;
+}
+
+#cardForm .form-control::placeholder {
+  color: #ced4da5f !important;
+  opacity: 1;
+}
+
 /* =========================================
    ESTILO SIDEBAR MÓVIL (TIPO POPUP)
 ========================================= */

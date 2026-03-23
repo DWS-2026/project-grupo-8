@@ -22,7 +22,7 @@ public class Plan {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private long id;
 
 	@Column(nullable = false, length = 80)
 	private String name;
@@ -54,7 +54,7 @@ public class Plan {
 		this.updatedAt = LocalDateTime.now();
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 

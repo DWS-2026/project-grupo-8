@@ -15,10 +15,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.math.BigDecimal;
 import com.hashpass.model.Credential;
+import com.hashpass.model.Plan;
 import com.hashpass.model.Review;
 import com.hashpass.model.User;
 import com.hashpass.repository.CredentialRepository;
+import com.hashpass.repository.PlanRepository;
 import com.hashpass.repository.ReviewRepository;
 import com.hashpass.repository.UserRepository;
 
@@ -31,8 +34,14 @@ public class Application {
 
 	@Bean
 	public CommandLineRunner seedData(UserRepository userRepository, CredentialRepository credentialRepository,
-			ReviewRepository reviewRepository, PasswordEncoder passwordEncoder) {
+			ReviewRepository reviewRepository, PlanRepository planRepository, PasswordEncoder passwordEncoder) {
 		return args -> {
+			// Inicializar planes si no existen
+			createPlanIfNotExists(planRepository, "Gratuito", BigDecimal.ZERO, "Para empezar");
+			createPlanIfNotExists(planRepository, "Premium", new BigDecimal("4.99"), "Uso diario avanzado");
+			createPlanIfNotExists(planRepository, "Platinum", new BigDecimal("9.99"), "Seguridad profesional");
+			Plan freePlan = planRepository.findByName("Gratuito").orElse(null);
+
 			String adminEmail = "adminhashpass@gmail.com";
 			if (userRepository.findByEmail(adminEmail).isEmpty()) {
 				User admin = new User();
@@ -43,7 +52,7 @@ public class Application {
 				userRepository.save(admin);
 			}
 
-			seedDemoUser(userRepository, credentialRepository, reviewRepository, passwordEncoder,
+			seedDemoUser(userRepository, credentialRepository, reviewRepository, passwordEncoder, freePlan,
 					"Usuario Demo Uno", "demo1@hashpass.local", "Demo123!", new String[][] {
 							{ "Gmail", "https://mail.google.com", "demo1@gmail.com", "Correo principal" },
 							{ "Netflix", "https://www.netflix.com", "demo1.netflix", "Streaming familiar" }
@@ -52,7 +61,7 @@ public class Application {
 							{ "Recomendada", "La uso desde hace meses y funciona genial.", "4" }
 					});
 
-			seedDemoUser(userRepository, credentialRepository, reviewRepository, passwordEncoder,
+			seedDemoUser(userRepository, credentialRepository, reviewRepository, passwordEncoder, freePlan,
 					"Usuario Demo Dos", "demo2@hashpass.local", "Demo123!", new String[][] {
 							{ "GitHub", "https://github.com", "demo2dev", "Cuenta de desarrollo" },
 							{ "Banco", "https://www.bbva.es", "demo2.banco", "Acceso banca online" }
@@ -65,7 +74,7 @@ public class Application {
 	}
 
 	private void seedDemoUser(UserRepository userRepository, CredentialRepository credentialRepository,
-			ReviewRepository reviewRepository, PasswordEncoder passwordEncoder, String name, String email,
+			ReviewRepository reviewRepository, PasswordEncoder passwordEncoder, Plan freePlan, String name, String email,
 			String rawPassword, String[][] credentialsData, String[][] reviewsData) {
 		User user = userRepository.findByEmail(email).orElseGet(() -> {
 			User newUser = new User();
@@ -73,7 +82,10 @@ public class Application {
 			newUser.setEmail(email);
 			newUser.setPasswordHash(passwordEncoder.encode(rawPassword));
 			newUser.setAdmin(false);
-			newUser.setSecurityTimeoutMinutes(5);
+			newUser.setSecurityTimeoutMinutes(10);
+			if (freePlan != null) {
+				newUser.setPlan(freePlan);
+			}
 			return userRepository.save(newUser);
 		});
 
@@ -146,6 +158,17 @@ public class Application {
 			return Base64.getEncoder().encodeToString(encryptedBytes);
 		} catch (Exception e) {
 			throw new RuntimeException("Error cifrando credencial demo", e);
+		}
+	}
+
+	private void createPlanIfNotExists(PlanRepository planRepository, String name, BigDecimal price, String description) {
+		if (planRepository.findByName(name).isEmpty()) {
+			Plan plan = new Plan();
+			plan.setName(name);
+			plan.setPriceMonthly(price);
+			plan.setDescription(description);
+			planRepository.save(plan);
+			System.out.println("✓ Plan '" + name + "' creado exitosamente.");
 		}
 	}
 }

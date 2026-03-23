@@ -55,7 +55,7 @@
                             
                             <div class="col-12">
                                 <label class="form-label text-secondary small">Nombre del titular</label>
-                                <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="Como aparece en la tarjeta">
+                                <input type="text" id="cardHolder" class="form-control bg-dark text-white border-secondary" placeholder="Ej: Michel Oyarzabal">
                             </div>
 
                             <div class="col-12">
@@ -70,12 +70,12 @@
 
                             <div class="col-md-6">
                                 <label class="form-label text-secondary small">Fecha de expiración</label>
-                                <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="MM / AA" maxlength="5">
+                                <input type="text" id="cardExpiry" class="form-control bg-dark text-white border-secondary" placeholder="MM / AA" maxlength="7" inputmode="numeric" autocomplete="cc-exp">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label text-secondary small">CVC / CVV</label>
                                 <div class="position-relative">
-                                    <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="123" maxlength="4">
+                                    <input type="text" id="cardCvv" class="form-control bg-dark text-white border-secondary" placeholder="123" maxlength="4">
                                     <div class="input-icon-right">
                                         <i class="bi bi-question-circle text-secondary" title="3 dígitos al reverso"></i>
                                     </div>
@@ -84,7 +84,7 @@
 
                             <div class="col-12 mt-4">
                                 <label class="form-label text-secondary small">País de facturación</label>
-                                <select class="form-select bg-dark text-white border-secondary">
+                                <select id="billingCountry" class="form-select bg-dark text-white border-secondary">
                                     <option selected>España</option>
                                     <option>México</option>
                                     <option>Estados Unidos</option>
@@ -104,27 +104,36 @@
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <div class="text-white fw-bold">Plan Premium</div>
-                            <div class="text-secondary small">Facturación anual</div>
+                            <div class="text-white fw-bold">{{paymentPlanName}}</div>
+                            <div class="text-secondary small">{{paymentBillingLabel}}</div>
                         </div>
-                        <div class="text-white">4.99€</div>
+                        <div class="text-white">{{paymentPrice}}</div>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="text-secondary small">Descuento (Promo)</div>
-                        <div class="text-success small">-1.99€</div>
+                        <div class="text-success small">{{paymentDiscount}}</div>
                     </div>
                     
                     <hr class="border-secondary opacity-25 my-3">
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div class="text-white fs-5 fw-bold">Total a pagar</div>
-                        <div class="fs-4 fw-bold texto-gradient">3.00€</div>
+                        <div class="fs-4 fw-bold texto-gradient">{{paymentTotal}}</div>
                     </div>
 
-                    <a href="/dashboard" class="btn btn-primary w-100 py-2 mb-3 fw-bold shadow-lg">
-                        <i class="bi bi-lock-fill me-2"></i> Pagar 3.00€
-                    </a>
+                    <button id="payButton" type="button" class="btn btn-primary w-100 py-2 mb-3 fw-bold shadow-lg">
+                        <i class="bi bi-lock-fill me-2"></i> Pagar {{paymentTotal}}
+                    </button>
+
+                    <form id="paymentSubmitForm" method="post" action="/payment/confirm" class="d-none">
+                        <input type="hidden" name="_csrf" value="{{token}}">
+                        <input type="hidden" id="paymentPlanInput" name="plan" value="{{paymentPlanKey}}">
+                    </form>
+
+                    <p id="paymentValidationMessage" class="text-danger small mb-3 d-none">
+                        Completa todos los campos de la tarjeta para continuar.
+                    </p>
 
                     <div class="text-center">
                         <p class="text-secondary small mb-2" style="font-size: 0.75rem;">
@@ -150,6 +159,17 @@
     <script>
         // Script simple para formatear el número de tarjeta con espacios
         const cardInput = document.getElementById('cardNumber');
+        const holderInput = document.getElementById('cardHolder');
+        const expiryInput = document.getElementById('cardExpiry');
+        const cvvInput = document.getElementById('cardCvv');
+        const countryInput = document.getElementById('billingCountry');
+        const cardForm = document.getElementById('cardForm');
+        const payButton = document.getElementById('payButton');
+        const paymentSubmitForm = document.getElementById('paymentSubmitForm');
+        const paymentPlanInput = document.getElementById('paymentPlanInput');
+        const methodCard = document.getElementById('methodCard');
+        const validationMessage = document.getElementById('paymentValidationMessage');
+        let hasTriedPay = false;
         
         cardInput.addEventListener('input', function (e) {
             let value = e.target.value.replace(/\D/g, ''); // Elimina todo lo que no sea número
@@ -163,6 +183,48 @@
             }
             
             e.target.value = formattedValue;
+            updatePayButtonState();
+        });
+
+        expiryInput.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 4) {
+                value = value.substring(0, 4);
+            }
+
+            if (value.length >= 3) {
+                e.target.value = value.substring(0, 2) + ' / ' + value.substring(2);
+            } else {
+                e.target.value = value;
+            }
+            updatePayButtonState();
+        });
+
+        cvvInput.addEventListener('input', function (e) {
+            e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
+            updatePayButtonState();
+        });
+
+        holderInput.addEventListener('input', updatePayButtonState);
+        countryInput.addEventListener('change', updatePayButtonState);
+
+        payButton.addEventListener('click', function () {
+            if (paymentPlanInput && !paymentPlanInput.value) {
+                paymentPlanInput.value = 'premium';
+            }
+
+            if (!methodCard.checked) {
+                paymentSubmitForm.submit();
+                return;
+            }
+
+            hasTriedPay = true;
+            const complete = isCardFormComplete();
+            updatePayButtonState();
+
+            if (complete) {
+                paymentSubmitForm.submit();
+            }
         });
 
         // Script para cambiar visualmente la opción de pago
@@ -177,12 +239,91 @@
             element.classList.add('active');
             element.querySelector('input').checked = true;
 
-            // Lógica simple para ocultar/mostrar formulario tarjeta (opcional)
-            // En un caso real, aquí cambiarías la vista
-            if(method === 'paypal') {
-                // Podrías ocultar los inputs de tarjeta
+            setCardInputsDisabled(method === 'paypal');
+
+            updatePayButtonState();
+        }
+
+        function setCardInputsDisabled(disabled) {
+            [holderInput, cardInput, expiryInput, cvvInput, countryInput].forEach(field => {
+                field.disabled = disabled;
+            });
+
+            cardForm.classList.toggle('opacity-50', disabled);
+        }
+
+        function isCardFormComplete() {
+            const holderOk = holderInput.value.trim().length > 0;
+            const cardDigits = cardInput.value.replace(/\D/g, '');
+            const cardOk = cardDigits.length === 16;
+            const expiryOk = isExpiryValid();
+            const cvvOk = /^\d{3,4}$/.test(cvvInput.value);
+            const countryOk = countryInput.value.trim().length > 0;
+
+            return holderOk && cardOk && expiryOk && cvvOk && countryOk;
+        }
+
+        function isExpiryValid() {
+            const raw = expiryInput.value.trim();
+            // Acepta formatos MM/AA y MM / AA
+            const match = raw.match(/^(\d{2})\s*\/\s*(\d{2})$/);
+            if (!match) {
+                return false;
+            }
+
+            const month = Number(match[1]);
+            return month >= 1 && month <= 12;
+        }
+
+        function setFieldValidityStyles(field, isValid) {
+            field.classList.toggle('border-danger', !isValid);
+            field.classList.toggle('border-secondary', isValid);
+        }
+
+        function updateCardFieldStyles() {
+            const holderOk = holderInput.value.trim().length > 0;
+            const cardDigits = cardInput.value.replace(/\D/g, '');
+            const cardOk = cardDigits.length === 16;
+            const expiryOk = isExpiryValid();
+            const cvvOk = /^\d{3,4}$/.test(cvvInput.value);
+            const countryOk = countryInput.value.trim().length > 0;
+
+            setFieldValidityStyles(holderInput, holderOk);
+            setFieldValidityStyles(cardInput, cardOk);
+            setFieldValidityStyles(expiryInput, expiryOk);
+            setFieldValidityStyles(cvvInput, cvvOk);
+            setFieldValidityStyles(countryInput, countryOk);
+        }
+
+        function resetCardFieldStyles() {
+            [holderInput, cardInput, expiryInput, cvvInput, countryInput].forEach(field => {
+                field.classList.remove('border-danger');
+                field.classList.add('border-secondary');
+            });
+        }
+
+        function updatePayButtonState() {
+            if (methodCard.checked) {
+                const complete = isCardFormComplete();
+                payButton.disabled = false;
+                setCardInputsDisabled(false);
+
+                if (hasTriedPay) {
+                    updateCardFieldStyles();
+                    validationMessage.classList.toggle('d-none', complete);
+                } else {
+                    validationMessage.classList.add('d-none');
+                    resetCardFieldStyles();
+                }
+            } else {
+                payButton.disabled = false;
+                setCardInputsDisabled(true);
+                validationMessage.classList.add('d-none');
+                resetCardFieldStyles();
             }
         }
+
+        updatePayButtonState();
     </script>
 
 </body>

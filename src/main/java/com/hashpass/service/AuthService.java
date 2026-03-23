@@ -5,18 +5,22 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.hashpass.model.Plan;
 import com.hashpass.model.User;
+import com.hashpass.repository.PlanRepository;
 import com.hashpass.repository.UserRepository;
 
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final PlanRepository planRepository;
     private final UserSession userSession;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthService(UserRepository userRepository, UserSession userSession, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository, PlanRepository planRepository, UserSession userSession, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.planRepository = planRepository;
         this.userSession = userSession;
         this.passwordEncoder = passwordEncoder;
     }
@@ -31,6 +35,13 @@ public class AuthService {
         newUser.setEmail(email);
         // Guardamos un hash de la contraseña usando BCrypt
         newUser.setPasswordHash(passwordEncoder.encode(password));
+        
+        // Obtener el plan gratuito y asignarlo al nuevo usuario
+        Optional<Plan> freePlan = planRepository.findByName("Gratuito");
+        if (freePlan.isPresent()) {
+            newUser.setPlan(freePlan.get());
+        }
+        
         return userRepository.save(newUser);
     }
 

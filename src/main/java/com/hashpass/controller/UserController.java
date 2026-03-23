@@ -29,7 +29,14 @@ public class UserController {
 
     @ModelAttribute("user")
     public User populateUser() {
-        return userSession.getUser();
+        User currentUser = userSession.getUser();
+        if (currentUser == null || currentUser.getId() == null) {
+            return currentUser;
+        }
+
+        User refreshedUser = userRepository.findWithPlanById(currentUser.getId()).orElse(currentUser);
+        userSession.setUser(refreshedUser);
+        return refreshedUser;
     }
 
     @ModelAttribute("profileImageUrl")

@@ -182,7 +182,7 @@ public class User {
 	}
 
 	public Integer getSecurityTimeoutMinutes() {
-		return securityTimeoutMinutes == null ? 5 : securityTimeoutMinutes;
+		return securityTimeoutMinutes == null ? 10 : securityTimeoutMinutes;
 	}
 
 	public void setSecurityTimeoutMinutes(Integer securityTimeoutMinutes) {
