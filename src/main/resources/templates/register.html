@@ -25,6 +25,8 @@
 
 					<form id="registerForm" method="post" action="/register" enctype="multipart/form-data">
 
+						<input type="hidden" name="_csrf" value="{{token}}">
+
 						<div class="mb-3">
 							<label for="fullname" class="form-label">Nombre completo</label>
 							<div class="input-group">

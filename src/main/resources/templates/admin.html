@@ -164,6 +164,7 @@
                                                 style="font-size: 8px;"></i>{{paymentStatus}}</span></td>
                                     <td class="text-center">
                                         <form method="post" action="/admin/delete-user" style="display:inline">
+                                            <input type="hidden" name="_csrf" value="{{token}}">
                                             <input type="hidden" name="id" value="{{id}}" />
                                             <button type="submit" class="btn btn-outline-danger btn-sm border-0"><i
                                                     class="bi bi-x-lg"></i></button>

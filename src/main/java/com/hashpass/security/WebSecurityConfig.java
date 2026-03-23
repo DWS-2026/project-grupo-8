@@ -163,8 +163,6 @@ public class WebSecurityConfig {
 						.deleteCookies("JSESSIONID")
 						.addLogoutHandler((request, response, auth) -> userSession.logout())
 						.permitAll());
-
-		http.csrf(csrf -> csrf.disable());
 		return http.build();
 	}
 

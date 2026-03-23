@@ -47,6 +47,7 @@
                             {{/success}}
 
                             <form method="post" action="/security-user" class="d-flex flex-column flex-grow-1 justify-content-between">
+                                <input type="hidden" name="_csrf" value="{{token}}">
 
                                 <div class="mb-3">
                                     <label for="currentPass" class="form-label text-white small fw-bold">Contraseña
@@ -124,6 +125,7 @@
                             </div>
 
                             <form method="post" action="/security-user/timeout" class="mb-2">
+                                <input type="hidden" name="_csrf" value="{{token}}">
                                 <label class="form-label text-white small fw-bold">Timeout de seguridad</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-transparent border-secondary text-secondary"><i
@@ -154,6 +156,7 @@
                                 no se puede deshacer.
                             </p>
                             <form method="post" action="/security-user/delete-account">
+                                <input type="hidden" name="_csrf" value="{{token}}">
                                 <div class="mb-3">
                                     <label for="deleteAccountPass" class="form-label text-white small fw-bold">Confirma tu contraseña maestra</label>
                                     <div class="input-group">

@@ -52,6 +52,7 @@
 
                         <div class="ms-auto d-flex gap-2">
                             <form method="post" action="/admin/delete-user" onsubmit="return confirm('Eliminar usuario?');">
+                                <input type="hidden" name="_csrf" value="{{token}}">
                                 <input type="hidden" name="id" value="{{detailId}}" />
                                 <button type="submit"
                                     class="btn btn-danger bg-danger bg-opacity-10 border-danger border-opacity-25 text-danger">

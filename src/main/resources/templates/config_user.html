@@ -33,6 +33,7 @@
                         <div class="col-12 col-lg-7">
                             <h5 class="text-white mb-3">Cambiar correo electrónico</h5>
                             <form method="post" action="/config-user">
+                                <input type="hidden" name="_csrf" value="{{token}}">
                                 <div class="mb-3">
                                     <label for="masterPass" class="form-label text-secondary small">Contraseña maestra (requerido)</label>
                                     <div class="input-group">
@@ -56,6 +57,7 @@
                             <h5 class="text-white mb-3">Foto de perfil</h5>
 
                             <form method="post" action="/config-user/avatar" enctype="multipart/form-data">
+                                <input type="hidden" name="_csrf" value="{{token}}">
                                 <div class="d-flex align-items-center gap-3 mb-3">
                                     <img src="{{#profileImageUrl}}{{profileImageUrl}}{{/profileImageUrl}}{{^profileImageUrl}}https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff{{/profileImageUrl}}"
                                         id="avatarPreview"
