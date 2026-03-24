@@ -7,11 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hashpass.model.Credential;
+import com.hashpass.model.Plan;
 import com.hashpass.model.User;
 import com.hashpass.repository.CredentialRepository;
 
 @Service
 public class EntryService {
+
+    private static final int FREE_PLAN_CREDENTIAL_LIMIT = 10;
+    public static final String FREE_PLAN_LIMIT_MESSAGE =
+            "Con el plan gratuito solo puedes guardar hasta 10 credenciales. Mejora tu plan para añadir más.";
 
     @Autowired
     private CredentialRepository credentialRepository;
@@ -40,9 +45,27 @@ public class EntryService {
         if (u == null) {
             throw new IllegalStateException("Debe iniciar sesión para guardar credenciales");
         }
+
+        boolean isNewCredential = cred.getId() == null;
+        if (isNewCredential && isFreePlan(u)) {
+            long currentCredentials = credentialRepository.countByUserId(u.getId());
+            if (currentCredentials >= FREE_PLAN_CREDENTIAL_LIMIT) {
+                throw new IllegalStateException(FREE_PLAN_LIMIT_MESSAGE);
+            }
+        }
+
         cred.setUser(u);
         cred.setPasswordEncrypted(encrypt(plainPassword));
         return credentialRepository.save(cred);
+    }
+
+    private boolean isFreePlan(User user) {
+        Plan plan = user.getPlan();
+        if (plan == null || plan.getName() == null) {
+            return true;
+        }
+        String planName = plan.getName().trim();
+        return "Gratuito".equalsIgnoreCase(planName) || "Free".equalsIgnoreCase(planName);
     }
 
     public Optional<Credential> findById(Long id) {

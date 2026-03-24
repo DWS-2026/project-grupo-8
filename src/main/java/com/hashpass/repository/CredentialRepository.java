@@ -9,4 +9,6 @@ import com.hashpass.model.Credential;
 public interface CredentialRepository extends JpaRepository<Credential, Long> {
 
     List<Credential> findByUserId(Long userId);
+
+    long countByUserId(Long userId);
 }

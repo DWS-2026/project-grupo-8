@@ -12,22 +12,26 @@ import com.hashpass.model.User;
 import com.hashpass.repository.PlanRepository;
 import com.hashpass.repository.UserRepository;
 import com.hashpass.service.ImageService;
+import com.hashpass.service.UserService;
 import com.hashpass.service.UserSession;
 
 @Controller
 public class PlanController {
 
     private final UserSession userSession;
+    private final UserService userService;
+
     private final ImageService imageService;
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
 
     public PlanController(UserSession userSession, ImageService imageService, UserRepository userRepository,
-            PlanRepository planRepository) {
+            PlanRepository planRepository, UserService userService) {
         this.userSession = userSession;
         this.imageService = imageService;
         this.userRepository = userRepository;
         this.planRepository = planRepository;
+        this.userService = userService;
     }
 
     @ModelAttribute("user")
@@ -163,7 +167,7 @@ public class PlanController {
     }
 
     private boolean hasCurrentPlan(String planName) {
-        User user = userSession.getUser();
+        User user = userService.getLoggedUser();
         if (user == null || user.getPlan() == null || user.getPlan().getName() == null) {
             return false;
         }

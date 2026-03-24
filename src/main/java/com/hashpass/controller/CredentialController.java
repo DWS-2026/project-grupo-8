@@ -217,7 +217,16 @@ public class CredentialController {
         c.setUsername(username);
         c.setSiteUrl(url);
         c.setNote(note);
-        Credential saved = entryService.save(c, password);
+        Credential saved;
+        try {
+            saved = entryService.save(c, password);
+        } catch (IllegalStateException e) {
+            if (EntryService.FREE_PLAN_LIMIT_MESSAGE.equals(e.getMessage())) {
+                model.addAttribute("error", e.getMessage());
+                return "add-password";
+            }
+            throw e;
+        }
         String imageError = imageService.saveCredentialImage(saved.getId(), credentialImage, userSession.getUser());
         if (imageError != null) {
             model.addAttribute("error", imageError);
