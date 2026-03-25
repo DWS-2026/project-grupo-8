@@ -167,11 +167,15 @@ public class PlanController {
     }
 
     private boolean hasCurrentPlan(String planName) {
-        User user = userService.getLoggedUser();
-        if (user == null || user.getPlan() == null || user.getPlan().getName() == null) {
+        if (!userSession.isLogged()) {
             return false;
+        }else{
+            User user = userService.getLoggedUser();
+            if (user == null || user.getPlan() == null || user.getPlan().getName() == null) {
+                return false;
+            }
+            return user.getPlan().getName().equalsIgnoreCase(planName);
         }
-        return user.getPlan().getName().equalsIgnoreCase(planName);
     }
 
     private String normalizePlan(String plan) {
