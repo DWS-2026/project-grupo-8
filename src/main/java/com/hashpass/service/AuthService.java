@@ -1,8 +1,10 @@
 package com.hashpass.service;
 
 import java.time.LocalDateTime;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +18,14 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
-    private final UserSession userSession;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final EntryService entryService;
 
-    public AuthService(UserRepository userRepository, PlanRepository planRepository, UserSession userSession, PasswordEncoder passwordEncoder, EntryService entryService) {
+    public AuthService(UserRepository userRepository, PlanRepository planRepository, UserService userService, PasswordEncoder passwordEncoder, EntryService entryService) {
         this.userRepository = userRepository;
         this.planRepository = planRepository;
-        this.userSession = userSession;
+        this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.entryService = entryService;
     }
@@ -33,11 +35,20 @@ public class AuthService {
     }
 
     public User registerUser(String name, String email, String password) {
+        String normalizedEmail = email == null ? "" : email.trim().toLowerCase();
+        if (normalizedEmail.isBlank()) {
+            throw new IllegalArgumentException("El correo electrónico es obligatorio.");
+        }
+        if (isEmailRegistered(normalizedEmail)) {
+            throw new IllegalStateException("El correo ya está registrado.");
+        }
+
         User newUser = new User();
         newUser.setName(name);
-        newUser.setEmail(email);
+        newUser.setEmail(normalizedEmail);
         // Guardamos un hash de la contraseña usando BCrypt
         newUser.setPasswordHash(passwordEncoder.encode(password));
+        newUser.setEncryptionKey(deriveEncryptionKey(password));
         
         // Obtener el plan gratuito y asignarlo al nuevo usuario
         Optional<Plan> freePlan = planRepository.findByName("Gratuito");
@@ -45,7 +56,12 @@ public class AuthService {
             newUser.setPlan(freePlan.get());
         }
         
-        return userRepository.save(newUser);
+        try {
+            return userRepository.save(newUser);
+        } catch (DataIntegrityViolationException e) {
+            // Evita error 500 si dos peticiones registran el mismo correo al mismo tiempo.
+            throw new IllegalStateException("El correo ya está registrado.", e);
+        }
     }
 
     public boolean login(String email, String password) {
@@ -55,7 +71,7 @@ public class AuthService {
     }
 
     public void logout() {
-        userSession.logout();
+        userService.logout();
         // Spring Security maneja el SecurityContext automáticamente
     }
 
@@ -108,6 +124,7 @@ public class AuthService {
 
         // 7. Actualizar la contraseña actual
         user.setPasswordHash(passwordEncoder.encode(newPassword));
+        user.setEncryptionKey(deriveEncryptionKey(newPassword));
         
         // 8. Guardar el usuario
         userRepository.save(user);
@@ -152,5 +169,23 @@ public class AuthService {
             u.setFailedAttempts(actual + 1); // Sumamos uno al fallo
             userRepository.save(u);
         });
+    }
+
+    private String deriveEncryptionKey(String password) {
+        try {
+            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            return hexString.toString().substring(0, 32);
+        } catch (Exception e) {
+            throw new RuntimeException("Error derivando la llave de cifrado", e);
+        }
     }
 }

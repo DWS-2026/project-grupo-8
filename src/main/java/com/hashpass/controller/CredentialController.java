@@ -24,7 +24,8 @@ import com.hashpass.model.User;
 import com.hashpass.repository.CredentialRepository;
 import com.hashpass.repository.ReviewRepository;
 import com.hashpass.repository.UserRepository;
-import com.hashpass.service.UserSession;
+import com.hashpass.service.UserService;
+
 import com.hashpass.service.EntryService;
 import com.hashpass.service.ImageService;
 
@@ -36,7 +37,7 @@ public class CredentialController {
     private UserRepository userRepository;
 
     @Autowired
-    private UserSession userSession;
+    private UserService userService;
 
     @Autowired
     private EntryService entryService;
@@ -52,22 +53,22 @@ public class CredentialController {
     // Make current user available to all views (mustache fragments expect it)
     @ModelAttribute("user")
     public User populateUser() {
-        User u = userSession.getUser();
-        if (u == null) {
+        Optional<User> u = userService.getLoggedUser();
+        if (!u.isPresent()) {
             return null;
         }
         // Reload user from DB to ensure lazy collections are available for views
-        return userRepository.findById(u.getId()).orElse(null);
+        return userRepository.findById(u.get().getId()).orElse(null);
     }
 
     @ModelAttribute("profileImageUrl")
     public String populateProfileImageUrl() {
-        return imageService.getProfileImageUrl(userSession.getUser());
+        return imageService.getProfileImageUrl(userService.getLoggedUser());
     }
 
     @ModelAttribute("isLogged")
     public boolean populateIsLogged() {
-        return userSession.isLogged();
+        return userService.getLoggedUser().isPresent();
     }
 
     @GetMapping("/")
@@ -79,7 +80,7 @@ public class CredentialController {
                     String authorName = (reviewUser != null && reviewUser.getName() != null && !reviewUser.getName().isBlank())
                             ? reviewUser.getName()
                             : (reviewUser != null ? reviewUser.getEmail() : "Usuario de HashPass");
-                    String avatarUrl = imageService.getProfileImageUrl(reviewUser);
+                    String avatarUrl = imageService.getProfileImageUrl(Optional.ofNullable(reviewUser));
                     if (avatarUrl == null) {
                         avatarUrl = "https://ui-avatars.com/api/?name="
                                 + URLEncoder.encode(authorName, StandardCharsets.UTF_8)
@@ -127,13 +128,13 @@ public class CredentialController {
     @GetMapping("/dashboard")
     public String dashboard(Model model, Principal principal) {
         
-        if (!userSession.isLogged()) {
+        if (!userService.getLoggedUser().isPresent()) {
             return "redirect:/login";
         }
 
         principal.getName(); // Esto va con el Principal de SpringSecurity
         
-        User currentUser = userSession.getUser(); // Esto va con el Principal de SpringSecurity
+        User currentUser = userService.getLoggedUser().get(); 
         model.addAttribute("user", currentUser);
 
         // 1. Obtener todas las contraseñas de este usuario
@@ -147,7 +148,7 @@ public class CredentialController {
         long weakCredentials = userCredentials.stream()
                 .filter(c -> {
                     try {
-                        String realPassword = entryService.decrypt(c.getPasswordEncrypted());
+                        String realPassword = entryService.decrypt(c.getPasswordEncrypted(), userService.getLoggedUser());
                         return realPassword != null && realPassword.length() < 8;
                     } catch (Exception e) {
                         return false; // Si hay error al descifrar, la ignoramos para esta cuenta
@@ -167,7 +168,7 @@ public class CredentialController {
 
     @GetMapping("/passwords")
     public String passwords(Model model) {
-        if (!userSession.isLogged()) {
+        if (!userService.getLoggedUser().isPresent()) {
             return "redirect:/login";
         }
         
@@ -178,7 +179,7 @@ public class CredentialController {
         // Esto solo afecta a lo que se envía al HTML, en la base de datos sigue cifrado
         encryptedList.forEach(cred -> {
             try {
-                String plain = entryService.decrypt(cred.getPasswordEncrypted());
+                String plain = entryService.decrypt(cred.getPasswordEncrypted(), userService.getLoggedUser());
                 cred.setPasswordEncrypted(plain); // Reutilizamos el campo solo para mostrárselo al HTML
             } catch (Exception e) {
                 cred.setPasswordEncrypted("Error al descifrar");
@@ -192,7 +193,7 @@ public class CredentialController {
 
     @GetMapping("/add-password")
     public String addPassword(Model model) {
-        if (!userSession.isLogged()) {
+        if (!userService.getLoggedUser().isPresent()) {
             return "redirect:/login";
         }
         // user already added by populateUser()
@@ -209,25 +210,38 @@ public class CredentialController {
             @RequestParam(required = false, name = "credentialImage") MultipartFile credentialImage,
             Model model
     ) {
-        if (!userSession.isLogged()) {
+        if (!userService.getLoggedUser().isPresent()) {
             return "redirect:/login";
         }
+
+        String normalizedService = service == null ? "" : service.trim();
+        String normalizedUsername = username == null ? "" : username.trim();
+        String normalizedPassword = password == null ? "" : password.trim();
+
+        if (normalizedService.isBlank() || normalizedUsername.isBlank() || normalizedPassword.isBlank()) {
+            model.addAttribute("error", "Debes completar servicio, usuario y contraseña.");
+            return "add-password";
+        }
+
         Credential c = new Credential();
-        c.setSiteName(service);
-        c.setUsername(username);
+        c.setSiteName(normalizedService);
+        c.setUsername(normalizedUsername);
         c.setSiteUrl(url);
         c.setNote(note);
         Credential saved;
         try {
-            saved = entryService.save(c, password);
+            saved = entryService.save(c, normalizedPassword);
         } catch (IllegalStateException e) {
             if (EntryService.FREE_PLAN_LIMIT_MESSAGE.equals(e.getMessage())) {
                 model.addAttribute("error", e.getMessage());
                 return "add-password";
             }
             throw e;
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "add-password";
         }
-        String imageError = imageService.saveCredentialImage(saved.getId(), credentialImage, userSession.getUser());
+        String imageError = imageService.saveCredentialImage(saved.getId(), credentialImage, userService.getLoggedUser().get());
         if (imageError != null) {
             model.addAttribute("error", imageError);
             return "add-password";
@@ -237,7 +251,7 @@ public class CredentialController {
 
     @GetMapping("/info-passwords")
     public String infoPasswords(Model model, @RequestParam(required = false) Long id) {
-        if (!userSession.isLogged()) {
+        if (!userService.getLoggedUser().isPresent()) {
             return "redirect:/login";
         }
 
@@ -246,10 +260,10 @@ public class CredentialController {
             if (credOpt.isPresent()) {
                 Credential cred = credOpt.get();
                 // ensure the credential belongs to current user
-                User current = userSession.getUser();
+                User current = userService.getLoggedUser().get();
                 if (cred.getUser() != null && cred.getUser().getId().equals(current.getId())) {
                     model.addAttribute("credential", cred);
-                    model.addAttribute("decryptedPassword", entryService.decrypt(cred.getPasswordEncrypted()));
+                    model.addAttribute("decryptedPassword", entryService.decrypt(cred.getPasswordEncrypted(), userService.getLoggedUser()));
                     model.addAttribute("credentialImageUrl", imageService.getCredentialImageUrl(cred.getId()));
                 } else {
                     return "redirect:/passwords";
@@ -265,13 +279,13 @@ public class CredentialController {
 
     @PostMapping("/delete-password")
     public String deletePassword(@RequestParam Long id) {
-        if (!userSession.isLogged()) {
+        if (!userService.getLoggedUser().isPresent()) {
             return "redirect:/login";
         }
         Optional<Credential> credOpt = entryService.findById(id);
         if (credOpt.isPresent()) {
             Credential cred = credOpt.get();
-            User current = userSession.getUser();
+            User current = userService.getLoggedUser().get();
             if (cred.getUser() != null && cred.getUser().getId().equals(current.getId())) {
                 entryService.delete(id);
             }
@@ -290,8 +304,18 @@ public class CredentialController {
                 @RequestParam(required = false, name = "credentialImage") MultipartFile credentialImage,
                 Model model
     ) {
-        if (!userSession.isLogged()) {
+        if (!userService.getLoggedUser().isPresent()) {
             return "redirect:/login";
+        }
+
+        String normalizedService = service == null ? "" : service.trim();
+        String normalizedUsername = username == null ? "" : username.trim();
+        String normalizedPassword = password == null ? "" : password.trim();
+
+        if (normalizedService.isBlank() || normalizedUsername.isBlank() || normalizedPassword.isBlank()) {
+            model.addAttribute("error", "Debes completar servicio, usuario y contraseña.");
+            model.addAttribute("decryptedPassword", normalizedPassword);
+            return "info-passwords";
         }
 
         Optional<Credential> existing = entryService.findById(id);
@@ -300,21 +324,30 @@ public class CredentialController {
         }
 
         Credential c = existing.get();
-        User current = userSession.getUser();
+        User current = userService.getLoggedUser().get();
         if (c.getUser() == null || !c.getUser().getId().equals(current.getId())) {
             return "redirect:/passwords";
         }
 
-        c.setSiteName(service);
-        c.setUsername(username);
+        c.setSiteName(normalizedService);
+        c.setUsername(normalizedUsername);
         c.setSiteUrl(url);
         c.setNote(note);
 
-        Credential saved = entryService.save(c, password);
+        Credential saved;
+        try {
+            saved = entryService.save(c, normalizedPassword);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("credential", c);
+            model.addAttribute("decryptedPassword", normalizedPassword);
+            model.addAttribute("credentialImageUrl", imageService.getCredentialImageUrl(c.getId()));
+            model.addAttribute("error", e.getMessage());
+            return "info-passwords";
+        }
         String imageError = imageService.saveCredentialImage(saved.getId(), credentialImage, current);
         if (imageError != null) {
             model.addAttribute("credential", saved);
-            model.addAttribute("decryptedPassword", password);
+            model.addAttribute("decryptedPassword", normalizedPassword);
             model.addAttribute("credentialImageUrl", imageService.getCredentialImageUrl(saved.getId()));
             model.addAttribute("error", imageError);
             return "info-passwords";

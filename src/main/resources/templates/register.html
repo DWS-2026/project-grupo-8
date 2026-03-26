@@ -276,6 +276,13 @@
 			document.getElementById('password').addEventListener('input', validateForm);
 			document.getElementById('confirm-password').addEventListener('input', validateForm);
 			document.getElementById('terms').addEventListener('change', validateForm);
+
+			const registerForm = document.getElementById('registerForm');
+			const registerBtn = document.getElementById('registerBtn');
+			registerForm.addEventListener('submit', () => {
+				registerBtn.disabled = true;
+				registerBtn.textContent = 'Creando cuenta...';
+			});
 		});
 	</script>
 

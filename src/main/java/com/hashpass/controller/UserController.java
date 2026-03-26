@@ -11,43 +11,45 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.Optional;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.hashpass.model.User;
 import com.hashpass.repository.UserRepository;
 import com.hashpass.service.AuthService;
 import com.hashpass.service.ImageService;
-import com.hashpass.service.UserSession;
+import com.hashpass.service.UserService;
 
 @Controller
 public class UserController {
 
     private final AuthService authService;
-    private final UserSession userSession;
+    private final UserService userService;
     private final ImageService imageService;
     private final UserRepository userRepository;
 
     @ModelAttribute("user")
     public User populateUser() {
-        User currentUser = userSession.getUser();
+        User currentUser = userService.getLoggedUser().orElse(null);
         if (currentUser == null || currentUser.getId() == null) {
             return currentUser;
         }
 
         User refreshedUser = userRepository.findWithPlanById(currentUser.getId()).orElse(currentUser);
-        userSession.setUser(refreshedUser);
+        userService.setUser(refreshedUser);
         return refreshedUser;
     }
 
     @ModelAttribute("profileImageUrl")
     public String populateProfileImageUrl() {
-        return imageService.getProfileImageUrl(userSession.getUser());
+        return imageService.getProfileImageUrl(userService.getLoggedUser());
     }
 
-    public UserController(AuthService authService, UserSession userSession, ImageService imageService,
+    public UserController(AuthService authService, UserService userService, ImageService imageService,
             UserRepository userRepository) {
         this.authService = authService;
-        this.userSession = userSession;
+        this.userService = userService;
         this.imageService = imageService;
         this.userRepository = userRepository;
     }
@@ -92,7 +94,13 @@ public class UserController {
             return "register";
         }
 
-        User registeredUser = authService.registerUser(name, email, password);
+        User registeredUser;
+        try {
+            registeredUser = authService.registerUser(name, email, password);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            model.addAttribute("error", e.getMessage());
+            return "register";
+        }
 
         if (avatar != null && !avatar.isEmpty()) {
             imageService.saveProfileImage(registeredUser, avatar);
@@ -114,7 +122,7 @@ public class UserController {
     @PostMapping("/config-user/avatar")
     public String uploadAvatar(@RequestParam("avatar") MultipartFile avatar,
             RedirectAttributes redirectAttributes) {
-        User currentUser = userSession.getUser();
+        User currentUser = userService.getLoggedUser().orElse(null);
         String error = imageService.saveProfileImage(currentUser, avatar);
         if (error == null) {
             redirectAttributes.addFlashAttribute("success", "Foto de perfil actualizada correctamente.");
@@ -128,7 +136,7 @@ public class UserController {
     public String changeEmail(@RequestParam String masterPass,
             @RequestParam String newEmail,
             Model model) {
-        User currentUser = userSession.getUser();
+        User currentUser = userService.getLoggedUser().orElse(null);
         String error = authService.changeEmail(currentUser, masterPass, newEmail);
         if (error == null) {
             // Actualizar el user en sesión con el nuevo email
@@ -150,7 +158,7 @@ public class UserController {
             @RequestParam String newPass,
             @RequestParam String confirmPass,
             Model model) {
-        User currentUser = userSession.getUser();
+        User currentUser = userService.getLoggedUser().orElse(null);
         String error = authService.changeMasterPassword(currentUser, currentPass, newPass, confirmPass);
         if (error == null) {
             model.addAttribute("success", "Contraseña maestra actualizada correctamente.");
@@ -169,7 +177,7 @@ public class UserController {
             return "redirect:/security-user";
         }
 
-        User currentUser = userSession.getUser();
+        User currentUser = userService.getLoggedUser().orElse(null);
         currentUser.setSecurityTimeoutMinutes(timeoutMinutes);
         userRepository.save(currentUser);
 
@@ -183,14 +191,14 @@ public class UserController {
     public String deleteAccount(@RequestParam String deleteAccountPass,
             Model model,
             HttpServletRequest request) {
-        User currentUser = userSession.getUser();
+        User currentUser = userService.getLoggedUser().orElse(null);
         String error = authService.deleteAccount(currentUser, deleteAccountPass);
         if (error != null) {
             model.addAttribute("error", error);
             return "security_user";
         }
 
-        userSession.logout();
+        userService.logout();
         SecurityContextHolder.clearContext();
         request.getSession().invalidate();
         return "redirect:/login?deleted=1";
@@ -203,10 +211,10 @@ public class UserController {
             @RequestParam(required = false, name = "regOrder") String regOrder,
             @RequestParam(required = false, name = "sortUser") String sortUser,
             Model model) {
-        if (!userSession.isLogged()) {
+        if (!userService.getLoggedUser().isPresent()) {
             return "redirect:/login";
         }
-        if (!userSession.getUser().isAdmin()) {
+        if (!userService.getLoggedUser().get().isAdmin()) {
             return "redirect:/error/403";
         }
         var users = userRepository.findAll();
@@ -293,10 +301,10 @@ public class UserController {
 
     @GetMapping("/admin-user-detail")
     public String adminUserDetail(@RequestParam(required = false) Long id, Model model) {
-        if (!userSession.isLogged()) {
+        if (!userService.getLoggedUser().isPresent()) {
             return "redirect:/login";
         }
-        if (!userSession.getUser().isAdmin()) {
+        if (!userService.getLoggedUser().get().isAdmin()) {
             return "redirect:/error/403";
         }
 
@@ -317,7 +325,7 @@ public class UserController {
         model.addAttribute("detailCreatedAt",
                 u.getCreatedAt() == null ? "-" : u.getCreatedAt().toLocalDate().toString());
         model.addAttribute("detailCredentialsCount", u.getCredentials() == null ? 0 : u.getCredentials().size());
-        model.addAttribute("detailProfileImageUrl", imageService.getProfileImageUrl(u));
+        model.addAttribute("detailProfileImageUrl", imageService.getProfileImageUrl(Optional.of(u)));
         model.addAttribute("detailLastLogin", u.getLastLogin() != null ? u.getLastLogin().toString() : "Sin datos");
         model.addAttribute("detailFailedAttempts", u.getFailedAttempts() != null ? u.getFailedAttempts() : 0);
 
@@ -326,11 +334,11 @@ public class UserController {
 
     @PostMapping("/admin/delete-user")
     public String deleteUser(@RequestParam Long id, RedirectAttributes redirectAttributes) {
-        if (!userSession.isLogged() || !userSession.getUser().isAdmin()) {
+        if (!userService.getLoggedUser().isPresent() || !userService.getLoggedUser().get().isAdmin()) {
             return "redirect:/error/403";
         }
 
-        Long currentId = userSession.getUser().getId();
+        Long currentId = userService.getLoggedUser().map(User::getId).orElse(null);
         if (currentId != null && currentId.equals(id)) {
             redirectAttributes.addFlashAttribute("error", "No puedes eliminar tu propia cuenta.");
             return "redirect:/admin";
@@ -347,7 +355,7 @@ public class UserController {
     }
 
     private String requireLogin(Model model, String view) {
-        if (!userSession.isLogged()) {
+        if (!userService.getLoggedUser().isPresent()) {
             return "redirect:/login";
         }
         return view;

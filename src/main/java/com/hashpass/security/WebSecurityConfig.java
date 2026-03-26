@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import com.hashpass.service.UserSession;
+import com.hashpass.service.UserService;
 import java.time.LocalDateTime;
 import com.hashpass.repository.UserRepository;
 
@@ -26,7 +26,7 @@ public class WebSecurityConfig {
 	RepositoryUserDetailsService userDetailsService;
 
 	@Autowired
-	UserSession userSession;
+	UserService userService;
 
 	@Autowired
 	UserRepository userRepository;
@@ -118,8 +118,8 @@ public class WebSecurityConfig {
 							String email = auth.getName();
 							String redirectTo = sanitizeRedirectTarget(request.getParameter("redirectTo"));
 							userRepository.findByEmail(email).ifPresent(user -> {
-								userSession.setUser(user);
-								userSession.setEncryptionKey(deriveKey(password));
+								userService.setUser(user);
+								user.setEncryptionKey(deriveKey(password));
 								request.getSession().setMaxInactiveInterval(user.getSecurityTimeoutMinutes() * 60);
 								user.setLastLogin(LocalDateTime.now()); // Fecha real de éxito
 								user.setFailedAttempts(0);
@@ -161,7 +161,7 @@ public class WebSecurityConfig {
 						.invalidateHttpSession(true)
 						.clearAuthentication(true)
 						.deleteCookies("JSESSIONID")
-						.addLogoutHandler((request, response, auth) -> userSession.logout())
+						.addLogoutHandler((request, response, auth) -> userService.logout())
 						.permitAll());
 		return http.build();
 	}

@@ -7,32 +7,32 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.hashpass.model.User;
 import com.hashpass.service.ImageService;
-import com.hashpass.service.UserSession;
+import com.hashpass.service.UserService;
 
 @Controller
 public class AppErrorController {
 
-	private final UserSession userSession;
+	private final UserService userService;
 	private final ImageService imageService;
 
-	public AppErrorController(UserSession userSession, ImageService imageService) {
-		this.userSession = userSession;
+	public AppErrorController(UserService userService, ImageService imageService) {
+		this.userService = userService;
 		this.imageService = imageService;
 	}
 
 	@ModelAttribute("user")
 	public User populateUser() {
-		return userSession.getUser();
+		return userService.getLoggedUser().orElse(null);
 	}
 
 	@ModelAttribute("profileImageUrl")
 	public String populateProfileImageUrl() {
-		return imageService.getProfileImageUrl(userSession.getUser());
+		return imageService.getProfileImageUrl(userService.getLoggedUser());
 	}
 
 	@ModelAttribute("isLogged")
 	public boolean populateIsLogged() {
-		return userSession.isLogged();
+		return userService.getLoggedUser().isPresent();
 	}
 
 	@GetMapping("/error/403")

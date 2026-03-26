@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,36 +21,36 @@ import com.hashpass.model.Review;
 import com.hashpass.model.User;
 import com.hashpass.repository.ReviewRepository;
 import com.hashpass.service.ImageService;
-import com.hashpass.service.UserSession;
+import com.hashpass.service.UserService;
 
 @Controller
 public class ReviewController {
 
     private static final DateTimeFormatter REVIEW_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    private final UserSession userSession;
+    private final UserService userService;
     private final ImageService imageService;
     private final ReviewRepository reviewRepository;
 
-    public ReviewController(UserSession userSession, ImageService imageService, ReviewRepository reviewRepository) {
-        this.userSession = userSession;
+    public ReviewController(UserService userService, ImageService imageService, ReviewRepository reviewRepository) {
+        this.userService = userService;
         this.imageService = imageService;
         this.reviewRepository = reviewRepository;
     }
 
     @ModelAttribute("user")
     public User populateUser() {
-        return userSession.getUser();
+        return userService.getLoggedUser().orElse(null);
     }
 
     @ModelAttribute("profileImageUrl")
     public String populateProfileImageUrl() {
-        return imageService.getProfileImageUrl(userSession.getUser());
+        return imageService.getProfileImageUrl(userService.getLoggedUser());
     }
 
     @ModelAttribute("isLogged")
     public boolean populateIsLogged() {
-        return userSession.isLogged();
+        return userService.getLoggedUser().isPresent();
     }
 
     @GetMapping("/reviews")
@@ -64,7 +65,7 @@ public class ReviewController {
             @RequestParam String comment,
             @RequestParam Integer rating,
             RedirectAttributes redirectAttributes) {
-        if (!userSession.isLogged()) {
+        if (!userService.getLoggedUser().isPresent()) {
             return "redirect:/login?redirectTo=/reviews";
         }
 
@@ -95,7 +96,7 @@ public class ReviewController {
         review.setTitle(normalizedTitle);
         review.setComment(normalizedComment);
         review.setRating(rating);
-        review.setUser(userSession.getUser());
+        review.setUser(userService.getLoggedUser().orElse(null));
         reviewRepository.save(review);
 
         redirectAttributes.addFlashAttribute("reviewSuccess", "Tu reseña se ha publicado correctamente.");
@@ -120,7 +121,7 @@ public class ReviewController {
             Map<String, Object> mappedReview = new HashMap<>();
             User reviewUser = review.getUser();
             String authorName = buildAuthorName(reviewUser);
-            String avatarUrl = imageService.getProfileImageUrl(reviewUser);
+            String avatarUrl = imageService.getProfileImageUrl(Optional.ofNullable(reviewUser));
 
             mappedReview.put("title", review.getTitle());
             mappedReview.put("comment", review.getComment());

@@ -118,12 +118,12 @@ public class ImageService {
 		return credentialImageRepository.findByCredentialId(credentialId);
 	}
 
-	public String getProfileImageUrl(User user) {
-		if (user == null || user.getId() == null) {
+	public String getProfileImageUrl(Optional<User> user) {
+		if (user == null || user.isEmpty() || user.get().getId() == null) {
 			return null;
 		}
 
-		Optional<Image> imageOptional = imageRepository.findByUserId(user.getId());
+		Optional<Image> imageOptional = imageRepository.findByUserId(user.get().getId());
 		if (imageOptional.isEmpty()) {
 			return null;
 		}
@@ -132,7 +132,7 @@ public class ImageService {
 		long version = image.getUpdatedAt() == null
 				? 0L
 				: image.getUpdatedAt().toEpochSecond(ZoneOffset.UTC);
-		return "/images/profile/" + user.getId() + "?v=" + version;
+		return "/images/profile/" + user.get().getId() + "?v=" + version;
 	}
 
 	public String saveCredentialImage(Long credentialId, MultipartFile file, User currentUser) {

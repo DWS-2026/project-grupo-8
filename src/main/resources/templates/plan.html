@@ -34,9 +34,20 @@
                                 <h2 class="display-6 fw-bold text-center mb-3">{{priceMonthly}}€</h2>
                                 <p class="text-center text-secondary mb-4">por mes</p>
 
-                                <button class="btn plan-cta plan-cta-premium w-100 mt-3" onclick="window.location.href='/register'">
-                                    Ver plan
+                                {{#isFree}}
+                                <form method="post" action="/plan/select" class="mt-3">
+                                    <input type="hidden" name="_csrf" value="{{token}}">
+                                    <input type="hidden" name="plan" value="{{id}}">
+                                    <button type="submit" class="btn plan-cta plan-cta-premium w-100">
+                                        Activar plan
+                                    </button>
+                                </form>
+                                {{/isFree}}
+                                {{^isFree}}
+                                <button class="btn plan-cta plan-cta-premium w-100 mt-3" onclick="window.location.href='/payment?plan={{id}}'">
+                                    Ir al pago
                                 </button>
+                                {{/isFree}}
                             </div>
                         </div>
                         {{/allPlans}}

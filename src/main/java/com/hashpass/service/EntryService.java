@@ -10,6 +10,7 @@ import com.hashpass.model.Credential;
 import com.hashpass.model.Plan;
 import com.hashpass.model.User;
 import com.hashpass.repository.CredentialRepository;
+import com.hashpass.service.UserService;
 
 @Service
 public class EntryService {
@@ -22,18 +23,17 @@ public class EntryService {
     private CredentialRepository credentialRepository;
 
     @Autowired
-    private UserSession userSession;
-
+    private UserService userService;
     /**
      * Obtiene todas las credenciales pertenecientes al usuario actualmente
      * almacenado en la sesión. Si no hay usuario lanza IllegalStateException.
      */
     public List<Credential> listCurrentUser() {
-        User u = userSession.getUser();
-        if (u == null) {
+        Optional<User> u = userService.getLoggedUser();
+        if (u.isEmpty()) {
             throw new IllegalStateException("No hay usuario en sesión");
         }
-        return credentialRepository.findByUserId(u.getId());
+        return credentialRepository.findByUserId(u.get().getId());
     }
 
     /**
@@ -41,25 +41,43 @@ public class EntryService {
      * plainPassword es cifrado/obfuscado antes de persistir.
      */
     public Credential save(Credential cred, String plainPassword) {
-        User u = userSession.getUser();
-        if (u == null) {
+        Optional<User> u = userService.getLoggedUser();
+        if (!u.isPresent()) {
             throw new IllegalStateException("Debe iniciar sesión para guardar credenciales");
+        }
+
+        if (cred == null) {
+            throw new IllegalArgumentException("La credencial no puede ser nula.");
+        }
+
+        String normalizedSiteName = cred.getSiteName() == null ? "" : cred.getSiteName().trim();
+        String normalizedUsername = cred.getUsername() == null ? "" : cred.getUsername().trim();
+        String normalizedPassword = plainPassword == null ? "" : plainPassword.trim();
+
+        if (normalizedSiteName.isBlank() || normalizedUsername.isBlank() || normalizedPassword.isBlank()) {
+            throw new IllegalArgumentException("Debes completar servicio, usuario y contraseña.");
         }
 
         boolean isNewCredential = cred.getId() == null;
         if (isNewCredential && isFreePlan(u)) {
-            long currentCredentials = credentialRepository.countByUserId(u.getId());
+            long currentCredentials = credentialRepository.countByUserId(u.get().getId());
             if (currentCredentials >= FREE_PLAN_CREDENTIAL_LIMIT) {
                 throw new IllegalStateException(FREE_PLAN_LIMIT_MESSAGE);
             }
         }
 
-        cred.setUser(u);
-        cred.setPasswordEncrypted(encrypt(plainPassword));
+        cred.setSiteName(normalizedSiteName);
+        cred.setUsername(normalizedUsername);
+        cred.setUser(u.get());
+        cred.setPasswordEncrypted(encrypt(normalizedPassword, u));
         return credentialRepository.save(cred);
     }
 
-    private boolean isFreePlan(User user) {
+    private boolean isFreePlan(Optional<User> userOpt) {
+        if (!userOpt.isPresent()) {
+            return true;
+        }
+        User user = userOpt.get();
         Plan plan = user.getPlan();
         if (plan == null || plan.getName() == null) {
             return true;
@@ -84,11 +102,15 @@ public class EntryService {
     // Helpers para cifrar y descifrar las contraseñas del usuario
     // ------------------------------------------------------------------
 
-    private String encrypt(String raw) {
+    private String encrypt(String raw, Optional<User> userOpt) {
         if (raw == null) return null;
-        
+        if (!userOpt.isPresent()) {
+            throw new IllegalStateException("No hay usuario en sesión para cifrar la contraseña");
+        }
+        User user = userOpt.get();
+
         // 1. Le pedimos la llave maestra al archivo temporal de la sesion, donde se ha guardado
-        String userKey = userSession.getEncryptionKey();
+        String userKey = user.getEncryptionKey();
         if (userKey == null) {
             throw new IllegalStateException("No hay llave de cifrado en la sesión");
         }
@@ -106,11 +128,15 @@ public class EntryService {
         }
     }
 
-    public String decrypt(String encrypted) {
+    public String decrypt(String encrypted, Optional<User> userOpt) {
         if (encrypted == null) return null;
-        
+        if (!userOpt.isPresent()) {
+            throw new IllegalStateException("No hay usuario en sesión para descifrar la contraseña");
+        }
+        User user = userOpt.get();
+
         // 1. Le pedimos la llave maestra al archivo temporal de la sesion, donde se ha guardado
-        String userKey = userSession.getEncryptionKey();
+        String userKey = user.getEncryptionKey();
         if (userKey == null) {
             throw new IllegalStateException("No hay llave de descifrado en la sesión");
         }

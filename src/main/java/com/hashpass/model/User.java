@@ -36,6 +36,9 @@ public class User {
 	@Column(nullable = false, length = 255)
 	private String passwordHash;
 
+	@Column(nullable = false, length = 255)
+    private String encryptionKey;
+
 	@Column(length = 255)
 	private String previousPasswordHash;
 
@@ -122,6 +125,14 @@ public class User {
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
 	}
+	
+	 public String getEncryptionKey() {
+        return encryptionKey;
+    }
+
+    public void setEncryptionKey(String encryptionKey) {
+        this.encryptionKey = encryptionKey;
+    }
 
 	public String getPreviousPasswordHash() {
 		return previousPasswordHash;

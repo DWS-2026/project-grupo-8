@@ -54,9 +54,9 @@ public class DatabaseInitializer {
 		System.out.println("🔧 Inicializando base de datos...");
 
 		// Inicializar planes si no existen
-		createPlanIfNotExists("Gratuito", BigDecimal.ZERO, "Para empezar");
-		createPlanIfNotExists("Premium", new BigDecimal("4.99"), "Uso diario avanzado");
-		createPlanIfNotExists("Platinum", new BigDecimal("9.99"), "Seguridad profesional");
+		createPlanIfNotExists("Gratuito", BigDecimal.ZERO, "- Hasta 10 credenciales\n- Sin soporte técnico\n- Almacenamiento 100MB\n- Contraseña maestra estándar");
+		createPlanIfNotExists("Premium", new BigDecimal("4.99"), "- Credenciales ilimitadas\n- Soporte prioritario\n- Almacenamiento 1GB\n- Seguridad avanzada 24 horas\n- Autenticación de dos factores");
+		createPlanIfNotExists("Platinum", new BigDecimal("9.99"), "- Credenciales ilimitadas\n- Soporte 24/7 dedicado\n- Almacenamiento 10GB\n- Cifrado de nivel militar\n- Auditoría completa\n- Sincronización en tiempo real\n- Recuperación ante desastres");
 
 		Plan freePlan = planRepository.findByName("Gratuito").orElse(null);
 
@@ -91,6 +91,7 @@ public class DatabaseInitializer {
 			admin.setName("Admin");
 			admin.setEmail(adminEmail);
 			admin.setPasswordHash(passwordEncoder.encode("admin123"));
+			admin.setEncryptionKey(deriveKey("admin123"));
 			admin.setAdmin(true);
 			userRepository.save(admin);
 			System.out.println("✓ Usuario administrador creado.");
@@ -114,6 +115,7 @@ public class DatabaseInitializer {
 			newUser.setName(name);
 			newUser.setEmail(email);
 			newUser.setPasswordHash(passwordEncoder.encode(rawPassword));
+			newUser.setEncryptionKey(deriveKey(rawPassword));
 			newUser.setAdmin(false);
 			newUser.setSecurityTimeoutMinutes(10);
 			if (freePlan != null) {

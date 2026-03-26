@@ -717,3 +717,10 @@ h6,
   border-color: rgba(255, 255, 255, 0.35);
   background-color: rgba(255, 255, 255, 0.06);
 }
+
+/* === ESTILOS PARA DESCRIPCIONES DE PLANES === */
+p.small.text-secondary {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  line-height: 1.6;
+}
