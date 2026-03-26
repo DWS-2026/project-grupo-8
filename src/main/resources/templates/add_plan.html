@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{{> fragments/head}}
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark border-bottom border-secondary border-opacity-25 bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
+            </a>
+
+            <div class="ms-auto">
+                <a href="/password-login?email={{user.email}}"
+                    class="boton-bloquear btn btn-outline-light rounded-pill px-4 text-decoration-none">
+                    <i class="bi bi-lock-fill"></i>Bloquear
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="mb-4">
+            <h2 class="text-white fw-bold">
+                <i class="bi bi-plus-circle texto-gradient me-2"></i> Crear Nuevo Plan
+            </h2>
+            <p class="text-secondary small text-uppercase fw-bold">Agrega un nuevo plan de suscripción</p>
+        </div>
+
+        {{#error}}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle me-2"></i>{{error}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {{/error}}
+
+        <div class="card shadow p-4 mx-auto bg-dark border border-secondary border-opacity-25" style="max-width: 600px;">
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" name="_csrf" value="{{token}}">
+                    <div class="mb-3">
+                        <label for="name" class="form-label text-white">
+                            <i class="bi bi-file-earmark me-2 text-success"></i>Nombre del Plan <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" id="name" name="name"
+                            placeholder="ej: Premium Plus" required>
+                        <small class="text-secondary">Nombre único que identificará al plan</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="priceMonthly" class="form-label text-white">
+                            <i class="bi bi-currency-dollar me-2 text-success"></i>Precio Mensual (€) <span class="text-danger">*</span>
+                        </label>
+                        <input type="number" class="form-control bg-dark text-white border-secondary" id="priceMonthly"
+                            name="priceMonthly" placeholder="0.00" min="0" step="0.01" required>
+                        <small class="text-secondary">Precio en euros, mínimo 0</small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="description" class="form-label text-white">
+                            <i class="bi bi-pencil-square me-2 text-success"></i>Descripción (Opcional)
+                        </label>
+                        <textarea class="form-control bg-dark text-white border-secondary" id="description"
+                            name="description" rows="3" placeholder="Describe las características del plan..."></textarea>
+                        <small class="text-secondary">Máximo 500 caracteres</small>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a href="/admin/plans" class="btn btn-secondary w-50">
+                            <i class="bi bi-arrow-left me-2"></i>Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success w-50">
+                            <i class="bi bi-check-circle me-2"></i>Crear Plan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {{> fragments/footerPublic}}
+</body>
+
+</html>

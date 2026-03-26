@@ -23,128 +23,23 @@
                 <section class="pb-5">
                     <div class="row row-cols-1 row-cols-md-3 g-4">
 
-                        <!-- GRATUITO -->
+                        {{#allPlans}}
                         <div class="col">
                             <div class="card h-100 p-4">
                                 <div class="text-center mb-3">
-                                    <i class="bi bi-unlock-fill fs-1 texto-gradient"></i>
-                                    <h4 class="fw-bold mt-3">Gratuito</h4>
-                                    <p class="small text-secondary">Para empezar</p>
+                                    <h4 class="fw-bold">{{name}}</h4>
+                                    <p class="small text-secondary">{{description}}</p>
                                 </div>
 
-                                <h2 class="display-6 fw-bold text-center mb-3">€0</h2>
-                                <p class="text-center text-secondary mb-4">Gratis para siempre</p>
-
-                                <ul class="list-unstyled small flex-grow-1">
-                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Hasta 10
-                                        credenciales</li>
-                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>1 dispositivo
-                                    </li>
-                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Cifrado AES-256
-                                    </li>
-                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Generador básico
-                                    </li>
-                                </ul>
-
-                                {{#isFreePlan}}
-                                <button class="btn btn-secondary w-100 mt-3" disabled>
-                                    Plan actual
-                                </button>
-                                {{/isFreePlan}}
-                                {{^isFreePlan}}
-                                <form method="post" action="/plan/select" class="mt-3">
-                                    <input type="hidden" name="_csrf" value="{{token}}">
-                                    <input type="hidden" name="plan" value="free">
-                                    <button type="submit" class="btn plan-cta plan-cta-free w-100">
-                                        Continuar gratis
-                                    </button>
-                                </form>
-                                {{/isFreePlan}}
-                            </div>
-                        </div>
-
-                        <!-- PREMIUM -->
-                        <div class="col">
-                            <div class="card h-100 p-4 border border-success position-relative">
-
-                                <span class="badge bg-success position-absolute top-0 start-50 translate-middle">
-                                    Recomendado
-                                </span>
-
-                                <div class="text-center mb-3 mt-3">
-                                    <i class="bi bi-shield-check fs-1 texto-gradient"></i>
-                                    <h4 class="fw-bold mt-3">Premium</h4>
-                                    <p class="small text-secondary">Uso diario avanzado</p>
-                                </div>
-
-                                <h2 class="display-6 fw-bold text-center mb-3">€4.99</h2>
+                                <h2 class="display-6 fw-bold text-center mb-3">{{priceMonthly}}€</h2>
                                 <p class="text-center text-secondary mb-4">por mes</p>
 
-                                <ul class="list-unstyled small flex-grow-1">
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Credenciales
-                                        ilimitadas</li>
-                                    <li class="mb-2"><i
-                                            class="bi bi-check-circle-fill texto-gradient me-2"></i>Dispositivos
-                                        ilimitados</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Auditoría
-                                        de
-                                        contraseñas</li>
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Alertas
-                                        de brechas
-                                    </li>
-                                    <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Soporte
-                                        prioritario
-                                    </li>
-                                </ul>
-
-                                {{#isPremiumPlan}}
-                                <button class="btn btn-secondary w-100 mt-3" disabled>
-                                    Plan actual
+                                <button class="btn plan-cta plan-cta-premium w-100 mt-3" onclick="window.location.href='/register'">
+                                    Ver plan
                                 </button>
-                                {{/isPremiumPlan}}
-                                {{^isPremiumPlan}}
-                                <button class="btn plan-cta plan-cta-premium w-100 mt-3" onclick="window.location.href='/payment?plan=premium'">
-                                    Actualizar a Premium
-                                </button>
-                                {{/isPremiumPlan}}
                             </div>
                         </div>
-
-                        <!-- PLATINUM -->
-                        <div class="col">
-                            <div class="card h-100 p-4">
-                                <div class="text-center mb-3">
-                                    <i class="bi bi-gem fs-1 texto-gradient"></i>
-                                    <h4 class="fw-bold mt-3">Platinum</h4>
-                                    <p class="small text-secondary">Seguridad profesional</p>
-                                </div>
-
-                                <h2 class="display-6 fw-bold text-center mb-3">€9.99</h2>
-                                <p class="text-center text-secondary mb-4">por mes</p>
-
-                                <ul class="list-unstyled small flex-grow-1">
-                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Todo Premium</li>
-                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>2FA avanzado</li>
-                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Compartición
-                                        segura</li>
-                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Acceso de
-                                        emergencia</li>
-                                    <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Soporte 24/7</li>
-                                </ul>
-
-                                {{#isPlatinumPlan}}
-                                <button class="btn btn-secondary w-100 mt-3" disabled>
-                                    Plan actual
-                                </button>
-                                {{/isPlatinumPlan}}
-                                {{^isPlatinumPlan}}
-                                <button class="btn plan-cta plan-cta-platinum w-100 mt-3"
-                                    onclick="window.location.href='/payment?plan=platinum'">
-                                    Elegir Platinum
-                                </button>
-                                {{/isPlatinumPlan}}
-                            </div>
-                        </div>
+                        {{/allPlans}}
 
                     </div>
                 </section>
@@ -168,92 +63,23 @@
     <section class="container pb-5">
         <div class="row row-cols-1 row-cols-md-3 g-4">
 
-            <!-- GRATUITO -->
+            {{#allPlans}}
             <div class="col">
                 <div class="card h-100 p-4">
                     <div class="text-center mb-3">
-                        <i class="bi bi-unlock-fill fs-1 texto-gradient"></i>
-                        <h4 class="fw-bold mt-3">Gratuito</h4>
-                        <p class="small text-secondary">Para empezar</p>
+                        <h4 class="fw-bold mt-3">{{name}}</h4>
+                        <p class="small text-secondary">{{description}}</p>
                     </div>
 
-                    <h2 class="display-6 fw-bold text-center mb-3">€0</h2>
-                    <p class="text-center text-secondary mb-4">Gratis para siempre</p>
-
-                    <ul class="list-unstyled small flex-grow-1">
-                        <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Hasta 10 credenciales</li>
-                        <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>1 dispositivo</li>
-                        <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Cifrado AES-256</li>
-                        <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Generador básico</li>
-                    </ul>
-
-                    <button class="btn plan-cta plan-cta-free w-100 mt-3" onclick="window.location.href='/dashboard'">
-                        Continuar gratis
-                    </button>
-                </div>
-            </div>
-
-            <!-- PREMIUM -->
-            <div class="col">
-                <div class="card h-100 p-4 border border-success position-relative">
-
-                    <span class="badge bg-success position-absolute top-0 start-50 translate-middle">
-                        Recomendado
-                    </span>
-
-                    <div class="text-center mb-3 mt-3">
-                        <i class="bi bi-shield-check fs-1 texto-gradient"></i>
-                        <h4 class="fw-bold mt-3">Premium</h4>
-                        <p class="small text-secondary">Uso diario avanzado</p>
-                    </div>
-
-                    <h2 class="display-6 fw-bold text-center mb-3">€4.99</h2>
+                    <h2 class="display-6 fw-bold text-center mb-3">{{priceMonthly}}€</h2>
                     <p class="text-center text-secondary mb-4">por mes</p>
 
-                    <ul class="list-unstyled small flex-grow-1">
-                        <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Credenciales
-                            ilimitadas</li>
-                        <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Dispositivos
-                            ilimitados</li>
-                        <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Auditoría de
-                            contraseñas</li>
-                        <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Alertas de brechas
-                        </li>
-                        <li class="mb-2"><i class="bi bi-check-circle-fill texto-gradient me-2"></i>Soporte prioritario
-                        </li>
-                    </ul>
-
-                    <button class="btn plan-cta plan-cta-premium w-100 mt-3" onclick="window.location.href='/payment?plan=premium'">
-                        Actualizar a Premium
+                    <button class="btn plan-cta plan-cta-premium w-100 mt-3" onclick="window.location.href='/register'">
+                        Ver plan
                     </button>
                 </div>
             </div>
-
-            <!-- PLATINUM -->
-            <div class="col">
-                <div class="card h-100 p-4">
-                    <div class="text-center mb-3">
-                        <i class="bi bi-gem fs-1 texto-gradient"></i>
-                        <h4 class="fw-bold mt-3">Platinum</h4>
-                        <p class="small text-secondary">Seguridad profesional</p>
-                    </div>
-
-                    <h2 class="display-6 fw-bold text-center mb-3">€9.99</h2>
-                    <p class="text-center text-secondary mb-4">por mes</p>
-
-                    <ul class="list-unstyled small flex-grow-1">
-                        <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Todo Premium</li>
-                        <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>2FA avanzado</li>
-                        <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Compartición segura</li>
-                        <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Acceso de emergencia</li>
-                        <li class="mb-2"><i class="bi bi-check-lg texto-gradient me-2"></i>Soporte 24/7</li>
-                    </ul>
-
-                    <button class="btn plan-cta plan-cta-platinum w-100 mt-3" onclick="window.location.href='/payment?plan=platinum'">
-                        Elegir Platinum
-                    </button>
-                </div>
-            </div>
+            {{/allPlans}}
 
         </div>
     </section>

@@ -1,11 +1,17 @@
 package com.hashpass.controller;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hashpass.model.Plan;
 import com.hashpass.model.User;
@@ -66,6 +72,9 @@ public class PlanController {
 
     @GetMapping("/plan")
     public String plan(Model model) {
+        // Obtener todos los planes de la base de datos y pasarlos a la vista
+        List<Plan> allPlans = planRepository.findAll();
+        model.addAttribute("allPlans", allPlans);
         return "plan";
     }
 
@@ -157,7 +166,175 @@ public class PlanController {
         return "redirect:/dashboard";
     }
 
-    // helper to require login and automatically supply user via @ModelAttribute
+    // =====================================================
+    // ENDPOINTS PARA ADMINISTRADORES - CRUD DE PLANES
+    // =====================================================
+
+    /**
+     * Muestra la lista de todos los planes (solo administradores)
+     */
+    @GetMapping("/admin/plans")
+    public String adminPlans(Model model) {
+        // Verificar que sea admin
+        if (!isAdmin()) {
+            return "redirect:/admin";
+        }
+
+        List<Plan> plans = planRepository.findAll();
+        model.addAttribute("plans", plans);
+        return "admin_plans";
+    }
+
+    /**
+     * Muestra el formulario para agregar un nuevo plan (solo administradores)
+     */
+    @GetMapping("/admin/plan/add")
+    public String showAddPlanForm(Model model) {
+        if (!isAdmin()) {
+            return "redirect:/admin";
+        }
+
+        model.addAttribute("plan", new Plan());
+        return "add_plan";
+    }
+
+    /**
+     * Crea un nuevo plan (solo administradores)
+     */
+    @PostMapping("/admin/plan/add")
+    public String addPlan(@RequestParam String name, @RequestParam BigDecimal priceMonthly,
+            @RequestParam String description, RedirectAttributes redirectAttributes) {
+        if (!isAdmin()) {
+            return "redirect:/admin";
+        }
+
+        // Validar que el plan no exista
+        if (planRepository.findByName(name).isPresent()) {
+            redirectAttributes.addFlashAttribute("error", "Ya existe un plan con ese nombre.");
+            return "redirect:/admin/plan/add";
+        }
+
+        // Validar campos
+        if (name == null || name.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "El nombre del plan es requerido.");
+            return "redirect:/admin/plan/add";
+        }
+
+        if (priceMonthly == null || priceMonthly.compareTo(BigDecimal.ZERO) < 0) {
+            redirectAttributes.addFlashAttribute("error", "El precio debe ser mayor o igual a 0.");
+            return "redirect:/admin/plan/add";
+        }
+
+        Plan newPlan = new Plan();
+        newPlan.setName(name.trim());
+        newPlan.setPriceMonthly(priceMonthly);
+        newPlan.setDescription(description != null ? description.trim() : "");
+
+        planRepository.save(newPlan);
+        redirectAttributes.addFlashAttribute("success", "Plan '" + name + "' creado exitosamente.");
+
+        return "redirect:/admin/plans";
+    }
+
+    /**
+     * Muestra el formulario para editar un plan existente (solo administradores)
+     */
+    @GetMapping("/admin/plan/edit/{id}")
+    public String showEditPlanForm(@PathVariable Long id, Model model) {
+        if (!isAdmin()) {
+            return "redirect:/admin";
+        }
+
+        Optional<Plan> planOpt = planRepository.findById(id);
+        if (planOpt.isEmpty()) {
+            return "redirect:/admin/plans";
+        }
+
+        model.addAttribute("plan", planOpt.get());
+        return "edit_plan";
+    }
+
+    /**
+     * Actualiza un plan existente (solo administradores)
+     */
+    @PostMapping("/admin/plan/edit/{id}")
+    public String editPlan(@PathVariable Long id, @RequestParam String name, @RequestParam BigDecimal priceMonthly,
+            @RequestParam String description, RedirectAttributes redirectAttributes) {
+        if (!isAdmin()) {
+            return "redirect:/admin";
+        }
+
+        Optional<Plan> planOpt = planRepository.findById(id);
+        if (planOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Plan no encontrado.");
+            return "redirect:/admin/plans";
+        }
+
+        Plan plan = planOpt.get();
+
+        // Validar que el nuevo nombre no exista (excepto si es el mismo plan)
+        Optional<Plan> existingPlan = planRepository.findByName(name);
+        if (existingPlan.isPresent() && existingPlan.get().getId() != id) {
+            redirectAttributes.addFlashAttribute("error", "Ya existe otro plan con ese nombre.");
+            return "redirect:/admin/plan/edit/" + id;
+        }
+
+        // Validar campos
+        if (name == null || name.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "El nombre del plan es requerido.");
+            return "redirect:/admin/plan/edit/" + id;
+        }
+
+        if (priceMonthly == null || priceMonthly.compareTo(BigDecimal.ZERO) < 0) {
+            redirectAttributes.addFlashAttribute("error", "El precio debe ser mayor o igual a 0.");
+            return "redirect:/admin/plan/edit/" + id;
+        }
+
+        plan.setName(name.trim());
+        plan.setPriceMonthly(priceMonthly);
+        plan.setDescription(description != null ? description.trim() : "");
+
+        planRepository.save(plan);
+        redirectAttributes.addFlashAttribute("success", "Plan '" + name + "' actualizado exitosamente.");
+
+        return "redirect:/admin/plans";
+    }
+
+    /**
+     * Elimina un plan (solo administradores)
+     */
+    @PostMapping("/admin/plan/delete/{id}")
+    public String deletePlan(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        if (!isAdmin()) {
+            return "redirect:/admin";
+        }
+
+        Optional<Plan> planOpt = planRepository.findById(id);
+        if (planOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Plan no encontrado.");
+            return "redirect:/admin/plans";
+        }
+
+        Plan plan = planOpt.get();
+
+        // Verificar que no haya usuarios con este plan
+        if (!plan.getUsers().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error",
+                    "No se puede eliminar el plan porque hay usuarios asignados a él.");
+            return "redirect:/admin/plans";
+        }
+
+        String planName = plan.getName();
+        planRepository.delete(plan);
+        redirectAttributes.addFlashAttribute("success", "Plan '" + planName + "' eliminado exitosamente.");
+
+        return "redirect:/admin/plans";
+    }
+
+    // =====================================================
+    // MÉTODOS AUXILIARES
+    // =====================================================
+
     private String requireLogin(Model model, String view) {
         if (!userSession.isLogged()) {
             return "redirect:/login";
@@ -169,7 +346,7 @@ public class PlanController {
     private boolean hasCurrentPlan(String planName) {
         if (!userSession.isLogged()) {
             return false;
-        }else{
+        } else {
             User user = userService.getLoggedUser();
             if (user == null || user.getPlan() == null || user.getPlan().getName() == null) {
                 return false;
@@ -191,5 +368,16 @@ public class PlanController {
             return "platinum";
         }
         return "premium";
+    }
+
+    /**
+     * Verifica si el usuario actual es administrador
+     */
+    private boolean isAdmin() {
+        if (!userSession.isLogged()) {
+            return false;
+        }
+        User user = userSession.getUser();
+        return user != null && user.isAdmin();
     }
 }

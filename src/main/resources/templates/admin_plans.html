@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{{> fragments/head}}
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark border-bottom border-secondary border-opacity-25 bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-shield-lock-fill me-2 text-success"></i>HashPass
+            </a>
+
+            <div class="ms-auto">
+                <a href="/password-login?email={{user.email}}"
+                    class="boton-bloquear btn btn-outline-light rounded-pill px-4 text-decoration-none">
+                    <i class="bi bi-lock-fill"></i>Bloquear
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="mb-4">
+            <h2 class="text-white fw-bold">
+                <i class="bi bi-diagram-3 texto-gradient me-2"></i> Gestión de Planes
+            </h2>
+            <p class="text-secondary small text-uppercase fw-bold">Administra todos los planes de suscripción</p>
+        </div>
+
+        {{#success}}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>{{success}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {{/success}}
+
+        {{#error}}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle me-2"></i>{{error}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {{/error}}
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <a href="/admin/plan/add" class="btn btn-success">
+                    <i class="bi bi-plus-lg me-2"></i>Crear Nuevo Plan
+                </a>
+                <a href="/admin" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Volver a Admin
+                </a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-hover border border-secondary border-opacity-25">
+                <thead class="table-secondary">
+                    <tr>
+                        <th class="text-dark">ID</th>
+                        <th class="text-dark">Nombre</th>
+                        <th class="text-dark">Precio Mensual</th>
+                        <th class="text-dark">Descripción</th>
+                        <th class="text-dark">Usuarios Asignados</th>
+                        <th class="text-dark text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#plans}}
+                    <tr>
+                        <td>{{id}}</td>
+                        <td class="fw-bold text-success">{{name}}</td>
+                        <td class="text-warning">{{priceMonthly}}€</td>
+                        <td class="text-secondary small">{{#description}}{{description}}{{/description}}{{^description}}<em>Sin descripción</em>{{/description}}</td>
+                        <td class="text-info">{{users.size}}</td>
+                        <td class="text-center">
+                            <a href="/admin/plan/edit/{{id}}" class="btn btn-sm btn-primary" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <form method="post" action="/admin/plan/delete/{{id}}" style="display:inline;" 
+                                  onsubmit="return confirm('¿Estás seguro de que quieres eliminar este plan?');">
+                                <input type="hidden" name="_csrf" value="{{token}}">
+                                <button type="submit" class="btn btn-sm btn-danger" title="Eliminar"
+                                        {{#users}}{{#size}}disabled{{/size}}{{/users}}>
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {{/plans}}
+
+                    {{^plans}}
+                    <tr>
+                        <td colspan="6" class="text-center text-secondary py-5">
+                            <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+                            <p class="mt-2">No hay planes registrados</p>
+                        </td>
+                    </tr>
+                    {{/plans}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {{> fragments/footerPublic}}
+</body>
+
+</html>
