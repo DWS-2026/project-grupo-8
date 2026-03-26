@@ -1,0 +1,252 @@
+package com.hashpass.service;
+
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.hashpass.model.Credential;
+import com.hashpass.model.Plan;
+import com.hashpass.model.Review;
+import com.hashpass.model.User;
+import com.hashpass.repository.CredentialRepository;
+import com.hashpass.repository.PlanRepository;
+import com.hashpass.repository.ReviewRepository;
+import com.hashpass.repository.UserRepository;
+
+/**
+ * Servicio encargado de inicializar la base de datos con datos por defecto.
+ * Se ejecuta después de que la aplicación está completamente compilada y lista.
+ */
+@Service
+public class DatabaseInitializer {
+
+	private final UserRepository userRepository;
+	private final CredentialRepository credentialRepository;
+	private final ReviewRepository reviewRepository;
+	private final PlanRepository planRepository;
+	private final PasswordEncoder passwordEncoder;
+
+	public DatabaseInitializer(UserRepository userRepository, CredentialRepository credentialRepository,
+			ReviewRepository reviewRepository, PlanRepository planRepository, PasswordEncoder passwordEncoder) {
+		this.userRepository = userRepository;
+		this.credentialRepository = credentialRepository;
+		this.reviewRepository = reviewRepository;
+		this.planRepository = planRepository;
+		this.passwordEncoder = passwordEncoder;
+	}
+
+	/**
+	 * Inicializa la base de datos con datos por defecto.
+	 * - Crea los planos si no existen
+	 * - Crea usuario admin si no existe
+	 * - Crea usuarios demo con credenciales y reseñas
+	 */
+	public void initializeDatabase() {
+		System.out.println("🔧 Inicializando base de datos...");
+
+		// Inicializar planes si no existen
+		createPlanIfNotExists("Gratuito", BigDecimal.ZERO, "Para empezar");
+		createPlanIfNotExists("Premium", new BigDecimal("4.99"), "Uso diario avanzado");
+		createPlanIfNotExists("Platinum", new BigDecimal("9.99"), "Seguridad profesional");
+
+		Plan freePlan = planRepository.findByName("Gratuito").orElse(null);
+
+		// Crear usuario admin
+		createAdminUserIfNotExists();
+
+		// Crear usuarios demo
+		seedDemoUser("Usuario Demo Uno", "demo1@hashpass.local", "Demo123!", new String[][] {
+				{ "Gmail", "https://mail.google.com", "demo1@gmail.com", "Correo principal" },
+				{ "Netflix", "https://www.netflix.com", "demo1.netflix", "Streaming familiar" }
+		}, new String[][] {
+				{ "Recomendada", "La uso desde hace meses y funciona genial.", "4" }
+		}, freePlan);
+
+		seedDemoUser("Usuario Demo Dos", "demo2@hashpass.local", "Demo123!", new String[][] {
+				{ "GitHub", "https://github.com", "demo2dev", "Cuenta de desarrollo" },
+				{ "Banco", "https://www.bbva.es", "demo2.banco", "Acceso banca online" }
+		}, new String[][] {
+				{ "Muy util", "Me ayuda a no repetir contrasenas y tener todo ordenado.", "5" },
+		}, freePlan);
+
+		System.out.println("✅ Base de datos inicializada correctamente.");
+	}
+
+	/**
+	 * Crea un usuario administrador si no existe.
+	 */
+	private void createAdminUserIfNotExists() {
+		String adminEmail = "adminhashpass@gmail.com";
+		if (userRepository.findByEmail(adminEmail).isEmpty()) {
+			User admin = new User();
+			admin.setName("Admin");
+			admin.setEmail(adminEmail);
+			admin.setPasswordHash(passwordEncoder.encode("admin123"));
+			admin.setAdmin(true);
+			userRepository.save(admin);
+			System.out.println("✓ Usuario administrador creado.");
+		}
+	}
+
+	/**
+	 * Siembra un usuario demo con credenciales y reseñas.
+	 * 
+	 * @param name Nombre del usuario
+	 * @param email Email del usuario
+	 * @param rawPassword Contraseña sin hashear
+	 * @param credentialsData Array de [siteName, siteUrl, username, note]
+	 * @param reviewsData Array de [title, comment, rating]
+	 * @param freePlan Plan a asignar al usuario
+	 */
+	private void seedDemoUser(String name, String email, String rawPassword, String[][] credentialsData,
+			String[][] reviewsData, Plan freePlan) {
+		User user = userRepository.findByEmail(email).orElseGet(() -> {
+			User newUser = new User();
+			newUser.setName(name);
+			newUser.setEmail(email);
+			newUser.setPasswordHash(passwordEncoder.encode(rawPassword));
+			newUser.setAdmin(false);
+			newUser.setSecurityTimeoutMinutes(10);
+			if (freePlan != null) {
+				newUser.setPlan(freePlan);
+			}
+			return userRepository.save(newUser);
+		});
+
+		// Crear credenciales demo
+		seedDemoCredentials(user, rawPassword, credentialsData);
+
+		// Crear reseñas demo
+		seedDemoReviews(user, reviewsData);
+
+		System.out.println("✓ Usuario demo '" + name + "' creado con datos de ejemplo.");
+	}
+
+	/**
+	 * Siembra credenciales demo para un usuario.
+	 * 
+	 * @param user Usuario propietario
+	 * @param rawPassword Contraseña maestra del usuario
+	 * @param credentialsData Array de [siteName, siteUrl, username, note]
+	 */
+	private void seedDemoCredentials(User user, String rawPassword, String[][] credentialsData) {
+		String encryptionKey = deriveKey(rawPassword);
+		List<Credential> existingCredentials = credentialRepository.findByUserId(user.getId());
+		Set<String> existingSites = new HashSet<>();
+		for (Credential credential : existingCredentials) {
+			existingSites.add(credential.getSiteName());
+		}
+
+		for (String[] data : credentialsData) {
+			String siteName = data[0];
+			if (existingSites.contains(siteName)) {
+				continue;
+			}
+			Credential credential = new Credential();
+			credential.setUser(user);
+			credential.setSiteName(siteName);
+			credential.setSiteUrl(data[1]);
+			credential.setUsername(data[2]);
+			credential.setNote(data[3]);
+			credential.setPasswordEncrypted(encryptForUser(siteName + "@2026", encryptionKey));
+			credentialRepository.save(credential);
+		}
+	}
+
+	/**
+	 * Siembra reseñas demo para un usuario.
+	 * 
+	 * @param user Usuario propietario
+	 * @param reviewsData Array de [title, comment, rating]
+	 */
+	private void seedDemoReviews(User user, String[][] reviewsData) {
+		List<Review> existingReviews = reviewRepository.findByUserId(user.getId());
+		Set<String> existingReviewTitles = new HashSet<>();
+		for (Review review : existingReviews) {
+			existingReviewTitles.add(review.getTitle());
+		}
+
+		for (String[] data : reviewsData) {
+			String title = data[0];
+			if (existingReviewTitles.contains(title)) {
+				continue;
+			}
+			Review review = new Review();
+			review.setUser(user);
+			review.setTitle(title);
+			review.setComment(data[1]);
+			review.setRating(Integer.parseInt(data[2]));
+			reviewRepository.save(review);
+		}
+	}
+
+	/**
+	 * Crea un plan si no existe.
+	 * 
+	 * @param name Nombre del plan
+	 * @param price Precio mensual
+	 * @param description Descripción del plan
+	 */
+	private void createPlanIfNotExists(String name, BigDecimal price, String description) {
+		if (planRepository.findByName(name).isEmpty()) {
+			Plan plan = new Plan();
+			plan.setName(name);
+			plan.setPriceMonthly(price);
+			plan.setDescription(description);
+			planRepository.save(plan);
+			System.out.println("✓ Plan '" + name + "' creado exitosamente.");
+		}
+	}
+
+	/**
+	 * Deriva una clave de cifrado SHA-256 a partir de la contraseña maestra.
+	 * 
+	 * @param password Contraseña maestra
+	 * @return Clave de cifrado de 32 caracteres
+	 */
+	private String deriveKey(String password) {
+		try {
+			java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+			StringBuilder hexString = new StringBuilder();
+			for (byte b : hash) {
+				String hex = Integer.toHexString(0xff & b);
+				if (hex.length() == 1) {
+					hexString.append('0');
+				}
+				hexString.append(hex);
+			}
+			return hexString.toString().substring(0, 32);
+		} catch (Exception e) {
+			throw new RuntimeException("Error generando la llave de cifrado demo", e);
+		}
+	}
+
+	/**
+	 * Encripta una contraseña demo con AES.
+	 * 
+	 * @param raw Contraseña sin encriptar
+	 * @param userKey Clave de encriptación del usuario
+	 * @return Contraseña encriptada en Base64
+	 */
+	private String encryptForUser(String raw, String userKey) {
+		try {
+			SecretKeySpec key = new SecretKeySpec(userKey.getBytes(StandardCharsets.UTF_8), "AES");
+			Cipher cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.ENCRYPT_MODE, key);
+			byte[] encryptedBytes = cipher.doFinal(raw.getBytes(StandardCharsets.UTF_8));
+			return Base64.getEncoder().encodeToString(encryptedBytes);
+		} catch (Exception e) {
+			throw new RuntimeException("Error cifrando credencial demo", e);
+		}
+	}
+}
