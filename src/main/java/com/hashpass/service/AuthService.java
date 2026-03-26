@@ -1,5 +1,6 @@
 package com.hashpass.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,12 +18,14 @@ public class AuthService {
     private final PlanRepository planRepository;
     private final UserSession userSession;
     private final PasswordEncoder passwordEncoder;
+    private final EntryService entryService;
 
-    public AuthService(UserRepository userRepository, PlanRepository planRepository, UserSession userSession, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository, PlanRepository planRepository, UserSession userSession, PasswordEncoder passwordEncoder, EntryService entryService) {
         this.userRepository = userRepository;
         this.planRepository = planRepository;
         this.userSession = userSession;
         this.passwordEncoder = passwordEncoder;
+        this.entryService = entryService;
     }
 
     public boolean isEmailRegistered(String email) {
@@ -73,21 +76,42 @@ public class AuthService {
     }
 
     public String changeMasterPassword(User user, String currentPassword, String newPassword, String confirmPassword) {
+        // 1. Validar que la contraseña actual sea correcta
         if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
             return "La contraseña actual es incorrecta.";
         }
+        
+        // 2. Validar que la nueva contraseña no esté vacía
         if (newPassword == null || newPassword.isBlank()) {
             return "La nueva contraseña no puede estar vacía.";
         }
+        
+        // 3. Validar que las contraseñas coincidan
         if (!newPassword.equals(confirmPassword)) {
             return "Las contraseñas no coinciden.";
         }
+        
+        // 4. Validar que la nueva contraseña sea diferente
         if (passwordEncoder.matches(newPassword, user.getPasswordHash())) {
             return "La nueva contraseña debe ser distinta a la actual.";
         }
 
+        // 5. Re-cifrar todas las credenciales del usuario
+        String reEncryptError = entryService.reEncryptAllCredentials(user.getId(), currentPassword, newPassword);
+        if (reEncryptError != null) {
+            return reEncryptError;
+        }
+
+        // 6. Guardar la contraseña anterior (hasheada)
+        user.setPreviousPasswordHash(user.getPasswordHash());
+        user.setPasswordChangeTime(LocalDateTime.now());
+
+        // 7. Actualizar la contraseña actual
         user.setPasswordHash(passwordEncoder.encode(newPassword));
+        
+        // 8. Guardar el usuario
         userRepository.save(user);
+        
         return null; // Éxito
     }
 

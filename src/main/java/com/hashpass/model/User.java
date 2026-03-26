@@ -36,6 +36,12 @@ public class User {
 	@Column(nullable = false, length = 255)
 	private String passwordHash;
 
+	@Column(length = 255)
+	private String previousPasswordHash;
+
+	@Column
+	private LocalDateTime passwordChangeTime;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "plan_id")
 	private Plan plan;
@@ -115,6 +121,22 @@ public class User {
 
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
+	}
+
+	public String getPreviousPasswordHash() {
+		return previousPasswordHash;
+	}
+
+	public void setPreviousPasswordHash(String previousPasswordHash) {
+		this.previousPasswordHash = previousPasswordHash;
+	}
+
+	public LocalDateTime getPasswordChangeTime() {
+		return passwordChangeTime;
+	}
+
+	public void setPasswordChangeTime(LocalDateTime passwordChangeTime) {
+		this.passwordChangeTime = passwordChangeTime;
 	}
 
 	public Plan getPlan() {
