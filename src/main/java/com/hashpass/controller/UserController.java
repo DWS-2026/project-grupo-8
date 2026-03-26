@@ -78,7 +78,11 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String register() {
+    public String register(@RequestParam(required = false) Long plan,
+            @RequestParam(required = false) String paid,
+            Model model) {
+        model.addAttribute("selectedPlanId", plan == null ? "" : plan);
+        model.addAttribute("paidSelection", paid != null);
         return "register";
     }
 
@@ -86,26 +90,34 @@ public class UserController {
     public String processRegister(@RequestParam String name,
             @RequestParam String email,
             @RequestParam String password,
+            @RequestParam(required = false) Long plan,
             @RequestParam(required = false, name = "avatar") MultipartFile avatar,
+            HttpServletRequest request,
             Model model) {
+
+        Long prepaidPlanId = (Long) request.getSession().getAttribute("prepaidPlanId");
+        boolean hasPrepaidForSelectedPlan = plan != null && prepaidPlanId != null && plan.equals(prepaidPlanId);
 
         if (authService.isEmailRegistered(email)) {
             model.addAttribute("error", "El correo ya está registrado.");
+            model.addAttribute("selectedPlanId", plan == null ? "" : plan);
             return "register";
         }
 
         User registeredUser;
         try {
-            registeredUser = authService.registerUser(name, email, password);
+            registeredUser = authService.registerUser(name, email, password, plan, hasPrepaidForSelectedPlan);
         } catch (IllegalArgumentException | IllegalStateException e) {
             model.addAttribute("error", e.getMessage());
+            model.addAttribute("selectedPlanId", plan == null ? "" : plan);
             return "register";
         }
+
+        request.getSession().removeAttribute("prepaidPlanId");
 
         if (avatar != null && !avatar.isEmpty()) {
             imageService.saveProfileImage(registeredUser, avatar);
         }
-
         return "redirect:/login";
     }
 

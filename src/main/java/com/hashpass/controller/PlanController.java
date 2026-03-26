@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import com.hashpass.model.Plan;
 import com.hashpass.model.User;
 import com.hashpass.repository.PlanRepository;
@@ -69,6 +71,11 @@ public class PlanController {
 
     @GetMapping("/plan")
     public String plan(Model model) {
+        Long currentPlanId = userService.getLoggedUser()
+                .map(User::getPlan)
+                .map(Plan::getId)
+                .orElse(null);
+
         List<Map<String, Object>> allPlans = planRepository.findAll().stream().map(plan -> {
             Map<String, Object> planView = new HashMap<>();
             BigDecimal price = plan.getPriceMonthly() == null ? BigDecimal.ZERO : plan.getPriceMonthly();
@@ -78,6 +85,7 @@ public class PlanController {
             planView.put("description", plan.getDescription());
             planView.put("priceMonthly", price);
             planView.put("isFree", price.compareTo(BigDecimal.ZERO) <= 0);
+            planView.put("isCurrentPlan", currentPlanId != null && currentPlanId.equals(plan.getId()));
             return planView;
         }).toList();
 
@@ -106,19 +114,24 @@ public class PlanController {
         model.addAttribute("paymentDiscount", "-" + formatEur(discount));
         model.addAttribute("paymentTotal", formatEur(total));
 
-        return requireLogin(model, "payment");
+        return "payment";
     }
 
     @PostMapping("/payment/confirm")
-    public String confirmPayment(@RequestParam String plan) {
-        if (!userService.getLoggedUser().isPresent()) {
-            return "redirect:/login";
-        }
-
+    public String confirmPayment(@RequestParam String plan, HttpServletRequest request) {
         Plan targetPlan = findPlanFromInput(plan).orElse(null);
 
         if (targetPlan == null) {
             return "redirect:/payment";
+        }
+
+        if (!userService.getLoggedUser().isPresent()) {
+            BigDecimal price = targetPlan.getPriceMonthly() == null ? BigDecimal.ZERO : targetPlan.getPriceMonthly();
+            if (price.compareTo(BigDecimal.ZERO) <= 0) {
+                return "redirect:/register?plan=" + targetPlan.getId();
+            }
+            request.getSession().setAttribute("prepaidPlanId", targetPlan.getId());
+            return "redirect:/register?plan=" + targetPlan.getId() + "&paid=1";
         }
 
         if (userService.updateLoggedUserPlan(targetPlan).isEmpty()) {

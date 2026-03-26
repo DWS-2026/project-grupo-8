@@ -1,5 +1,6 @@
 package com.hashpass.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class AuthService {
         return userRepository.existsByEmail(email);
     }
 
-    public User registerUser(String name, String email, String password) {
+    public User registerUser(String name, String email, String password, Long selectedPlanId, boolean allowPaidPlan) {
         String normalizedEmail = email == null ? "" : email.trim().toLowerCase();
         if (normalizedEmail.isBlank()) {
             throw new IllegalArgumentException("El correo electrónico es obligatorio.");
@@ -50,10 +51,23 @@ public class AuthService {
         newUser.setPasswordHash(passwordEncoder.encode(password));
         newUser.setEncryptionKey(deriveEncryptionKey(password));
         
-        // Obtener el plan gratuito y asignarlo al nuevo usuario
-        Optional<Plan> freePlan = planRepository.findByName("Gratuito");
-        if (freePlan.isPresent()) {
-            newUser.setPlan(freePlan.get());
+        Optional<Plan> selectedPlanOpt = selectedPlanId == null
+                ? Optional.empty()
+                : planRepository.findById(selectedPlanId);
+
+        Plan selectedPlan = selectedPlanOpt.orElse(null);
+        Plan freePlan = planRepository.findByName("Gratuito").orElse(null);
+        Plan planToAssign = freePlan;
+        if (selectedPlan != null) {
+            BigDecimal price = selectedPlan.getPriceMonthly() == null ? BigDecimal.ZERO : selectedPlan.getPriceMonthly();
+            boolean isPaidPlan = price.compareTo(BigDecimal.ZERO) > 0;
+            if (!isPaidPlan || allowPaidPlan) {
+                planToAssign = selectedPlan;
+            }
+        }
+
+        if (planToAssign != null) {
+            newUser.setPlan(planToAssign);
         }
         
         try {
