@@ -150,7 +150,7 @@ h6,
 }
 
 .right-decor2 {
-  background: linear-gradient(180deg, #102238 0%,  #0f172a 100%);
+  background: linear-gradient(180deg, #102238 0%, #0f172a 100%);
   border-radius: 12px;
   min-height: 420px;
 }
@@ -340,19 +340,21 @@ h6,
 .tabla-contenedor {
   background-color: var(--fondo-tarjeta);
   border-radius: 12px;
-  overflow: visible !important; 
+  overflow: visible !important;
 }
+
 /* Evita que el scroll horizontal de Bootstrap corte los menús desplegables */
 .table-responsive {
   overflow: visible !important;
 }
+
 .table tr {
   position: relative;
 }
 
 /* Asegura que el dropdown siempre esté por encima de otras filas */
 .dropdown-menu {
-  z-index: 1060 !important; 
+  z-index: 1060 !important;
 }
 
 /* 4. Efecto Focus en el Buscador (El brillo verde) */
@@ -392,6 +394,41 @@ h6,
   padding: 0.6em 1em;
   font-weight: 500;
   letter-spacing: 0.5px;
+}
+/* =========================================
+   7. CABECERA Y ESQUINAS PARA TABLA DE PLANES
+========================================= */
+
+.cabecera-planes th {
+  /* Color distinto: un tono intermedio elegante de tu paleta (#27374d) */
+  background-color: #27374d !important; 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-top: none !important;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Redondear las esquinas de arriba a la fuerza (para que no hagan picos) */
+.cabecera-planes th:first-child {
+  border-top-left-radius: 12px;
+}
+
+.cabecera-planes th:last-child {
+  border-top-right-radius: 12px;
+}
+
+/* Redondear las esquinas de abajo de la última fila */
+.table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+.table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+/* Quitar el borde inferior de la última fila para que no choque con el contenedor */
+.table tbody tr:last-child td {
+  border-bottom: none !important;
 }
 
 /* =========================================
