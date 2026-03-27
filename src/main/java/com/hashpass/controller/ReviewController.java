@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
@@ -54,8 +55,29 @@ public class ReviewController {
     }
 
     @GetMapping("/reviews")
-    public String reviews(Model model) {
+    public String reviews(Model model, @RequestParam(name = "editId", required = false) Long editId) {
         model.addAttribute("reviewsList", buildReviewsView());
+
+        if (editId != null && !model.containsAttribute("reviewId")) {
+            Optional<User> logged = userService.getLoggedUser();
+            Optional<Review> reviewOpt = reviewRepository.findById(editId);
+            if (reviewOpt.isPresent() && logged.isPresent()) {
+                Review review = reviewOpt.get();
+                if (isAllowedToModifyReview(review, logged.get())) {
+                    model.addAttribute("editMode", true);
+                    model.addAttribute("reviewId", review.getId());
+                    model.addAttribute("reviewTitle", review.getTitle());
+                    model.addAttribute("reviewComment", review.getComment());
+                    model.addAttribute("reviewRating", review.getRating());
+                    model.addAttribute("openReviewModal", true);
+                } else {
+                    model.addAttribute("reviewError", "No tienes permiso para editar esta reseña.");
+                }
+            } else {
+                model.addAttribute("reviewError", "Reseña no encontrada.");
+            }
+        }
+
         prepareReviewForm(model);
         return "reviews";
     }
@@ -65,7 +87,8 @@ public class ReviewController {
             @RequestParam String comment,
             @RequestParam Integer rating,
             RedirectAttributes redirectAttributes) {
-        if (!userService.getLoggedUser().isPresent()) {
+        Optional<User> logged = userService.getLoggedUser();
+        if (logged.isEmpty()) {
             return "redirect:/login?redirectTo=/reviews";
         }
 
@@ -73,62 +96,165 @@ public class ReviewController {
         String normalizedComment = comment == null ? "" : comment.trim();
 
         if (normalizedTitle.isBlank() || normalizedComment.isBlank()) {
-            return redirectWithFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
-                    "Debes completar el título y el comentario.");
+            return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
+                    false, "Debes completar el título y el comentario.");
         }
 
         if (normalizedTitle.length() > 120) {
-            return redirectWithFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
-                    "El título no puede superar los 120 caracteres.");
+            return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
+                    false, "El título no puede superar los 120 caracteres.");
         }
 
         if (normalizedComment.length() > 1000) {
-            return redirectWithFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
-                    "El comentario no puede superar los 1000 caracteres.");
+            return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
+                    false, "El comentario no puede superar los 1000 caracteres.");
         }
 
         if (rating == null || rating < 1 || rating > 5) {
-            return redirectWithFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
-                    "La puntuación debe estar entre 1 y 5.");
+            return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
+                    false, "La puntuación debe estar entre 1 y 5.");
         }
 
         Review review = new Review();
         review.setTitle(normalizedTitle);
         review.setComment(normalizedComment);
         review.setRating(rating);
-        review.setUser(userService.getLoggedUser().orElse(null));
+        review.setUser(logged.get());
         reviewRepository.save(review);
 
         redirectAttributes.addFlashAttribute("reviewSuccess", "Tu reseña se ha publicado correctamente.");
         return "redirect:/reviews";
     }
 
-    private String redirectWithFormError(RedirectAttributes redirectAttributes,
+    @PostMapping("/reviews/edit")
+    public String editReview(@RequestParam Long id,
+            @RequestParam String title,
+            @RequestParam String comment,
+            @RequestParam Integer rating,
+            RedirectAttributes redirectAttributes) {
+        Optional<User> logged = userService.getLoggedUser();
+        if (logged.isEmpty()) {
+            return "redirect:/login?redirectTo=/reviews";
+        }
+
+        Optional<Review> reviewOpt = reviewRepository.findById(id);
+        if (reviewOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("reviewError", "Reseña no encontrada.");
+            return "redirect:/reviews";
+        }
+
+        Review review = reviewOpt.get();
+        if (!isAllowedToModifyReview(review, logged.get())) {
+            redirectAttributes.addFlashAttribute("reviewError", "No tienes permiso para editar esta reseña.");
+            return "redirect:/reviews";
+        }
+
+        String normalizedTitle = title == null ? "" : title.trim();
+        String normalizedComment = comment == null ? "" : comment.trim();
+
+        if (normalizedTitle.isBlank() || normalizedComment.isBlank()) {
+            return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
+                    true, "Debes completar el título y el comentario.", id);
+        }
+
+        if (normalizedTitle.length() > 120) {
+            return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
+                    true, "El título no puede superar los 120 caracteres.", id);
+        }
+
+        if (normalizedComment.length() > 1000) {
+            return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
+                    true, "El comentario no puede superar los 1000 caracteres.", id);
+        }
+
+        if (rating == null || rating < 1 || rating > 5) {
+            return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
+                    true, "La puntuación debe estar entre 1 y 5.", id);
+        }
+
+        review.setTitle(normalizedTitle);
+        review.setComment(normalizedComment);
+        review.setRating(rating);
+        reviewRepository.save(review);
+
+        redirectAttributes.addFlashAttribute("reviewSuccess", "Tu reseña se ha actualizado correctamente.");
+        return "redirect:/reviews";
+    }
+
+    @PostMapping("/reviews/delete")
+    public String deleteReview(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+        Optional<User> logged = userService.getLoggedUser();
+        if (logged.isEmpty()) {
+            return "redirect:/login?redirectTo=/reviews";
+        }
+
+        Optional<Review> reviewOpt = reviewRepository.findById(id);
+        if (reviewOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("reviewError", "Reseña no encontrada.");
+            return "redirect:/reviews";
+        }
+
+        Review review = reviewOpt.get();
+        if (!isAllowedToDeleteReview(review, logged.get())) {
+            redirectAttributes.addFlashAttribute("reviewError", "No tienes permiso para borrar esta reseña.");
+            return "redirect:/reviews";
+        }
+
+        reviewRepository.delete(review);
+        redirectAttributes.addFlashAttribute("reviewSuccess", "Reseña eliminada correctamente.");
+        return "redirect:/reviews";
+    }
+
+    private String redirectWithReviewFormError(RedirectAttributes redirectAttributes,
             String title,
             String comment,
             Integer rating,
+            boolean editMode,
             String errorMessage) {
         redirectAttributes.addFlashAttribute("reviewError", errorMessage);
         redirectAttributes.addFlashAttribute("reviewTitle", title);
         redirectAttributes.addFlashAttribute("reviewComment", comment);
         redirectAttributes.addFlashAttribute("reviewRating", rating);
+        if (editMode) {
+            redirectAttributes.addFlashAttribute("editMode", true);
+        }
         redirectAttributes.addFlashAttribute("openReviewModal", true);
         return "redirect:/reviews";
     }
 
+    private String redirectWithReviewFormError(RedirectAttributes redirectAttributes,
+            String title,
+            String comment,
+            Integer rating,
+            boolean editMode,
+            String errorMessage,
+            Long id) {
+        redirectWithReviewFormError(redirectAttributes, title, comment, rating, editMode, errorMessage);
+        redirectAttributes.addFlashAttribute("reviewId", id);
+        return "redirect:/reviews";
+    }
+
     private List<Map<String, Object>> buildReviewsView() {
+        Optional<User> logged = userService.getLoggedUser();
         return reviewRepository.findAllByOrderByCreatedAtDesc().stream().map(review -> {
             Map<String, Object> mappedReview = new HashMap<>();
             User reviewUser = review.getUser();
             String authorName = buildAuthorName(reviewUser);
             String avatarUrl = imageService.getProfileImageUrl(Optional.ofNullable(reviewUser));
 
+            boolean isOwner = logged.isPresent() && reviewUser != null && Objects.equals(reviewUser.getId(), logged.get().getId());
+            boolean isAdmin = logged.map(User::isAdmin).orElse(false);
+
+            mappedReview.put("id", review.getId());
             mappedReview.put("title", review.getTitle());
             mappedReview.put("comment", review.getComment());
             mappedReview.put("authorName", authorName);
             mappedReview.put("avatarUrl", avatarUrl != null ? avatarUrl : buildAvatarFallback(authorName));
             mappedReview.put("createdAt", review.getCreatedAt() == null ? "" : REVIEW_DATE_FORMAT.format(review.getCreatedAt()));
             mappedReview.put("stars", buildStars(review.getRating()));
+
+            mappedReview.put("canEdit", isOwner);
+            mappedReview.put("canDelete", isOwner || isAdmin);
             return mappedReview;
         }).toList();
     }
@@ -141,6 +267,13 @@ public class ReviewController {
         model.addAttribute("reviewTitle", title == null ? "" : title);
         model.addAttribute("reviewComment", comment == null ? "" : comment);
         model.addAttribute("ratingOptions", buildRatingOptions(parseRating(rating)));
+
+        if (model.asMap().containsKey("editMode")) {
+            model.addAttribute("editMode", model.asMap().get("editMode"));
+        }
+        if (model.asMap().containsKey("reviewId")) {
+            model.addAttribute("reviewId", model.asMap().get("reviewId"));
+        }
     }
 
     private Integer parseRating(Object rating) {
@@ -178,6 +311,20 @@ public class ReviewController {
             stars.add(star);
         }
         return stars;
+    }
+
+    private boolean isAllowedToModifyReview(Review review, User logged) {
+        if (review == null || logged == null) {
+            return false;
+        }
+        return review.getUser() != null && Objects.equals(review.getUser().getId(), logged.getId());
+    }
+
+    private boolean isAllowedToDeleteReview(Review review, User logged) {
+        if (review == null || logged == null) {
+            return false;
+        }
+        return isAllowedToModifyReview(review, logged) || logged.isAdmin();
     }
 
     private String buildAuthorName(User reviewUser) {
