@@ -12,11 +12,15 @@
             </a>
 
             <div class="ms-auto">
-                <a href="/password-login?email={{user.email}}"
-                    class="boton-bloquear btn btn-outline-light rounded-pill px-4 text-decoration-none">
-                    <i class="bi bi-lock-fill"></i>Bloquear
-                </a>
+                <form method="post" action="/logout" class="m-0">
+                    <input type="hidden" name="_csrf" value="{{token}}">
+                    <button type="submit"
+                        class="boton-bloquear btn btn-outline-light rounded-pill px-4 text-decoration-none">
+                        <i class="bi bi-lock-fill"></i> Bloquear
+                    </button>
+                </form>
             </div>
+
         </div>
     </nav>
     <div class="container mt-4">
@@ -65,96 +69,97 @@
                     <div class="table-responsive">
                         <table class="table table-dark table-hover mb-0">
 
-                        <thead>
-                            <tr class="cabecera-estilizada">
+                            <thead>
+                                <tr class="cabecera-estilizada">
 
-                                <th scope="col" class="py-3 px-3">
-                                    <div class="dropdown">
-                                        <button
-                                            class="btn btn-link text-white text-decoration-none dropdown-toggle fw-bold p-0 border-0"
-                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Usuario
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-dark">
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="sortUser"
-                                                    data-value="asc">A - Z (Ascendente)</a></li>
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="sortUser"
-                                                    data-value="desc">Z - A (Descendente)</a></li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="sortUser"
-                                                    data-value="">Quitar orden</a></li>
-                                        </ul>
-                                    </div>
-                                </th>
+                                    <th scope="col" class="py-3 px-3">
+                                        <div class="dropdown">
+                                            <button
+                                                class="btn btn-link text-white text-decoration-none dropdown-toggle fw-bold p-0 border-0"
+                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Usuario
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-dark">
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="sortUser"
+                                                        data-value="asc">A - Z (Ascendente)</a></li>
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="sortUser"
+                                                        data-value="desc">Z - A (Descendente)</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="sortUser"
+                                                        data-value="">Quitar orden</a></li>
+                                            </ul>
+                                        </div>
+                                    </th>
 
-                                <th scope="col" class="py-3 text-white">Nº contraseñas</th>
-                                <th scope="col" class="py-3">
-                                    <div class="dropdown">
-                                        <button
-                                            class="btn btn-link text-white text-decoration-none dropdown-toggle fw-bold p-0 border-0"
-                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Plan
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-dark">
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="plan"
-                                                    data-value="todos">Ver Todos</a></li>
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="plan"
-                                                    data-value="gratuito">Gratuito</a></li>
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="plan"
-                                                    data-value="premium">Premium</a></li>
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="plan"
-                                                    data-value="platinum">Platinum</a></li>
-                                        </ul>
-                                    </div>
-                                </th>
+                                    <th scope="col" class="py-3 text-white">Nº contraseñas</th>
+                                    <th scope="col" class="py-3">
+                                        <div class="dropdown">
+                                            <button
+                                                class="btn btn-link text-white text-decoration-none dropdown-toggle fw-bold p-0 border-0"
+                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Plan
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-dark">
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="plan"
+                                                        data-value="todos">Ver Todos</a></li>
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="plan"
+                                                        data-value="gratuito">Gratuito</a></li>
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="plan"
+                                                        data-value="premium">Premium</a></li>
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="plan"
+                                                        data-value="platinum">Platinum</a></li>
+                                            </ul>
+                                        </div>
+                                    </th>
 
-                                <th scope="col" class="py-3">
-                                    <div class="dropdown">
-                                        <button
-                                            class="btn btn-link text-white text-decoration-none dropdown-toggle fw-bold p-0 border-0"
-                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Registro
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-dark">
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="regOrder"
-                                                    data-value="asc">Más Antiguo</a></li>
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="regOrder"
-                                                    data-value="desc">Más Reciente</a></li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="regOrder"
-                                                    data-value="">Quitar orden</a></li>
-                                        </ul>
-                                    </div>
-                                </th>
+                                    <th scope="col" class="py-3">
+                                        <div class="dropdown">
+                                            <button
+                                                class="btn btn-link text-white text-decoration-none dropdown-toggle fw-bold p-0 border-0"
+                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Registro
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-dark">
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="regOrder"
+                                                        data-value="asc">Más Antiguo</a></li>
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="regOrder"
+                                                        data-value="desc">Más Reciente</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="regOrder"
+                                                        data-value="">Quitar orden</a></li>
+                                            </ul>
+                                        </div>
+                                    </th>
 
-                                <th scope="col" class="py-3">
-                                    <div class="dropdown">
-                                        <button
-                                            class="btn btn-link text-white text-decoration-none dropdown-toggle fw-bold p-0 border-0"
-                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Pago
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-dark">
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="payment"
-                                                    data-value="todos">Ver Todos</a></li>
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="payment"
-                                                    data-value="activo">Activo</a></li>
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="payment"
-                                                    data-value="pendiente">Pendiente</a></li>
-                                            <li><a class="dropdown-item filter-control" href="#" data-key="payment"
-                                                    data-value="suspendido">Suspendido</a></li>
-                                        </ul>
-                                    </div>
-                                </th>
+                                    <th scope="col" class="py-3">
+                                        <div class="dropdown">
+                                            <button
+                                                class="btn btn-link text-white text-decoration-none dropdown-toggle fw-bold p-0 border-0"
+                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Pago
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-dark">
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="payment"
+                                                        data-value="todos">Ver Todos</a></li>
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="payment"
+                                                        data-value="activo">Activo</a></li>
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="payment"
+                                                        data-value="pendiente">Pendiente</a></li>
+                                                <li><a class="dropdown-item filter-control" href="#" data-key="payment"
+                                                        data-value="suspendido">Suspendido</a></li>
+                                            </ul>
+                                        </div>
+                                    </th>
 
-                                <th scope="col" class="py-3 text-center"><i class="bi bi-trash-fill text-secondary"></i>
-                                </th>
-                            </tr>
-                        </thead>
+                                    <th scope="col" class="py-3 text-center"><i
+                                            class="bi bi-trash-fill text-secondary"></i>
+                                    </th>
+                                </tr>
+                            </thead>
 
                             <tbody class="align-middle">
                                 {{#usersList}}

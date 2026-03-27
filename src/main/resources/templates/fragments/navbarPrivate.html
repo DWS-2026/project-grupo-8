@@ -35,13 +35,6 @@
                     </a>
                 </li>
                 {{/user.admin}}
-                <li><hr class="dropdown-divider border-secondary opacity-25 mx-2 my-2"></li>
-                <li>
-                        <a class="dropdown-item d-flex align-items-center gap-3 py-2" href="/password-login?email={{user.email}}">
-                        <i class="bi bi-lock fs-5 text-secondary"></i><span>Bloquear</span>
-                    </a>
-                </li>
-                <li>
                     <form method="post" action="/logout" class="m-0">
                         <input type="hidden" name="_csrf" value="{{token}}">
                         <button type="submit" class="dropdown-item d-flex align-items-center gap-3 py-2 text-danger icon-link-hover-danger border-0 bg-transparent w-100 text-start">
