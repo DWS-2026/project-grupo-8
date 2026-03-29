@@ -167,15 +167,27 @@ public class CredentialController {
     }
 
     @GetMapping("/passwords")
-    public String passwords(Model model) {
+    public String passwords(Model model, @RequestParam(required = false) String q) {
         if (!userService.getLoggedUser().isPresent()) {
             return "redirect:/login";
         }
-        
+
         // 1. Obtenemos la lista cifrada
         List<Credential> encryptedList = entryService.listCurrentUser();
-        
-        // 2. NUEVO: Creamos una copia de la lista donde reemplazamos el texto cifrado por el texto real temporalmente
+
+        String query = q == null ? "" : q.trim().toLowerCase();
+        if (!query.isBlank()) {
+            encryptedList = encryptedList.stream()
+                    .filter(cred -> {
+                        String siteName = cred.getSiteName() == null ? "" : cred.getSiteName().toLowerCase();
+                        String username = cred.getUsername() == null ? "" : cred.getUsername().toLowerCase();
+                        String siteUrl = cred.getSiteUrl() == null ? "" : cred.getSiteUrl().toLowerCase();
+                        return siteName.contains(query) || username.contains(query) || siteUrl.contains(query);
+                    })
+                    .toList();
+        }
+
+        // 2. Reemplazamos el texto cifrado por el texto real temporalmente
         // Esto solo afecta a lo que se envía al HTML, en la base de datos sigue cifrado
         encryptedList.forEach(cred -> {
             try {
@@ -186,8 +198,9 @@ public class CredentialController {
             }
             cred.setImageUrl(imageService.getCredentialImageUrl(cred.getId()));
         });
-        
+
         model.addAttribute("credentials", encryptedList);
+        model.addAttribute("q", q == null ? "" : q);
         return "passwords";
     }
 
