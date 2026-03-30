@@ -22,7 +22,10 @@
             <div class="col-6 col-lg-2">
                 <h6 class="fw-bold text-white mb-3">Legal</h6>
                 <ul class="list-unstyled text-secondary small d-flex flex-column gap-2">
-                    <li><a href="/" class="text-decoration-none text-secondary hover-white">Términos</a></li>
+                    <li>
+                        <a href="#" class="text-decoration-none text-secondary hover-white" data-bs-toggle="modal"
+                            data-bs-target="#legalTermsModal">Términos</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -31,3 +34,61 @@
         </div>
     </div>
 </footer>
+
+<div class="modal fade" id="legalTermsModal" tabindex="-1" aria-labelledby="legalTermsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-dark text-light border border-secondary border-opacity-50">
+            <div class="modal-header border-secondary border-opacity-25">
+                <h5 class="modal-title fw-bold" id="legalTermsModalLabel">
+                    <i class="bi bi-file-text-fill text-success me-2"></i>Términos Legales y Condiciones de Uso
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" style="max-height: 55vh; overflow-y: auto;">
+                <p class="small text-secondary">Última actualización: 30 de marzo de 2026</p>
+                <p>
+                    Al acceder y utilizar HashPass, aceptas de forma expresa y voluntaria las presentes condiciones
+                    legales, diseñadas para garantizar un uso seguro, responsable y conforme a la normativa vigente.
+                    Este servicio está orientado a la gestión cifrada de credenciales personales y profesionales, por
+                    lo que el usuario se compromete a proporcionar información veraz, actualizada y bajo su exclusiva
+                    responsabilidad.
+                </p>
+                <p>
+                    HashPass implementa medidas de seguridad técnicas y organizativas razonables para proteger la
+                    confidencialidad e integridad de los datos almacenados. No obstante, el usuario reconoce que ningún
+                    sistema conectado a internet puede ofrecer una garantía absoluta de invulnerabilidad. En
+                    consecuencia, se recomienda mantener buenas prácticas de seguridad, incluyendo contraseñas robustas,
+                    autenticación segura y control de dispositivos autorizados.
+                </p>
+                <p>
+                    Queda estrictamente prohibido utilizar la plataforma para actividades ilícitas, fraudulentas,
+                    difamatorias o que vulneren derechos de terceros. HashPass se reserva el derecho de limitar,
+                    suspender o cancelar cuentas que incumplan estas condiciones, así como colaborar con autoridades
+                    competentes cuando exista requerimiento legal.
+                </p>
+                <p>
+                    El contenido, código, diseño y elementos de marca vinculados a HashPass se encuentran protegidos por
+                    normativa de propiedad intelectual. Su reproducción, distribución o modificación sin autorización
+                    expresa está prohibida. El uso del servicio no otorga al usuario derechos de titularidad sobre la
+                    plataforma ni sobre sus componentes.
+                </p>
+                <p>
+                    En materia de protección de datos, HashPass tratará la información conforme a los principios de
+                    licitud, minimización y finalidad. Podrás ejercer tus derechos de acceso, rectificación, supresión,
+                    oposición y portabilidad mediante los canales de soporte habilitados. Si no estás de acuerdo con
+                    cualquier punto de estos términos, deberás abstenerte de utilizar el servicio.
+                </p>
+                <p class="mb-0">
+                    El uso continuado de la aplicación tras la publicación de cambios en estos términos se entenderá
+                    como aceptación de la versión vigente. Recomendamos revisar periódicamente este documento para estar
+                    al tanto de posibles actualizaciones legales, técnicas o de seguridad.
+                </p>
+            </div>
+            <div class="modal-footer border-secondary border-opacity-25">
+                <button type="button" class="btn btn-success rounded-pill px-4" data-bs-dismiss="modal">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
