@@ -25,8 +25,7 @@ public class EntryService {
     @Autowired
     private UserService userService;
     /**
-     * Obtiene todas las credenciales pertenecientes al usuario actualmente
-     * almacenado en la sesión. Si no hay usuario lanza IllegalStateException.
+     * obtains the list of credentials of the current logged user. If there is no user in session, throws an exception.
      */
     public List<Credential> listCurrentUser() {
         Optional<User> u = userService.getLoggedUser();
@@ -37,8 +36,10 @@ public class EntryService {
     }
 
     /**
-     * Guarda una nueva credencial o actualiza una existente. El parámetro
-     * plainPassword es cifrado/obfuscado antes de persistir.
+     * saves the credential of the current logged user.
+     * If there is no user in session, throws an exception.
+     * If the credential is new and the user has a free plan with 10 or more credentials, throws an exception.
+     * If the credential is null or has empty fields, throws an exception.
      */
     public Credential save(Credential cred, String plainPassword) {
         Optional<User> u = userService.getLoggedUser();
@@ -99,7 +100,7 @@ public class EntryService {
     }
 
     // ------------------------------------------------------------------
-    // Helpers para cifrar y descifrar las contraseñas del usuario
+    // Helpers {Decrypt/Encrypt, Re-encrypt}
     // ------------------------------------------------------------------
 
     private String encrypt(String raw, Optional<User> userOpt) {
@@ -109,14 +110,14 @@ public class EntryService {
         }
         User user = userOpt.get();
 
-        // 1. Le pedimos la llave maestra al archivo temporal de la sesion, donde se ha guardado
+        // 1. We ask for the master key from the session temporary file, where it has been stored
         String userKey = user.getEncryptionKey();
         if (userKey == null) {
             throw new IllegalStateException("No hay llave de cifrado en la sesión");
         }
 
         try {
-            // 2. Cerramos el candado AES usando la llave personal del usuario
+            // 2. We close the AES lock using the user's personal key
             java.security.Key key = new javax.crypto.spec.SecretKeySpec(userKey.getBytes(java.nio.charset.StandardCharsets.UTF_8), "AES");
             javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES");
             cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, key);
@@ -135,14 +136,14 @@ public class EntryService {
         }
         User user = userOpt.get();
 
-        // 1. Le pedimos la llave maestra al archivo temporal de la sesion, donde se ha guardado
+        // 1. We ask for the master key from the session temporary file, where it has been stored
         String userKey = user.getEncryptionKey();
         if (userKey == null) {
             throw new IllegalStateException("No hay llave de descifrado en la sesión");
         }
 
         try {
-            // 2. Cerramos el candado AES usando la llave personal del usuario
+            // 2. We close the AES lock using the user's personal key
             java.security.Key key = new javax.crypto.spec.SecretKeySpec(userKey.getBytes(java.nio.charset.StandardCharsets.UTF_8), "AES");
             javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES");
             cipher.init(javax.crypto.Cipher.DECRYPT_MODE, key);
@@ -156,12 +157,12 @@ public class EntryService {
     }
 
     // ------------------------------------------------------------------
-    // Re-cifrado de credenciales cuando cambia la contraseña maestra
+    // User's mastery key rotation (re-encryption)
     // ------------------------------------------------------------------
 
     /**
-     * Deriva una clave de cifrado a partir de una contraseña maestra.
-     * Utiliza SHA-256 para generar una clave de 32 caracteres (256 bits).
+     * Derives an encryption key from a master password.
+     * Uses SHA-256 for hashing a 32-character key (256 bits).
      */
     private String deriveEncryptionKey(String masterPassword) {
         try {
@@ -182,8 +183,8 @@ public class EntryService {
     }
 
     /**
-     * Encripta una contraseña usando una llave proporcionada (no la de la sesión).
-     * Se usa durante la migración de contraseñas.
+     * Encrypts a password using a provided key (not the session key).
+     * We use this during password migration when the session key is not available or has changed.
      */
     private String encryptWithKey(String raw, String encryptionKey) {
         if (raw == null) return null;
@@ -201,8 +202,8 @@ public class EntryService {
     }
 
     /**
-     * Desencripta una contraseña usando una llave proporcionada (no la de la sesión).
-     * Se usa durante la migración de contraseñas.
+     * Encrypts a password using a provided key (not the session key).
+     * We use this during password migration when the session key is not available or has changed.
      */
     private String decryptWithKey(String encrypted, String encryptionKey) {
         if (encrypted == null) return null;
@@ -221,42 +222,42 @@ public class EntryService {
     }
 
     /**
-     * Re-cifra todas las credenciales de un usuario con una nueva contraseña maestra.
-     * Primero desencripta con la clave antigua, luego encripta con la clave nueva.
+     * Re-encrypts all credentials of a user with a new master password.
+     * First decrypts with the old key, then encrypts with the new key.
      * 
-     * @param userId ID del usuario
-     * @param oldPassword Contraseña maestra anterior (sin hashear)
-     * @param newPassword Contraseña maestra nueva (sin hashear)
-     * @return Mensaje de error si algo falla, null si éxito
+     * @param userId ID of the user
+     * @param oldPassword Previous master password (unhashed)
+     * @param newPassword New master password (unhashed)
+     * @return Error message if something fails, null if successful
      */
     public String reEncryptAllCredentials(Long userId, String oldPassword, String newPassword) {
         try {
-            // Derivar las claves de ambas contraseñas
+            // Derive the keys for both passwords
             String oldKey = deriveEncryptionKey(oldPassword);
             String newKey = deriveEncryptionKey(newPassword);
             
-            // Obtener todas las credenciales del usuario
+            // Get all credentials for the user
             List<Credential> credentials = credentialRepository.findByUserId(userId);
             
-            // Re-cifrar cada credencial
+            // Re-encrypt each credential
             for (Credential cred : credentials) {
                 try {
-                    // Desencriptar con la clave anterior
+                    // Decrypt with the old key
                     String decrypted = decryptWithKey(cred.getPasswordEncrypted(), oldKey);
                     
-                    // Encriptar con la clave nueva
+                    // Encrypt with the new key
                     String encrypted = encryptWithKey(decrypted, newKey);
                     
-                    // Actualizar la credencial
+                    // Update the credential
                     cred.setPasswordEncrypted(encrypted);
                     credentialRepository.save(cred);
                 } catch (Exception e) {
-                    // Si una credencial falla, registrar el error pero continuar
-                    System.err.println("Error re-cifrando credencial " + cred.getId() + ": " + e.getMessage());
+                    // If a credential fails, log the error but continue
+                    System.err.println("Error re-encrypting credential " + cred.getId() + ": " + e.getMessage());
                 }
             }
             
-            return null; // Éxito
+            return null; // Success
         } catch (Exception e) {
             return "Error al re-cifrar las credenciales: " + e.getMessage();
         }

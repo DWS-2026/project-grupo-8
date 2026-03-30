@@ -23,8 +23,8 @@ import com.hashpass.repository.ReviewRepository;
 import com.hashpass.repository.UserRepository;
 
 /**
- * Servicio encargado de inicializar la base de datos con datos por defecto.
- * Se ejecuta después de que la aplicación está completamente compilada y lista.
+ * Service responsible for initializing the database with default data.
+ * It runs after the application is fully compiled and ready.
  */
 @Service
 public class DatabaseInitializer {
@@ -45,25 +45,25 @@ public class DatabaseInitializer {
 	}
 
 	/**
-	 * Inicializa la base de datos con datos por defecto.
-	 * - Crea los planos si no existen
-	 * - Crea usuario admin si no existe
-	 * - Crea usuarios demo con credenciales y reseñas
+	 * Initializes the database with default data.
+	 * - Creates plans if they do not exist
+	 * - Creates admin user if missing
+	 * - Creates demo users with credentials and reviews
 	 */
 	public void initializeDatabase() {
 		System.out.println("🔧 Inicializando base de datos...");
 
-		// Inicializar planes si no existen
+		// Initialize plans if they do not exist
 		createPlanIfNotExists("Gratuito", BigDecimal.ZERO, "- Hasta 10 credenciales\n- Sin soporte técnico\n- Almacenamiento 100MB\n- Contraseña maestra estándar");
 		createPlanIfNotExists("Premium", new BigDecimal("4.99"), "- Credenciales ilimitadas\n- Soporte prioritario\n- Almacenamiento 1GB\n- Seguridad avanzada 24 horas\n- Autenticación de dos factores");
 		createPlanIfNotExists("Platinum", new BigDecimal("9.99"), "- Credenciales ilimitadas\n- Soporte 24/7 dedicado\n- Almacenamiento 10GB\n- Cifrado de nivel militar\n- Auditoría completa\n- Sincronización en tiempo real\n- Recuperación ante desastres");
 
 		Plan freePlan = planRepository.findByName("Gratuito").orElse(null);
 
-		// Crear usuario admin
+		// Create admin user
 		createAdminUserIfNotExists();
 
-		// Crear usuarios demo
+		// Create demo users
 		seedDemoUser("Usuario Demo Uno", "demo1@hashpass.local", "Demo123!", new String[][] {
 				{ "Gmail", "https://mail.google.com", "demo1@gmail.com", "Correo principal" },
 				{ "Netflix", "https://www.netflix.com", "demo1.netflix", "Streaming familiar" }
@@ -82,7 +82,7 @@ public class DatabaseInitializer {
 	}
 
 	/**
-	 * Crea un usuario administrador si no existe.
+	 * Creates an administrator user if it does not exist.
 	 */
 	private void createAdminUserIfNotExists() {
 		String adminEmail = "adminhashpass@gmail.com";
@@ -99,14 +99,14 @@ public class DatabaseInitializer {
 	}
 
 	/**
-	 * Siembra un usuario demo con credenciales y reseñas.
+	 * Seeds a demo user with credentials and reviews.
 	 * 
-	 * @param name Nombre del usuario
-	 * @param email Email del usuario
-	 * @param rawPassword Contraseña sin hashear
-	 * @param credentialsData Array de [siteName, siteUrl, username, note]
-	 * @param reviewsData Array de [title, comment, rating]
-	 * @param freePlan Plan a asignar al usuario
+	 * @param name User name
+	 * @param email User email
+	 * @param rawPassword Plain-text password
+	 * @param credentialsData Array of [siteName, siteUrl, username, note]
+	 * @param reviewsData Array of [title, comment, rating]
+	 * @param freePlan Plan to assign to the user
 	 */
 	private void seedDemoUser(String name, String email, String rawPassword, String[][] credentialsData,
 			String[][] reviewsData, Plan freePlan) {
@@ -124,21 +124,21 @@ public class DatabaseInitializer {
 			return userRepository.save(newUser);
 		});
 
-		// Crear credenciales demo
+		// Create demo credentials
 		seedDemoCredentials(user, rawPassword, credentialsData);
 
-		// Crear reseñas demo
+		// Create demo reviews
 		seedDemoReviews(user, reviewsData);
 
 		System.out.println("✓ Usuario demo '" + name + "' creado con datos de ejemplo.");
 	}
 
 	/**
-	 * Siembra credenciales demo para un usuario.
+	 * Seeds demo credentials for a user.
 	 * 
-	 * @param user Usuario propietario
-	 * @param rawPassword Contraseña maestra del usuario
-	 * @param credentialsData Array de [siteName, siteUrl, username, note]
+	 * @param user Credential owner
+	 * @param rawPassword User master password
+	 * @param credentialsData Array of [siteName, siteUrl, username, note]
 	 */
 	private void seedDemoCredentials(User user, String rawPassword, String[][] credentialsData) {
 		String encryptionKey = deriveKey(rawPassword);
@@ -165,10 +165,10 @@ public class DatabaseInitializer {
 	}
 
 	/**
-	 * Siembra reseñas demo para un usuario.
+	 * Seeds demo reviews for a user.
 	 * 
-	 * @param user Usuario propietario
-	 * @param reviewsData Array de [title, comment, rating]
+	 * @param user Review owner
+	 * @param reviewsData Array of [title, comment, rating]
 	 */
 	private void seedDemoReviews(User user, String[][] reviewsData) {
 		List<Review> existingReviews = reviewRepository.findByUserId(user.getId());
@@ -192,11 +192,11 @@ public class DatabaseInitializer {
 	}
 
 	/**
-	 * Crea un plan si no existe.
+	 * Creates a plan if it does not exist.
 	 * 
-	 * @param name Nombre del plan
-	 * @param price Precio mensual
-	 * @param description Descripción del plan
+	 * @param name Plan name
+	 * @param price Monthly price
+	 * @param description Plan description
 	 */
 	private void createPlanIfNotExists(String name, BigDecimal price, String description) {
 		if (planRepository.findByName(name).isEmpty()) {
@@ -210,10 +210,10 @@ public class DatabaseInitializer {
 	}
 
 	/**
-	 * Deriva una clave de cifrado SHA-256 a partir de la contraseña maestra.
+	 * Derives a SHA-256 encryption key from a master password.
 	 * 
-	 * @param password Contraseña maestra
-	 * @return Clave de cifrado de 32 caracteres
+	 * @param password Master password
+	 * @return 32-character encryption key
 	 */
 	private String deriveKey(String password) {
 		try {
@@ -234,11 +234,11 @@ public class DatabaseInitializer {
 	}
 
 	/**
-	 * Encripta una contraseña demo con AES.
+	 * Encrypts a demo password using AES.
 	 * 
-	 * @param raw Contraseña sin encriptar
-	 * @param userKey Clave de encriptación del usuario
-	 * @return Contraseña encriptada en Base64
+	 * @param raw Plain password
+	 * @param userKey User encryption key
+	 * @return Base64-encoded encrypted password
 	 */
 	private String encryptForUser(String raw, String userKey) {
 		try {

@@ -132,32 +132,32 @@ public class CredentialController {
             return "redirect:/login";
         }
 
-        principal.getName(); // Esto va con el Principal de SpringSecurity
+        principal.getName(); // Keep Principal in use for Spring Security
         
         User currentUser = userService.getLoggedUser().get(); 
         model.addAttribute("user", currentUser);
 
-        // 1. Obtener todas las contraseñas de este usuario
+        // 1. Get all credentials for this user
         List<Credential> userCredentials = credentialRepository.findByUserId(currentUser.getId());
 
-        // Total de contraseñas guardadas
+        // Total number of stored credentials
         model.addAttribute("totalCredentials", userCredentials.size());
 
-        // Calcular contraseñas débiles (menos de 8 caracteres)
-        // NUEVO: Ahora desciframos cada contraseña temporalmente para medir su longitud real
+        // Compute weak passwords (less than 8 characters)
+        // NEW: Decrypt each password temporarily to measure real length
         long weakCredentials = userCredentials.stream()
                 .filter(c -> {
                     try {
                         String realPassword = entryService.decrypt(c.getPasswordEncrypted(), userService.getLoggedUser());
                         return realPassword != null && realPassword.length() < 8;
                     } catch (Exception e) {
-                        return false; // Si hay error al descifrar, la ignoramos para esta cuenta
+                        return false; // If decryption fails, ignore this item for this metric
                     }
                 })
                 .count();
         model.addAttribute("weakCredentials", weakCredentials);
 
-        // Usar contador de logins almacenado en User para accesos últimos 30 días
+        // Use login counter stored in User for the last 30 days
         Integer cnt = currentUser.getLoginCount();
         model.addAttribute("monthlyAccesses", cnt == null ? 0 : cnt);
 
@@ -172,7 +172,7 @@ public class CredentialController {
             return "redirect:/login";
         }
 
-        // 1. Obtenemos la lista cifrada
+        // 1. Get the encrypted list
         List<Credential> encryptedList = entryService.listCurrentUser();
 
         String query = q == null ? "" : q.trim().toLowerCase();
@@ -187,12 +187,12 @@ public class CredentialController {
                     .toList();
         }
 
-        // 2. Reemplazamos el texto cifrado por el texto real temporalmente
-        // Esto solo afecta a lo que se envía al HTML, en la base de datos sigue cifrado
+        // 2. Replace encrypted text with plain text temporarily
+        // This only affects what is sent to HTML; data remains encrypted in the database
         encryptedList.forEach(cred -> {
             try {
                 String plain = entryService.decrypt(cred.getPasswordEncrypted(), userService.getLoggedUser());
-                cred.setPasswordEncrypted(plain); // Reutilizamos el campo solo para mostrárselo al HTML
+                cred.setPasswordEncrypted(plain); // Reuse the field only for rendering in HTML
             } catch (Exception e) {
                 cred.setPasswordEncrypted("Error al descifrar");
             }

@@ -47,7 +47,7 @@ public class AuthService {
         User newUser = new User();
         newUser.setName(name);
         newUser.setEmail(normalizedEmail);
-        // Guardamos un hash de la contraseña usando BCrypt
+        // Store a password hash using BCrypt
         newUser.setPasswordHash(passwordEncoder.encode(password));
         newUser.setEncryptionKey(deriveEncryptionKey(password));
         
@@ -73,20 +73,20 @@ public class AuthService {
         try {
             return userRepository.save(newUser);
         } catch (DataIntegrityViolationException e) {
-            // Evita error 500 si dos peticiones registran el mismo correo al mismo tiempo.
+            // Avoid a 500 error if two requests register the same email at the same time.
             throw new IllegalStateException("El correo ya está registrado.", e);
         }
     }
 
     public boolean login(String email, String password) {
-        // Este método ya no se usa, ya que Spring Security maneja el login
-        // Pero se mantiene por compatibilidad
+        // This method is no longer used because Spring Security handles login
+        // It is kept for compatibility
         return false;
     }
 
     public void logout() {
         userService.logout();
-        // Spring Security maneja el SecurityContext automáticamente
+        // Spring Security handles the SecurityContext automatically
     }
 
     public Optional<User> findByEmail(String email) {
@@ -102,48 +102,48 @@ public class AuthService {
         }
         user.setEmail(newEmail);
         userRepository.save(user);
-        return null; // Éxito
+        return null; // Success
     }
 
     public String changeMasterPassword(User user, String currentPassword, String newPassword, String confirmPassword) {
-        // 1. Validar que la contraseña actual sea correcta
+        // 1. Validate the current password
         if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
             return "La contraseña actual es incorrecta.";
         }
         
-        // 2. Validar que la nueva contraseña no esté vacía
+        // 2. Validate that the new password is not empty
         if (newPassword == null || newPassword.isBlank()) {
             return "La nueva contraseña no puede estar vacía.";
         }
         
-        // 3. Validar que las contraseñas coincidan
+        // 3. Validate that passwords match
         if (!newPassword.equals(confirmPassword)) {
             return "Las contraseñas no coinciden.";
         }
         
-        // 4. Validar que la nueva contraseña sea diferente
+        // 4. Validate that the new password is different
         if (passwordEncoder.matches(newPassword, user.getPasswordHash())) {
             return "La nueva contraseña debe ser distinta a la actual.";
         }
 
-        // 5. Re-cifrar todas las credenciales del usuario
+        // 5. Re-encrypt all user credentials
         String reEncryptError = entryService.reEncryptAllCredentials(user.getId(), currentPassword, newPassword);
         if (reEncryptError != null) {
             return reEncryptError;
         }
 
-        // 6. Guardar la contraseña anterior (hasheada)
+        // 6. Store previous password hash
         user.setPreviousPasswordHash(user.getPasswordHash());
         user.setPasswordChangeTime(LocalDateTime.now());
 
-        // 7. Actualizar la contraseña actual
+        // 7. Update current password
         user.setPasswordHash(passwordEncoder.encode(newPassword));
         user.setEncryptionKey(deriveEncryptionKey(newPassword));
         
-        // 8. Guardar el usuario
+        // 8. Save the user
         userRepository.save(user);
         
-        return null; // Éxito
+        return null; // Success
     }
 
     public String deleteAccount(User user, String currentPassword) {
@@ -165,14 +165,14 @@ public class AuthService {
     public void actualizarUltimoLogin(String email) {
     userRepository.findByEmail(email).ifPresent(u -> {
         u.setLastLogin(java.time.LocalDateTime.now());
-        u.setFailedAttempts(0); // Si entra, reseteamos los fallos a 0
+        u.setFailedAttempts(0); // On successful login, reset failed attempts to 0
         userRepository.save(u);
     });
 }
     public void loginSuccess(String email) {
         userRepository.findByEmail(email).ifPresent(u -> {
             u.setLastLogin(java.time.LocalDateTime.now());
-            u.setFailedAttempts(0); // Reiniciamos a 0 porque ha entrado
+            u.setFailedAttempts(0); // Reset to 0 after successful login
             userRepository.save(u);
         });
     }
@@ -180,7 +180,7 @@ public class AuthService {
     public void loginFailed(String email) {
         userRepository.findByEmail(email).ifPresent(u -> {
             int actual = (u.getFailedAttempts() != null) ? u.getFailedAttempts() : 0;
-            u.setFailedAttempts(actual + 1); // Sumamos uno al fallo
+            u.setFailedAttempts(actual + 1); // Increment failed attempts
             userRepository.save(u);
         });
     }

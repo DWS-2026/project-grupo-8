@@ -157,7 +157,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Script simple para formatear el número de tarjeta con espacios
+        // Simple script to format card number with spaces
         const cardInput = document.getElementById('cardNumber');
         const holderInput = document.getElementById('cardHolder');
         const expiryInput = document.getElementById('cardExpiry');
@@ -172,7 +172,7 @@
         let hasTriedPay = false;
         
         cardInput.addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, ''); // Elimina todo lo que no sea número
+            let value = e.target.value.replace(/\D/g, ''); // Remove all non-numeric characters
             let formattedValue = '';
             
             for (let i = 0; i < value.length; i++) {
@@ -227,15 +227,15 @@
             }
         });
 
-        // Script para cambiar visualmente la opción de pago
+        // Script to visually switch payment option
         function selectPayment(method, element) {
-            // Quitar clase active de todos
+            // Remove active class from all options
             document.querySelectorAll('.payment-option').forEach(el => {
                 el.classList.remove('active');
                 el.querySelector('input').checked = false;
             });
 
-            // Activar el clickeado
+            // Activate the clicked option
             element.classList.add('active');
             element.querySelector('input').checked = true;
 
@@ -265,7 +265,7 @@
 
         function isExpiryValid() {
             const raw = expiryInput.value.trim();
-            // Acepta formatos MM/AA y MM / AA
+            // Accept MM/YY and MM / YY formats
             const match = raw.match(/^(\d{2})\s*\/\s*(\d{2})$/);
             if (!match) {
                 return false;

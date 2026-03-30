@@ -15,10 +15,10 @@ public class Application {
 	}
 
 	/**
-	 * Inicializa la base de datos después de que la aplicación está completamente compilada.
+	 * inicialize the database after the application is fully compiled and ready
 	 * 
-	 * @param databaseInitializer Service encargado de la inicialización
-	 * @return CommandLineRunner que ejecuta la inicialización
+	 * @param databaseInitializer Service that initializes the database with default data
+	 * @return CommandLineRunner that runs the application and initializes the database
 	 */
 	@Bean
 	public CommandLineRunner seedData(DatabaseInitializer databaseInitializer) {

@@ -122,10 +122,10 @@ public class WebSecurityConfig {
 								userService.setUser(user);
 								user.setEncryptionKey(deriveKey(password));
 								request.getSession().setMaxInactiveInterval(user.getSecurityTimeoutMinutes() * 60);
-								user.setLastLogin(LocalDateTime.now()); // Fecha real de éxito
+								user.setLastLogin(LocalDateTime.now()); // Actual successful login timestamp
 								user.setFailedAttempts(0);
 
-								// Actualizar contador de logins de 30 días (simple, persistente en User)
+								// Update 30-day login counter (simple and persisted in User)
 								LocalDateTime now = LocalDateTime.now();
 								if (user.getLoginCountWindowStart() == null
 										|| user.getLoginCountWindowStart().isBefore(now.minusDays(30))) {

@@ -99,7 +99,7 @@
 								<button class="btn btn-outline-secondary" type="button" aria-label="Mostrar contraseña"
 									onclick="togglePasswordRegister(event)"><i class="bi bi-eye"></i></button>
 							</div>
-							<!-- Indicador de fortaleza -->
+							<!-- Strength indicator -->
 							<label class="form-label mt-3">Nivel de seguridad de la contraseña</label>
 							<div class="progress" style="height: 6px;">
 								<div id="strengthBar" class="progress-bar"></div>
@@ -141,7 +141,7 @@
 						<p>¿Ya tienes cuenta? <a href="/login" class="muted-link">Inicia sesión aquí</a></p>
 					</div>
 
-					<!-- Recuadro con logo similar a password-login -->
+					<!-- Logo box similar to password-login -->
 					<div style="margin-top:36px;margin-bottom:25px;text-align:center;">
 						<a class="navbar-brand brand-logo-large lower-logo"
 							style="display:inline-flex;align-items:center;justify-content:center;">
@@ -175,7 +175,7 @@
 			{ text: "Muy fuerte", class: "bg-success", width: "100%" }
 		];
 
-		// Validar formato de email
+		// Validate email format
 		function isValidEmail(email) {
 			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			return emailRegex.test(email);
@@ -224,7 +224,7 @@
 			}
 		}
 
-		// Validar seguridad y fortaleza de contraseña
+		// Validate password security and strength
 		passwordInput.addEventListener('input', () => {
 			const value = passwordInput.value;
 
@@ -246,7 +246,7 @@
 			validateForm();
 		});
 
-		// Validar que todos los campos estén rellenos y términos aceptados
+		// Validate that all fields are filled and terms are accepted
 		function validateForm() {
 			const fullname = document.getElementById('fullname').value.trim();
 			const email = document.getElementById('email').value.trim();
@@ -256,10 +256,10 @@
 
 			const btn = document.getElementById('registerBtn');
 
-			// Verificar si el email es válido
+			// Check whether email is valid
 			const emailValid = isValidEmail(email);
 
-			// Verificar si la contraseña es lo suficientemente fuerte (score >= 3)
+			// Check whether password is strong enough (score >= 3)
 			let passwordStrong = false;
 			if (password) {
 				const result = zxcvbn(password);
@@ -271,7 +271,7 @@
 			btn.disabled = !isValid;
 		}
 
-		// Agregar event listeners a todos los inputs
+		// Add event listeners to all inputs
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('fullname').addEventListener('input', validateForm);
 			document.getElementById('password').addEventListener('input', validateForm);

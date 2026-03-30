@@ -35,7 +35,7 @@ h6,
 3. PERSONALIZACIÓN DE BOOTSTRAP
 ========================================= */
 
-/* Barra de navegación transparente */
+/* Transparent navigation bar */
 .navbar {
   background-color: transparent !important;
   padding-top: 1.5rem;
@@ -55,14 +55,14 @@ h6,
   color: var(--verde-principal) !important;
 }
 
-/* Tarjetas oscuras */
+/* Dark cards */
 .card {
   background-color: var(--fondo-tarjeta) !important;
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--texto-gris);
 }
 
-/* Botones Verdes */
+/* Green buttons */
 .btn-primary {
   background-color: var(--verde-principal);
   border: none;
@@ -75,7 +75,7 @@ h6,
 }
 
 /* =========================================
-4. TUS CLASES ESPECIALES DE PASSWORDS.HTML
+4. YOUR SPECIAL PASSWORDS.HTML CLASSES
 ========================================= */
 
 .icono-brillante {
@@ -92,7 +92,7 @@ h6,
   margin: 0 auto;
 }
 
-/* Texto degradado  */
+/* Gradient text */
 .texto-gradient {
   color: var(--verde-principal);
 }
@@ -200,25 +200,25 @@ h6,
 
 
 /* =========================================
-   ESTILOS ESPECÍFICOS PARA LA BARRA
-   (Usando tus variables)
+  SPECIFIC STYLES FOR THE BAR
+  (Using your variables)
 ========================================= */
 
-/* 1. Estilo para el contenedor del buscador (Simula una sola caja) */
+/* 1. Style for the search container (simulates a single box) */
 .search-box {
   background-color: var(--fondo-tarjeta);
   border: 1px solid rgba(206, 181, 181, 0.163);
   border-radius: 6px;
-  /* Radio similar a Bootstrap standard */
+  /* Radius similar to Bootstrap standard */
 }
 
-/* Color del texto del placeholder */
+/* Placeholder text color */
 .search-box input::placeholder {
   color: var(--texto-gris);
   opacity: 0.6;
 }
 
-/* 2. Clase genérica para botones oscuros (Filtro y Toggles) */
+/* 2. Generic class for dark buttons (Filter and toggles) */
 .btn-dark-custom {
   background-color: var(--fondo-tarjeta);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -231,15 +231,15 @@ h6,
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Estado activo para el botón de vista (el cuadrado gris claro) */
+/* Active state for the view button (light gray square) */
 .btn-dark-custom.active {
   background-color: rgba(254, 248, 248, 0.064);
-  /* Un poco más claro */
+  /* A bit lighter */
   color: var(--texto-blanco);
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* CTA de planes más llamativos */
+/* More eye-catching plan CTA */
 .plan-cta {
   border: 0;
   font-weight: 700;
@@ -271,7 +271,7 @@ h6,
   box-shadow: 0 10px 24px rgba(148, 163, 184, 0.3);
 }
 
-/* Campos de pago en vista oscura */
+/* Payment fields in dark mode */
 #cardForm .form-control,
 #cardForm .form-select {
   color: #f8f9fa !important;
@@ -283,31 +283,31 @@ h6,
 }
 
 /* =========================================
-   ESTILO SIDEBAR MÓVIL (TIPO POPUP)
+   MOBILE SIDEBAR STYLE (POPUP-LIKE)
 ========================================= */
 @media (max-width: 767.98px) {
   #sidebar {
-    /* Posición fija para que flote sobre el contenido */
+    /* Fixed position to float above the content */
     position: fixed !important;
     top: 0;
     left: 0;
     height: 100vh;
-    /* Ocupa toda la altura */
+    /* Takes full height */
     width: 280px;
-    /* Ancho del menú en móvil */
+    /* Mobile menu width */
     z-index: 1050;
-    /* Asegura que esté por encima de todo */
+    /* Ensure it stays above everything */
 
-    /* Aseguramos que tenga fondo (si no, sería transparente) */
+    /* Ensure it has a background (otherwise it would be transparent) */
     background-color: var(--fondo-oscuro, #0f172a);
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
-    /* Sombra para efecto 3D */
+    /* Shadow for 3D effect */
 
     padding-right: 1rem;
     padding-left: 1rem;
     overflow-y: auto;
-    /* Scroll interno si el menú es muy largo */
+    /* Internal scroll if the menu is very long */
   }
 }
 
@@ -315,7 +315,7 @@ h6,
    5. ESTILOS ADMIN
 ========================================= */
 
-/* 1. Ajuste de la Tabla para que sea azul oscuro (no gris/negro) */
+/* 1. Table adjustment to make it dark blue (not gray/black) */
 .table-dark {
   --bs-table-bg: var(--fondo-tarjeta);
   --bs-table-hover-bg: rgba(255, 255, 255, 0.03);
@@ -323,7 +323,7 @@ h6,
   border-color: rgba(255, 255, 255, 0.05);
 }
 
-/* 2. Cabecera de la tabla con fondo ligeramente distinto */
+/* 2. Table header with slightly different background */
 .cabecera-estilizada {
   background-color: rgba(255, 255, 255, 0.05) !important;
 }
@@ -336,14 +336,14 @@ h6,
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* 3. Contenedor de la tabla (Borde redondeado y sombra) */
+/* 3. Table container (rounded border and shadow) */
 .tabla-contenedor {
   background-color: var(--fondo-tarjeta);
   border-radius: 12px;
   overflow: visible !important;
 }
 
-/* Evita que el scroll horizontal de Bootstrap corte los menús desplegables */
+/* Prevent Bootstrap horizontal scroll from clipping dropdown menus */
 .table-responsive {
   overflow: visible !important;
 }
@@ -352,19 +352,19 @@ h6,
   position: relative;
 }
 
-/* Asegura que el dropdown siempre esté por encima de otras filas */
+/* Ensure dropdown is always above other rows */
 .dropdown-menu {
   z-index: 1060 !important;
 }
 
-/* 4. Efecto Focus en el Buscador (El brillo verde) */
+/* 4. Focus effect on search box (green glow) */
 .search-box:focus-within {
   border-color: var(--verde-principal) !important;
   box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
   transition: all 0.3s ease;
 }
 
-/* 5. Dropdowns oscuros personalizados */
+/* 5. Custom dark dropdowns */
 .dropdown-menu-dark {
   background-color: var(--fondo-tarjeta);
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -376,7 +376,7 @@ h6,
   color: #fff !important;
 }
 
-/* 6. Estilo específico para las tarjetas de estadísticas */
+/* 6. Specific style for statistic cards */
 .tarjeta-dato {
   background-color: var(--fondo-tarjeta);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -389,18 +389,18 @@ h6,
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* 7. Badges (Etiquetas) más elegantes */
+/* 7. More elegant badges (labels) */
 .badge {
   padding: 0.6em 1em;
   font-weight: 500;
   letter-spacing: 0.5px;
 }
 /* =========================================
-   7. CABECERA Y ESQUINAS PARA TABLA DE PLANES
+  7. HEADER AND CORNERS FOR PLANS TABLE
 ========================================= */
 
 .cabecera-planes th {
-  /* Color distinto: un tono intermedio elegante de tu paleta (#27374d) */
+  /* Different color: an elegant mid-tone from your palette (#27374d) */
   background-color: #27374d !important; 
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-top: none !important;
@@ -408,7 +408,7 @@ h6,
   letter-spacing: 0.5px;
 }
 
-/* Redondear las esquinas de arriba a la fuerza (para que no hagan picos) */
+/* Force top corners to be rounded (avoid sharp spikes) */
 .cabecera-planes th:first-child {
   border-top-left-radius: 12px;
 }
@@ -417,7 +417,7 @@ h6,
   border-top-right-radius: 12px;
 }
 
-/* Redondear las esquinas de abajo de la última fila */
+/* Round bottom corners of the last row */
 .table tbody tr:last-child td:first-child {
   border-bottom-left-radius: 12px;
 }
@@ -426,7 +426,7 @@ h6,
   border-bottom-right-radius: 12px;
 }
 
-/* Quitar el borde inferior de la última fila para que no choque con el contenedor */
+/* Remove bottom border from the last row to avoid clashing with container */
 .table tbody tr:last-child td {
   border-bottom: none !important;
 }
@@ -434,19 +434,19 @@ h6,
 /* =========================================
    6. ESTILOS DASHBOARD
 ========================================= */
-/* Altura fija para la tabla y activación del scroll */
+/* Fixed table height and scroll activation */
 .tabla-scroll-y {
   max-height: 300px;
-  /* Altura del rectángulo */
+  /* Rectangle height */
   min-height: 300px;
-  /* Fuerza que mantenga el tamaño aunque esté vacía */
+  /* Keep size even when empty */
   overflow-y: auto;
-  /* Activa el scroll vertical si se pasa */
+  /* Enable vertical scroll when overflowing */
   padding-right: 5px;
-  /* Espacio para que el scroll no tape texto */
+  /* Space so scrollbar does not overlap text */
 }
 
-/* Personalización de la barra de scroll (Webkit: Chrome, Edge, Safari) */
+/* Scrollbar customization (Webkit: Chrome, Edge, Safari) */
 .tabla-scroll-y::-webkit-scrollbar {
   width: 6px;
 }
@@ -465,36 +465,36 @@ h6,
   background: rgba(255, 255, 255, 0.4);
 }
 
-/* Encabezado de tabla pegajoso (Sticky Header) */
+/* Sticky table header */
 .thead-sticky th {
   position: sticky;
   top: 0;
   background-color: var(--fondo-tarjeta);
-  /* Color sólido para tapar el texto que pasa por debajo */
+  /* Solid color to cover text passing underneath */
   z-index: 10;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 1rem;
-  /* Espacio extra para que respire */
+  /* Extra spacing for better breathing room */
 }
 
-/* Ajuste para que los números grandes sean blancos como en la foto, no verdes */
+/* Keep large numbers white as in the reference, not green */
 .text-white-stats {
   color: var(--texto-blanco);
   font-weight: 700;
 }
 
-/* EFECTO HOVER EN LAS FILAS */
+/* HOVER EFFECT ON ROWS */
 .hover-effect {
   transition: background-color 0.2s ease;
 }
 
 .hover-effect:hover {
   background-color: rgba(255, 255, 255, 0.05);
-  /* Se ilumina un poco al pasar el ratón */
+  /* Slight highlight on hover */
   cursor: pointer;
 }
 
-/* BOTONES PEQUEÑOS DE ACCIÓN */
+/* SMALL ACTION BUTTONS */
 .btn-icon-sm {
   width: 35px;
   height: 35px;
@@ -512,79 +512,79 @@ h6,
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* ESTILOS PARA CONFIGURACIÓN DE USUARIO */
+/* USER SETTINGS STYLES */
 
-/* Ajuste fino para inputs en fondo oscuro */
+/* Fine-tuning for inputs on dark background */
 .form-control:focus {
   background-color: transparent !important;
-  /* Que no se ponga blanco al escribir */
+  /* Prevent turning white while typing */
   color: white !important;
   border-color: var(--verde-principal) !important;
   box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
 }
 
-/* ESTILOS PARA LA FOTO DE PERFIL */
+/* PROFILE PHOTO STYLES */
 .avatar-img {
   width: 80px;
-  /* Tamaño del círculo */
+  /* Circle size */
   height: 80px;
   object-fit: cover;
-  /* Recorta la imagen para que no se estire */
+  /* Crop image to avoid stretching */
   background-color: #1e293b;
-  /* Fondo por si la imagen es transparente */
+  /* Background in case image is transparent */
   transition: transform 0.2s ease;
 }
 
 .avatar-img:hover {
   transform: scale(1.05);
-  /* Pequeño efecto zoom al pasar el ratón */
+  /* Subtle zoom effect on hover */
 }
 
-/* Efecto suave para el botón */
+/* Smooth button effect */
 .hover-scale:hover {
   transform: translateY(-2px);
   transition: transform 0.2s;
 }
 
-/* === ESTILOS PARA EL NAVBAR USER MENU === */
+/* === USER MENU NAVBAR STYLES === */
 
-/* 1. La imagen del avatar en el navbar */
+/* 1. Navbar avatar image */
 .avatar-img-nav {
   width: 42px;
   height: 42px;
   object-fit: cover;
   border: 2px solid rgba(255, 255, 255, 0.1);
-  /* Borde sutil */
+  /* Subtle border */
   padding: 2px;
-  /* Espacio entre borde e imagen */
+  /* Space between border and image */
   transition: all 0.2s ease;
 }
 
 .avatar-img-nav:hover {
   border-color: var(--verde-principal, #10b981);
-  /* Se ilumina en verde al pasar */
+  /* Glow green on hover */
   transform: scale(1.05);
 }
 
-/* 2. Ocultar la flecha por defecto del dropdown toggle */
+/* 2. Hide default dropdown toggle arrow */
 .dropdown-toggle.no-arrow::after {
   display: none !important;
 }
 
-/* 3. Personalización del menú desplegable oscuro */
+/* 3. Dark dropdown menu customization */
 .dropdown-menu-dark {
   background-color: var(--fondo-tarjeta, #1e293b);
-  /* Tu color de fondo de tarjetas */
+  /* Your card background color */
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Estilo de los elementos al pasar el ratón */
+/* Item style on hover */
 .dropdown-item {
   transition: all 0.15s ease;
   border-radius: 6px;
-  /* Bordes redondeados en los ítems */
+  /* Rounded corners on items */
   margin: 0 4px;
-  /* Un poco de margen lateral */
+  /* A bit of side margin */
   width: auto;
 }
 
@@ -593,34 +593,34 @@ h6,
   color: white !important;
 }
 
-/* Hacer que el icono también cambie de color al pasar el ratón sobre el enlace */
+/* Make icon color change when hovering link */
 .dropdown-item:hover i {
   color: var(--verde-principal, #10b981) !important;
   transition: color 0.15s ease;
 }
 
-/* 4. Estilo especial para "Cerrar sesión" (Rojo) */
+/* 4. Special style for "Log out" (Red) */
 .dropdown-item.text-danger:hover {
   background-color: rgba(220, 53, 69, 0.15) !important;
-  /* Fondo rojo suave */
+  /* Soft red background */
   color: #ef4444 !important;
-  /* Texto rojo vivo */
+  /* Bright red text */
 }
 
 .dropdown-item.text-danger:hover i {
   color: #ef4444 !important;
-  /* Icono rojo vivo */
+  /* Bright red icon */
 }
 
 
-/* IMAGEN FLOTANDO PARA LANDING */
+/* FLOATING IMAGE FOR LANDING */
 .hero-section {
   padding: 80px 0;
   position: relative;
   overflow: hidden;
 }
 
-/* Efecto de brillo de fondo */
+/* Background glow effect */
 .hero-bg-glow {
   position: absolute;
   width: 600px;
@@ -632,7 +632,7 @@ h6,
   border-radius: 50%;
 }
 
-/* Imagen del dashboard flotante */
+/* Floating dashboard image */
 .hero-img-container {
   position: relative;
   animation: float 6s ease-in-out infinite;
@@ -709,7 +709,7 @@ h6,
   overflow: hidden;
 }
 
-/* Input con icono a la derecha */
+/* Input with icon on the right */
 .input-icon-right {
   position: absolute;
   right: 15px;
@@ -718,7 +718,7 @@ h6,
   color: var(--texto-gris);
 }
 
-/* Selección de método de pago */
+/* Payment method selection */
 .payment-option {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
@@ -755,7 +755,7 @@ h6,
   background-color: rgba(255, 255, 255, 0.06);
 }
 
-/* === ESTILOS PARA DESCRIPCIONES DE PLANES === */
+/* === PLAN DESCRIPTION STYLES === */
 p.small.text-secondary {
   white-space: pre-wrap;
   word-wrap: break-word;

@@ -151,7 +151,7 @@ public class UserController {
         User currentUser = userService.getLoggedUser().orElse(null);
         String error = authService.changeEmail(currentUser, masterPass, newEmail);
         if (error == null) {
-            // Actualizar el user en sesión con el nuevo email
+            // Update session user with the new email
             currentUser.setEmail(newEmail);
             model.addAttribute("success", "Correo electrónico cambiado exitosamente.");
         } else {

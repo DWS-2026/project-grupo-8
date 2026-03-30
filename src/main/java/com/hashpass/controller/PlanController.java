@@ -163,15 +163,15 @@ public class PlanController {
     }
 
     // =====================================================
-    // ENDPOINTS PARA ADMINISTRADORES - CRUD DE PLANES
+    // ADMIN ENDPOINTS - PLAN CRUD
     // =====================================================
 
     /**
-     * Muestra la lista de todos los planes (solo administradores)
+     * Shows the list of all plans (admins only)
      */
     @GetMapping("/admin/plans")
     public String adminPlans(Model model) {
-        // Verificar que sea admin
+        // Verify admin access
         if (!isAdmin()) {
             return "redirect:/admin";
         }
@@ -182,7 +182,7 @@ public class PlanController {
     }
 
     /**
-     * Muestra el formulario para agregar un nuevo plan (solo administradores)
+     * Shows the form to add a new plan (admins only)
      */
     @GetMapping("/admin/plan/add")
     public String showAddPlanForm(Model model) {
@@ -195,7 +195,7 @@ public class PlanController {
     }
 
     /**
-     * Crea un nuevo plan (solo administradores)
+     * Creates a new plan (admins only)
      */
     @PostMapping("/admin/plan/add")
     public String addPlan(@RequestParam String name, @RequestParam BigDecimal priceMonthly,
@@ -204,13 +204,13 @@ public class PlanController {
             return "redirect:/admin";
         }
 
-        // Validar que el plan no exista
+        // Validate that the plan does not already exist
         if (planRepository.findByName(name).isPresent()) {
             redirectAttributes.addFlashAttribute("error", "Ya existe un plan con ese nombre.");
             return "redirect:/admin/plan/add";
         }
 
-        // Validar campos
+        // Validate fields
         if (name == null || name.trim().isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "El nombre del plan es requerido.");
             return "redirect:/admin/plan/add";
@@ -233,7 +233,7 @@ public class PlanController {
     }
 
     /**
-     * Muestra el formulario para editar un plan existente (solo administradores)
+     * Shows the form to edit an existing plan (admins only)
      */
     @GetMapping("/admin/plan/edit/{id}")
     public String showEditPlanForm(@PathVariable Long id, Model model) {
@@ -251,7 +251,7 @@ public class PlanController {
     }
 
     /**
-     * Actualiza un plan existente (solo administradores)
+     * Updates an existing plan (admins only)
      */
     @PostMapping("/admin/plan/edit/{id}")
     public String editPlan(@PathVariable Long id, @RequestParam String name, @RequestParam BigDecimal priceMonthly,
@@ -268,14 +268,14 @@ public class PlanController {
 
         Plan plan = planOpt.get();
 
-        // Validar que el nuevo nombre no exista (excepto si es el mismo plan)
+        // Validate that the new name is unique (unless it is the same plan)
         Optional<Plan> existingPlan = planRepository.findByName(name);
         if (existingPlan.isPresent() && existingPlan.get().getId() != id) {
             redirectAttributes.addFlashAttribute("error", "Ya existe otro plan con ese nombre.");
             return "redirect:/admin/plan/edit/" + id;
         }
 
-        // Validar campos
+        // Validate fields
         if (name == null || name.trim().isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "El nombre del plan es requerido.");
             return "redirect:/admin/plan/edit/" + id;
@@ -297,7 +297,7 @@ public class PlanController {
     }
 
     /**
-     * Elimina un plan (solo administradores)
+     * Deletes a plan (admins only)
      */
     @PostMapping("/admin/plan/delete/{id}")
     public String deletePlan(@PathVariable Long id, RedirectAttributes redirectAttributes) {
@@ -313,7 +313,7 @@ public class PlanController {
 
         Plan plan = planOpt.get();
 
-        // Verificar que no haya usuarios con este plan
+        // Verify there are no users assigned to this plan
         if (!plan.getUsers().isEmpty()) {
             redirectAttributes.addFlashAttribute("error",
                     "No se puede eliminar el plan porque hay usuarios asignados a él.");
@@ -328,7 +328,7 @@ public class PlanController {
     }
 
     // =====================================================
-    // MÉTODOS AUXILIARES
+    // HELPER METHODS
     // =====================================================
 
     private String requireLogin(Model model, String view) {
@@ -379,7 +379,7 @@ public class PlanController {
             Long planId = Long.parseLong(trimmed);
             return planRepository.findById(planId);
         } catch (NumberFormatException ignored) {
-            // Si no es id numérico, intentar resolver por nombre o alias.
+            // If it is not a numeric id, try resolving by name or alias.
         }
 
         Optional<Plan> directMatch = planRepository.findByName(trimmed);
@@ -422,7 +422,7 @@ public class PlanController {
     }
 
     /**
-     * Verifica si el usuario actual es administrador
+     * Checks whether the current user is an administrator
      */
     private boolean isAdmin() {
         Optional<User> userOpt = userService.getLoggedUser();
