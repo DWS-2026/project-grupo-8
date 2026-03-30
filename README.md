@@ -223,6 +223,12 @@ Solo si han cambiado.
 
 ### **Instrucciones de Ejecución**
 
+Ejecutar en terminal el siguiente comando si el usuario que desea uasr la aplicación usa docker para la BBDD: 
+
+<docker run --rm -e MYSQL_ROOT_PASSWORD='SS$pgmHbJ8&Mbv1' -e MYSQL_DATABASE=hashpass -p 3306:3306 -d mysql:9.6>
+
+
+
 #### **Requisitos Previos**
 - **Java**: versión 21 o superior
 - **Maven**: versión 3.8 o superior
@@ -240,8 +246,9 @@ Solo si han cambiado.
 2. **AQUÍ INDICAR LO SIGUIENTES PASOS**
 
 #### **Credenciales de prueba**
-- **Usuario Admin**: usuario: `admin`, contraseña: `admin`
-- **Usuario Registrado**: usuario: `user`, contraseña: `user`
+- **Usuario Admin**: usuario: `adminhashpass@gmail.com`, contraseña: `admin123`
+- **Usuario Registrado 1**: usuario: `demo1@hashpass.local`, contraseña: `Demo123!`
+- **Usuario Registrado 2**: usuario: `demo2@hashpass.local`, contraseña: `Demo123!`
 
 ### **Diagrama de Entidades de Base de Datos**
 
@@ -289,17 +296,17 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ---
 
-#### **Alumno 3 - [Nombre Completo]**
+#### **Alumno 3 - Iker Marín López**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Desarrollo general de la aplicación (entidades, servicios, ...) sobre todo en la creación de la misma. También el desarrollo en profundidad de la entidad de "planes" y traducción final de los comentarios del código. 
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Desarrollo general de inicio de proyecto](https://github.com/DWS-2026/dws-2026-project-base/commit/9ca216f6a700fd46b00366232232542ff0aab991)  |
+|2| [Migración del código de thymeleaf a mustache](https://github.com/DWS-2026/dws-2026-project-base/commit/cc6ffaf925a65645c790b86edbd5af3b48f3390a)  |
+|3| [Creación de un controler y un service para el login y register](https://github.com/DWS-2026/dws-2026-project-base/commit/3e940ce7a3f2b9af760cae60803e11687b0c95f4)  |
+|4| [Ajustes del Dashboard, cambio en BBDD para los planes, creación de planes, ...](https://github.com/DWS-2026/dws-2026-project-base/commit/bd808d29b0c2b15419dda3899c898605aa5c7868)  |
+|5| [Traducción de comentarios](https://github.com/DWS-2026/dws-2026-project-base/commit/fecca6862b8fb5bf099fdcd2abf7734d3375f37f)  |
 
 ---
 
