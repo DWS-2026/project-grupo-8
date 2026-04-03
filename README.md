@@ -219,7 +219,25 @@ Solo si ha cambiado.
 
 #### **Capturas de Pantalla Actualizadas**
 
-Solo si han cambiado.
+#### **1. Añadir credencial**
+![Añadir credencial](images/2ºPráctica/add_credential_new.png)
+
+> Se han añadido imagenes a las credenciales de forma opcional
+
+#### **2. Informacion de las credenciales**
+![Info credencial](images/2ºPráctica/info_credentials_new.png)
+
+> Se han añadido imagenes a las credenciales de forma opcional
+
+#### **3. Admin**
+![Admin](images/2ºPráctica/admin_new.png)
+
+> Se ha añadido la opcion de gestionar planes desde el admin
+
+#### **4. Error**
+![Error](images/2ºPráctica/error_403_new.png)
+
+> Se han añadido paginas de error, tanto 403, 404, como 500 
 
 ### **Instrucciones de Ejecución**
 
@@ -243,7 +261,8 @@ Ejecutar en terminal el siguiente comando si el usuario que desea uasr la aplica
    cd [nombre-repositorio]
    ```
 
-2. **AQUÍ INDICAR LO SIGUIENTES PASOS**
+2. **Te metes desde vscode a esa carpeta y ejecutas el código**
+3. **Abres el enlace https://localhost:8443**
 
 #### **Credenciales de prueba**
 - **Usuario Admin**: usuario: `adminhashpass@gmail.com`, contraseña: `admin123`
@@ -282,17 +301,17 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ---
 
-#### **Alumno 2 - [Nombre Completo]**
+#### **Alumno 2 - Yago Contreras Nevares**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Creación general de controllers, services, entidades, ... sobre todo la creación del login, imágenes, seguridad, algo de las reviews, entre otras cosas 
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Cambio del UserSesion a UserService para pedir al usuario logueado](https://github.com/DWS-2026/project-grupo-8/commit/5cbd7599491df0c2eda13024f7e21309a063e9aa)  | [PlanController.java entre otros](https://github.com/DWS-2026/project-grupo-8/commit/5cbd7599491df0c2eda13024f7e21309a063e9aa)   |
+|2| [Cambio de planes para hacerlos de forma dinámica desde la base de datos](https://github.com/DWS-2026/project-grupo-8/commit/f7a7921a44d053f48dc00bacdeaa14910125c03d)  | [PlanController.java entre otros](https://github.com/DWS-2026/project-grupo-8/commit/f7a7921a44d053f48dc00bacdeaa14910125c03d)   |
+|3| [Creacion de reviews](https://github.com/DWS-2026/project-grupo-8/commit/8bc4849b61f8f21fbf8d17a8962b25e440d31dc6)  | [ReviewController.java entre otras](https://github.com/DWS-2026/project-grupo-8/commit/8bc4849b61f8f21fbf8d17a8962b25e440d31dc6)   |
+|4| [Creación de imágenes](https://github.com/DWS-2026/project-grupo-8/commit/43077c90b2d40e6ab8fde4cdc5571800eb7f32a0)  | [ImagesService.java entre otros](https://github.com/DWS-2026/project-grupo-8/commit/43077c90b2d40e6ab8fde4cdc5571800eb7f32a0)   |
+|5| [Redirecciones, admin, reviews](https://github.com/DWS-2026/project-grupo-8/commit/501226fb0e428d38281e85bd35078d1015088936)  | [admin.html entre otros](https://github.com/DWS-2026/project-grupo-8/commit/501226fb0e428d38281e85bd35078d1015088936)   |
 
 ---
 
