@@ -1,6 +1,7 @@
 package com.hashpass.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,30 @@ public class UserService {
 
     public void logout() {
         SecurityContextHolder.clearContext();
+    }
+
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public Optional<User> findWithPlanById(Long id) {
+        return userRepository.findWithPlanById(id);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
+    }
+
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
     
 }

@@ -20,8 +20,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import com.hashpass.model.Plan;
 import com.hashpass.model.User;
-import com.hashpass.repository.PlanRepository;
 import com.hashpass.service.ImageService;
+import com.hashpass.service.PlanService;
 import com.hashpass.service.UserService;
 
 @Controller
@@ -30,12 +30,12 @@ public class PlanController {
     private final UserService userService;
 
     private final ImageService imageService;
-    private final PlanRepository planRepository;
+    private final PlanService planService;
 
     public PlanController(ImageService imageService,
-            PlanRepository planRepository, UserService userService) {
+            PlanService planService, UserService userService) {
         this.imageService = imageService;
-        this.planRepository = planRepository;
+        this.planService = planService;
         this.userService = userService;
     }
 
@@ -76,7 +76,7 @@ public class PlanController {
                 .map(Plan::getId)
                 .orElse(null);
 
-        List<Map<String, Object>> allPlans = planRepository.findAll().stream().map(plan -> {
+        List<Map<String, Object>> allPlans = planService.findAll().stream().map(plan -> {
             Map<String, Object> planView = new HashMap<>();
             BigDecimal price = plan.getPriceMonthly() == null ? BigDecimal.ZERO : plan.getPriceMonthly();
 
@@ -96,7 +96,7 @@ public class PlanController {
     @GetMapping("/payment")
     public String payment(@RequestParam(required = false) String plan, Model model) {
         Plan selectedPlan = findPlanFromInput(plan)
-                .or(() -> planRepository.findByName("Premium"))
+            .or(() -> planService.findByName("Premium"))
                 .orElse(null);
 
         if (selectedPlan == null) {
@@ -176,7 +176,7 @@ public class PlanController {
             return "redirect:/admin";
         }
 
-        List<Plan> plans = planRepository.findAll();
+        List<Plan> plans = planService.findAll();
         model.addAttribute("plans", plans);
         return "admin_plans";
     }
@@ -205,7 +205,7 @@ public class PlanController {
         }
 
         // Validate that the plan does not already exist
-        if (planRepository.findByName(name).isPresent()) {
+        if (planService.findByName(name).isPresent()) {
             redirectAttributes.addFlashAttribute("error", "Ya existe un plan con ese nombre.");
             return "redirect:/admin/plan/add";
         }
@@ -226,7 +226,7 @@ public class PlanController {
         newPlan.setPriceMonthly(priceMonthly);
         newPlan.setDescription(description != null ? description.trim() : "");
 
-        planRepository.save(newPlan);
+        planService.save(newPlan);
         redirectAttributes.addFlashAttribute("success", "Plan '" + name + "' creado exitosamente.");
 
         return "redirect:/admin/plans";
@@ -241,7 +241,7 @@ public class PlanController {
             return "redirect:/admin";
         }
 
-        Optional<Plan> planOpt = planRepository.findById(id);
+        Optional<Plan> planOpt = planService.findById(id);
         if (planOpt.isEmpty()) {
             return "redirect:/admin/plans";
         }
@@ -260,7 +260,7 @@ public class PlanController {
             return "redirect:/admin";
         }
 
-        Optional<Plan> planOpt = planRepository.findById(id);
+        Optional<Plan> planOpt = planService.findById(id);
         if (planOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Plan no encontrado.");
             return "redirect:/admin/plans";
@@ -269,7 +269,7 @@ public class PlanController {
         Plan plan = planOpt.get();
 
         // Validate that the new name is unique (unless it is the same plan)
-        Optional<Plan> existingPlan = planRepository.findByName(name);
+        Optional<Plan> existingPlan = planService.findByName(name);
         if (existingPlan.isPresent() && existingPlan.get().getId() != id) {
             redirectAttributes.addFlashAttribute("error", "Ya existe otro plan con ese nombre.");
             return "redirect:/admin/plan/edit/" + id;
@@ -290,7 +290,7 @@ public class PlanController {
         plan.setPriceMonthly(priceMonthly);
         plan.setDescription(description != null ? description.trim() : "");
 
-        planRepository.save(plan);
+        planService.save(plan);
         redirectAttributes.addFlashAttribute("success", "Plan '" + name + "' actualizado exitosamente.");
 
         return "redirect:/admin/plans";
@@ -305,7 +305,7 @@ public class PlanController {
             return "redirect:/admin";
         }
 
-        Optional<Plan> planOpt = planRepository.findById(id);
+        Optional<Plan> planOpt = planService.findById(id);
         if (planOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Plan no encontrado.");
             return "redirect:/admin/plans";
@@ -321,7 +321,7 @@ public class PlanController {
         }
 
         String planName = plan.getName();
-        planRepository.delete(plan);
+        planService.delete(plan);
         redirectAttributes.addFlashAttribute("success", "Plan '" + planName + "' eliminado exitosamente.");
 
         return "redirect:/admin/plans";
@@ -377,26 +377,26 @@ public class PlanController {
         String trimmed = rawPlan.trim();
         try {
             Long planId = Long.parseLong(trimmed);
-            return planRepository.findById(planId);
+            return planService.findById(planId);
         } catch (NumberFormatException ignored) {
             // If it is not a numeric id, try resolving by name or alias.
         }
 
-        Optional<Plan> directMatch = planRepository.findByName(trimmed);
+        Optional<Plan> directMatch = planService.findByName(trimmed);
         if (directMatch.isPresent()) {
             return directMatch;
         }
 
         String normalized = normalizePlan(trimmed);
         if ("free".equals(normalized)) {
-            return planRepository.findByName("Gratuito");
+            return planService.findByName("Gratuito");
         }
         if ("platinum".equals(normalized)) {
-            return planRepository.findByName("Platinum")
-                    .or(() -> planRepository.findByName("Platino"));
+                return planService.findByName("Platinum")
+                    .or(() -> planService.findByName("Platino"));
         }
         if ("premium".equals(normalized)) {
-            return planRepository.findByName("Premium");
+            return planService.findByName("Premium");
         }
 
         return Optional.empty();

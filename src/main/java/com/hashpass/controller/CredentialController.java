@@ -21,21 +21,14 @@ import java.util.Map;
 
 import com.hashpass.model.Credential;
 import com.hashpass.model.User;
-import com.hashpass.repository.CredentialRepository;
-import com.hashpass.repository.ReviewRepository;
-import com.hashpass.repository.UserRepository;
 import com.hashpass.service.UserService;
 
 import com.hashpass.service.EntryService;
 import com.hashpass.service.ImageService;
+import com.hashpass.service.ReviewService;
 
 @Controller
 public class CredentialController {
-    @Autowired
-    private CredentialRepository credentialRepository;
-    @Autowired
-    private UserRepository userRepository;
-
     @Autowired
     private UserService userService;
 
@@ -46,7 +39,7 @@ public class CredentialController {
     private ImageService imageService;
 
     @Autowired
-    private ReviewRepository reviewRepository;
+    private ReviewService reviewService;
 
     private static final DateTimeFormatter INDEX_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -58,7 +51,7 @@ public class CredentialController {
             return null;
         }
         // Reload user from DB to ensure lazy collections are available for views
-        return userRepository.findById(u.get().getId()).orElse(null);
+        return userService.findById(u.get().getId()).orElse(null);
     }
 
     @ModelAttribute("profileImageUrl")
@@ -73,7 +66,7 @@ public class CredentialController {
 
     @GetMapping("/")
     public String index(Model model) {
-        List<Map<String, Object>> topReviews = reviewRepository.findTop3ByOrderByRatingDescCreatedAtDesc()
+        List<Map<String, Object>> topReviews = reviewService.findTop3ByOrderByRatingDescCreatedAtDesc()
                 .stream().map(review -> {
                     Map<String, Object> m = new HashMap<>();
                     User reviewUser = review.getUser();
@@ -112,7 +105,7 @@ public class CredentialController {
         if (email == null || email.isBlank()) {
             return "redirect:/login";
         }
-        if (userRepository.findByEmail(email).isEmpty()) {
+        if (userService.findByEmail(email).isEmpty()) {
             return "redirect:/login?error=1";
         }
 
@@ -138,7 +131,7 @@ public class CredentialController {
         model.addAttribute("user", currentUser);
 
         // 1. Get all credentials for this user
-        List<Credential> userCredentials = credentialRepository.findByUserId(currentUser.getId());
+        List<Credential> userCredentials = entryService.listCurrentUser();
 
         // Total number of stored credentials
         model.addAttribute("totalCredentials", userCredentials.size());

@@ -34,10 +34,7 @@
                                 <h5 class="text-white mb-0">Contraseña Maestra</h5>
                             </div>
 
-                            <p class="text-secondary small mb-4">
-                                Esta es la llave única para acceder a tu bóveda. Si la pierdes, no podremos recuperarla
-                                por ti.
-                            </p>
+                            <p class="text-secondary small mb-4">Esta es la llave única para acceder a tu bóveda. Si la pierdes, no podremos recuperarla por ti.</p>
 
                             {{#error}}
                             <div class="alert alert-danger" role="alert">{{error}}</div>
@@ -151,10 +148,7 @@
                         <div class="tarjeta-dato p-4 border border-danger flex-grow-1">
                             <h6 class="text-danger fw-bold mb-3"><i
                                     class="bi bi-exclamation-triangle-fill me-2"></i>Zona de Peligro</h6>
-                            <p class="text-secondary small mb-3">
-                                Eliminar tu cuenta borrará permanentemente todas tus contraseñas. Esta acción
-                                no se puede deshacer.
-                            </p>
+                            <p class="text-secondary small mb-3">Eliminar tu cuenta borrará permanentemente todas tus contraseñas. Esta acción no se puede deshacer.</p>
                             <form method="post" action="/security-user/delete-account">
                                 <input type="hidden" name="_csrf" value="{{token}}">
                                 <div class="mb-3">

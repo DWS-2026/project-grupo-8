@@ -16,7 +16,6 @@ import java.util.Optional;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.hashpass.model.User;
-import com.hashpass.repository.UserRepository;
 import com.hashpass.service.AuthService;
 import com.hashpass.service.ImageService;
 import com.hashpass.service.UserService;
@@ -27,7 +26,6 @@ public class UserController {
     private final AuthService authService;
     private final UserService userService;
     private final ImageService imageService;
-    private final UserRepository userRepository;
 
     @ModelAttribute("user")
     public User populateUser() {
@@ -36,7 +34,7 @@ public class UserController {
             return currentUser;
         }
 
-        User refreshedUser = userRepository.findWithPlanById(currentUser.getId()).orElse(currentUser);
+        User refreshedUser = userService.findWithPlanById(currentUser.getId()).orElse(currentUser);
         userService.setUser(refreshedUser);
         return refreshedUser;
     }
@@ -46,12 +44,10 @@ public class UserController {
         return imageService.getProfileImageUrl(userService.getLoggedUser());
     }
 
-    public UserController(AuthService authService, UserService userService, ImageService imageService,
-            UserRepository userRepository) {
+    public UserController(AuthService authService, UserService userService, ImageService imageService) {
         this.authService = authService;
         this.userService = userService;
         this.imageService = imageService;
-        this.userRepository = userRepository;
     }
 
     @GetMapping("/login")
@@ -191,7 +187,7 @@ public class UserController {
 
         User currentUser = userService.getLoggedUser().orElse(null);
         currentUser.setSecurityTimeoutMinutes(timeoutMinutes);
-        userRepository.save(currentUser);
+        userService.setUser(currentUser);
 
         request.getSession().setMaxInactiveInterval(timeoutMinutes * 60);
         redirectAttributes.addFlashAttribute("timeoutSuccess",
@@ -229,7 +225,7 @@ public class UserController {
         if (!userService.getLoggedUser().get().isAdmin()) {
             return "redirect:/error/403";
         }
-        var users = userRepository.findAll();
+        var users = userService.findAllUsers();
 
         // total credentials across all users
         int passwordsCount = users.stream()
@@ -324,7 +320,7 @@ public class UserController {
             return "redirect:/admin";
         }
 
-        var opt = userRepository.findById(id);
+        var opt = userService.findById(id);
         if (opt.isEmpty()) {
             return "redirect:/admin";
         }
@@ -356,8 +352,8 @@ public class UserController {
             return "redirect:/admin";
         }
 
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
+        if (userService.existsById(id)) {
+            userService.deleteById(id);
             redirectAttributes.addFlashAttribute("success", "Usuario eliminado correctamente.");
         } else {
             redirectAttributes.addFlashAttribute("error", "Usuario no encontrado.");

@@ -20,8 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hashpass.model.Review;
 import com.hashpass.model.User;
-import com.hashpass.repository.ReviewRepository;
 import com.hashpass.service.ImageService;
+import com.hashpass.service.ReviewService;
 import com.hashpass.service.UserService;
 
 @Controller
@@ -31,12 +31,12 @@ public class ReviewController {
 
     private final UserService userService;
     private final ImageService imageService;
-    private final ReviewRepository reviewRepository;
+    private final ReviewService reviewService;
 
-    public ReviewController(UserService userService, ImageService imageService, ReviewRepository reviewRepository) {
+    public ReviewController(UserService userService, ImageService imageService, ReviewService reviewService) {
         this.userService = userService;
         this.imageService = imageService;
-        this.reviewRepository = reviewRepository;
+        this.reviewService = reviewService;
     }
 
     @ModelAttribute("user")
@@ -60,7 +60,7 @@ public class ReviewController {
 
         if (editId != null && !model.containsAttribute("reviewId")) {
             Optional<User> logged = userService.getLoggedUser();
-            Optional<Review> reviewOpt = reviewRepository.findById(editId);
+            Optional<Review> reviewOpt = reviewService.findById(editId);
             if (reviewOpt.isPresent() && logged.isPresent()) {
                 Review review = reviewOpt.get();
                 if (isAllowedToModifyReview(review, logged.get())) {
@@ -120,7 +120,7 @@ public class ReviewController {
         review.setComment(normalizedComment);
         review.setRating(rating);
         review.setUser(logged.get());
-        reviewRepository.save(review);
+        reviewService.save(review);
 
         redirectAttributes.addFlashAttribute("reviewSuccess", "Tu reseña se ha publicado correctamente.");
         return "redirect:/reviews";
@@ -137,7 +137,7 @@ public class ReviewController {
             return "redirect:/login?redirectTo=/reviews";
         }
 
-        Optional<Review> reviewOpt = reviewRepository.findById(id);
+        Optional<Review> reviewOpt = reviewService.findById(id);
         if (reviewOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("reviewError", "Reseña no encontrada.");
             return "redirect:/reviews";
@@ -175,7 +175,7 @@ public class ReviewController {
         review.setTitle(normalizedTitle);
         review.setComment(normalizedComment);
         review.setRating(rating);
-        reviewRepository.save(review);
+        reviewService.save(review);
 
         redirectAttributes.addFlashAttribute("reviewSuccess", "Tu reseña se ha actualizado correctamente.");
         return "redirect:/reviews";
@@ -188,7 +188,7 @@ public class ReviewController {
             return "redirect:/login?redirectTo=/reviews";
         }
 
-        Optional<Review> reviewOpt = reviewRepository.findById(id);
+        Optional<Review> reviewOpt = reviewService.findById(id);
         if (reviewOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("reviewError", "Reseña no encontrada.");
             return "redirect:/reviews";
@@ -200,7 +200,7 @@ public class ReviewController {
             return "redirect:/reviews";
         }
 
-        reviewRepository.delete(review);
+        reviewService.delete(review);
         redirectAttributes.addFlashAttribute("reviewSuccess", "Reseña eliminada correctamente.");
         return "redirect:/reviews";
     }
@@ -236,7 +236,7 @@ public class ReviewController {
 
     private List<Map<String, Object>> buildReviewsView() {
         Optional<User> logged = userService.getLoggedUser();
-        return reviewRepository.findAllByOrderByCreatedAtDesc().stream().map(review -> {
+        return reviewService.findAllByOrderByCreatedAtDesc().stream().map(review -> {
             Map<String, Object> mappedReview = new HashMap<>();
             User reviewUser = review.getUser();
             String authorName = buildAuthorName(reviewUser);

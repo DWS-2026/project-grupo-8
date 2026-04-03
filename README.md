@@ -230,7 +230,7 @@ Ejecutar en terminal el siguiente comando si el usuario que desea uasr la aplica
 
 
 #### **Requisitos Previos**
-- **Java**: versión 21 o superior
+- **Java**: versión 25 o superior
 - **Maven**: versión 3.8 o superior
 - **MySQL**: versión 8.0 o superior
 - **Git**: para clonar el repositorio
