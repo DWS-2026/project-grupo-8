@@ -220,22 +220,22 @@ Solo si ha cambiado.
 #### **Capturas de Pantalla Actualizadas**
 
 #### **1. Añadir credencial**
-![Añadir credencial](images/2ºPráctica/add_credential_new.png)
+![Añadir credencial](images/add_credential_new.png)
 
 > Se han añadido imagenes a las credenciales de forma opcional
 
 #### **2. Informacion de las credenciales**
-![Info credencial](images/2ºPráctica/info_credentials_new.png)
+![Info credencial](images/info_credentials_new.png)
 
 > Se han añadido imagenes a las credenciales de forma opcional
 
 #### **3. Admin**
-![Admin](images/2ºPráctica/admin_new.png)
+![Admin](images/admin_new.png)
 
 > Se ha añadido la opcion de gestionar planes desde el admin
 
 #### **4. Error**
-![Error](images/2ºPráctica/error_403_new.png)
+![Error](images/error_403_new.png)
 
 > Se han añadido paginas de error, tanto 403, 404, como 500 
 
