@@ -293,11 +293,11 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Lógica de cifrado AES y seguridad en el acceso y gestión de contraseñas](https://github.com/DWS-2026/project-grupo-8/commit/df6c10dd8290c2c601214ff5b48b3fb0bb1cf1eb)  | [AuthService.java, EntryService.java, UserSession.java y MainController.java](https://github.com/DWS-2026/project-grupo-8/commit/df6c10dd8290c2c601214ff5b48b3fb0bb1cf1eb#diff-d0b2e9f5a02a6c7f254390113eaf871522c8e0b8b39a4de7e58d6e786a06f2aa)   |
+|2| [Creacion EntryService](https://github.com/DWS-2026/project-grupo-8/commit/0c28aa5d70436de9afdffe05fd5a5d49bb935100)  | [EntryService.java entre otros](https://github.com/DWS-2026/project-grupo-8/commit/0c28aa5d70436de9afdffe05fd5a5d49bb935100#diff-d0b2e9f5a02a6c7f254390113eaf871522c8e0b8b39a4de7e58d6e786a06f2aa)   |
+|3| [creacion de un controller por cada una de las 4 entidades](https://github.com/DWS-2026/project-grupo-8/commit/3ae7434948b6ae41dce6ede536d85484573aef3f)  | [Todos los controller.java](https://github.com/DWS-2026/project-grupo-8/commit/3ae7434948b6ae41dce6ede536d85484573aef3f#diff-a5a1e31ae899215bc47ca93d9cb6fb97ec97b4b854fa5c5904c0dda4676c064f)   |
+|4| [Fecha ultimo login, e intentos fallidos recientes, y diseño pantalla admin](https://github.com/DWS-2026/project-grupo-8/commit/fc04cc78a37389414e1f91d814c53203dc56eb9b)  | [AuthService.java entre otros](https://github.com/DWS-2026/project-grupo-8/commit/fc04cc78a37389414e1f91d814c53203dc56eb9b#diff-dbd1337d00de64e54f39aff7aeb4dfefae9a6b8f3f1879a73f6cca630c8b1a27)   |
+|5| [Reviews edit and delete](https://github.com/DWS-2026/project-grupo-8/commit/96bdc93d0f9c536288b1ee5163f9463ff6dc3ff9)  | [ReviewController.java](https://github.com/DWS-2026/project-grupo-8/commit/96bdc93d0f9c536288b1ee5163f9463ff6dc3ff9#diff-459cf7c77e2a69042e385e3659d058ad0e1511dbc82b5e5d7ab58aafa7fb75ca)   |
 
 ---
 
