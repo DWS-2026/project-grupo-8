@@ -321,11 +321,11 @@ Desarrollo general de la aplicación (entidades, servicios, ...) sobre todo en l
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Desarrollo general de inicio de proyecto](https://github.com/DWS-2026/dws-2026-project-base/commit/9ca216f6a700fd46b00366232232542ff0aab991)  |
-|2| [Migración del código de thymeleaf a mustache](https://github.com/DWS-2026/dws-2026-project-base/commit/cc6ffaf925a65645c790b86edbd5af3b48f3390a)  |
-|3| [Creación de un controler y un service para el login y register](https://github.com/DWS-2026/dws-2026-project-base/commit/3e940ce7a3f2b9af760cae60803e11687b0c95f4)  |
-|4| [Ajustes del Dashboard, cambio en BBDD para los planes, creación de planes, ...](https://github.com/DWS-2026/dws-2026-project-base/commit/bd808d29b0c2b15419dda3899c898605aa5c7868)  |
-|5| [Traducción de comentarios](https://github.com/DWS-2026/dws-2026-project-base/commit/fecca6862b8fb5bf099fdcd2abf7734d3375f37f)  |
+|1| [Desarrollo general de inicio de proyecto](https://github.com/DWS-2026/dws-2026-project-base/commit/9ca216f6a700fd46b00366232232542ff0aab991)  | [Plan.java entre otros](https://github.com/DWS-2026/dws-2026-project-base/commit/9ca216f6a700fd46b00366232232542ff0aab991#diff-e5158bd2a8137474bfca510dd2cc98ce30a0fd72a252e9bf83fad523d0a92006)   |
+|2| [Migración del código de thymeleaf a mustache](https://github.com/DWS-2026/dws-2026-project-base/commit/cc6ffaf925a65645c790b86edbd5af3b48f3390a)  | [footerPublic.html entre otros](https://github.com/DWS-2026/dws-2026-project-base/commit/cc6ffaf925a65645c790b86edbd5af3b48f3390a#diff-59bf28b7dc0c557e15f7b4de4c7ed54ad71c36aa2f9138c06e730ef340cf012b) |
+|3| [Creación de un controler y un service para el login y register](https://github.com/DWS-2026/dws-2026-project-base/commit/3e940ce7a3f2b9af760cae60803e11687b0c95f4)  | [AuthController.java entre otros](https://github.com/DWS-2026/dws-2026-project-base/commit/3e940ce7a3f2b9af760cae60803e11687b0c95f4#diff-34a6338c5c4a2ca112ab109ce48a5227cd95f7edca3f6e7c1869bf8ae9ddbbe0)   |
+|4| [Ajustes del Dashboard, cambio en BBDD para los planes, creación de planes, ...](https://github.com/DWS-2026/dws-2026-project-base/commit/bd808d29b0c2b15419dda3899c898605aa5c7868)  | [PlanController.java entre otros](https://github.com/DWS-2026/dws-2026-project-base/commit/bd808d29b0c2b15419dda3899c898605aa5c7868#diff-a5a1e31ae899215bc47ca93d9cb6fb97ec97b4b854fa5c5904c0dda4676c064f)   |
+|5| [Traducción de comentarios](https://github.com/DWS-2026/dws-2026-project-base/commit/fecca6862b8fb5bf099fdcd2abf7734d3375f37f)  | [EntryService.java entre otros](https://github.com/DWS-2026/dws-2026-project-base/commit/fecca6862b8fb5bf099fdcd2abf7734d3375f37f#diff-d0b2e9f5a02a6c7f254390113eaf871522c8e0b8b39a4de7e58d6e786a06f2aa)   |
 
 ---
 
