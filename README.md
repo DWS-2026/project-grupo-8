@@ -287,9 +287,9 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ### **Participación de Miembros en la Práctica 2**
 
-#### **Alumno 1 - [Nombre Completo]**
+#### **Alumno 1 - Iván Tabares Rico**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Desarrollo general de la lógica de seguridad y gestión de datos (cifrado AES, autenticación, ...), sobre todo la creación del sistema de sesiones y control de acceso. También la implementación de controladores de entidades y la pantalla de administración."
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
@@ -329,7 +329,7 @@ Desarrollo general de la aplicación (entidades, servicios, ...) sobre todo en l
 
 ---
 
-#### **Alumno 4 - [Carlos  Javier González Ledo]**
+#### **Alumno 4 - Carlos  Javier González Ledo**
 
 Desarrollo general del backend, configuración de base de datos, autenticación, gestión segura de contraseñas y panel de administración. Además de varios arreglos y mejoras en Entidades. 
 
