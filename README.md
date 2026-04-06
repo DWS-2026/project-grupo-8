@@ -329,17 +329,17 @@ Desarrollo general de la aplicación (entidades, servicios, ...) sobre todo en l
 
 ---
 
-#### **Alumno 4 - [Nombre Completo]**
+#### **Alumno 4 - [Carlos  Javier González Ledo]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Desarrollo general del backend, configuración de base de datos, autenticación, gestión segura de contraseñas y panel de administración. Además de varios arreglos y mejoras en Entidades. 
 
-| Nº    | Commits      | Files      |
-|:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+| Nº | Commits | Files |
+|:---:|:---|:---|
+| 1 | [Configuración de BD y sistema de autenticación base](https://github.com/DWS-2026/project-grupo-8/commit/10c4889f66fa7fc361add47b5575b86a152f58c5) | [MainController.java](https://github.com/DWS-2026/project-grupo-8/commit/10c4889f66fa7fc361add47b5575b86a152f58c5#diff-96e557d647d64a5cc6924ffd0e4d55121017fde20b9edc09c914b3adfcd1650b) |
+| 2 | [Implementación de estadísticas dinámicas en el dashboard](https://github.com/DWS-2026/project-grupo-8/commit/535e0b7ba0cbf3ba87b7d6c2c175cff17fcfebbf) | [User.java](https://github.com/DWS-2026/project-grupo-8/commit/535e0b7ba0cbf3ba87b7d6c2c175cff17fcfebbf#diff-6254fbff4673d7fa4e920913e0adb7faec60eb11a491939145ac07ea50a6f84b) |
+| 3 | [Desarrollo del CRUD para almacenamiento de credenciales](https://github.com/DWS-2026/project-grupo-8/commit/0d4bd773c3d8758b6b28c8756133015adca955ce) | [MainController.java](https://github.com/DWS-2026/project-grupo-8/commit/0d4bd773c3d8758b6b28c8756133015adca955ce#diff-96e557d647d64a5cc6924ffd0e4d55121017fde20b9edc09c914b3adfcd1650b) |
+| 4 | [Creación del panel de administración y control de roles](https://github.com/DWS-2026/project-grupo-8/commit/9c19a7a239b273e8913f8817905dc3b7a12be642) | [UserController.java](https://github.com/DWS-2026/project-grupo-8/commit/9c19a7a239b273e8913f8817905dc3b7a12be642#diff-a1ba98464931c168a2577cb7752cdd0161551ca079c4fecb083f57cffba56da6) |
+| 5 | [Algoritmos de filtrado/ordenación y seguridad de cuenta](https://github.com/DWS-2026/project-grupo-8/commit/b1ca28500b9f5b049f5767639178a794584f39b8) | [UserController.java](https://github.com/DWS-2026/project-grupo-8/commit/b1ca28500b9f5b049f5767639178a794584f39b8#diff-a1ba98464931c168a2577cb7752cdd0161551ca079c4fecb083f57cffba56da6) |
 
 ---
 
