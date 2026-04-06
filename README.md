@@ -208,7 +208,7 @@ Desarrollo del Landing, Planes, ventana de añadir credenciales y user info
 ## 🛠 **Práctica 2: Web con HTML generado en servidor**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)**
+📹 **[Enlace al vídeo en YouTube](https://youtu.be/FzdeYResrmw?si=tp4GaUr3YkSWezOw)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
 ### **Navegación y Capturas de Pantalla**
