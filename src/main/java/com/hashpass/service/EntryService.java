@@ -10,7 +10,6 @@ import com.hashpass.model.Credential;
 import com.hashpass.model.Plan;
 import com.hashpass.model.User;
 import com.hashpass.repository.CredentialRepository;
-import com.hashpass.service.UserService;
 
 @Service
 public class EntryService {
