@@ -331,14 +331,6 @@ public class PlanController {
     // HELPER METHODS
     // =====================================================
 
-    private String requireLogin(Model model, String view) {
-        if (userService.getLoggedUser().isEmpty()) {
-            return "redirect:/login";
-        }
-        // user already added by populateUser()
-        return view;
-    }
-
     private boolean hasCurrentPlan(String planName) {
         Optional<User> userOpt = userService.getLoggedUser();
         if (userOpt.isEmpty()) {
