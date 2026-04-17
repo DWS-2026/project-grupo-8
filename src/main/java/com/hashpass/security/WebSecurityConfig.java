@@ -92,7 +92,12 @@ public class WebSecurityConfig {
 						.requestMatchers("/sidebar", "/sidebar/**").hasAnyRole("USER")
 
 						.requestMatchers("/admin-user-detail", "/admin-user-detail/**").hasAnyRole("ADMIN")
-						.requestMatchers("/admin", "/admin/**").hasAnyRole("ADMIN"))
+						.requestMatchers("/admin", "/admin/**").hasAnyRole("ADMIN")
+
+						// OpenAPI
+						.requestMatchers("/v3/api-docs*/**").permitAll()
+						.requestMatchers("/swagger-ui.html").permitAll()
+						.requestMatchers("/swagger-ui/**").permitAll())
 
 				.formLogin(formLogin -> formLogin
 						.loginPage("/login")

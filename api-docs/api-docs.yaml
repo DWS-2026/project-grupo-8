@@ -1,0 +1,200 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: https://localhost:8443
+  description: Generated server url
+paths:
+  /api/v1/users/{id}:
+    get:
+      tags:
+      - user-rest-controller
+      operationId: getUserById
+      parameters:
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/User"
+components:
+  schemas:
+    Credential:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        siteName:
+          type: string
+        siteUrl:
+          type: string
+        username:
+          type: string
+        passwordEncrypted:
+          type: string
+        note:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+        credentialImage:
+          $ref: "#/components/schemas/CredentialImage"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        imageUrl:
+          type: string
+    CredentialImage:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        filename:
+          type: string
+        contentType:
+          type: string
+        data:
+          type: string
+          format: byte
+        credential:
+          $ref: "#/components/schemas/Credential"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Image:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        filename:
+          type: string
+        contentType:
+          type: string
+        data:
+          type: string
+          format: byte
+        user:
+          $ref: "#/components/schemas/User"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Plan:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        priceMonthly:
+          type: number
+        description:
+          type: string
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Review:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        comment:
+          type: string
+        rating:
+          type: integer
+          format: int32
+        user: {}
+        createdAt:
+          type: string
+          format: date-time
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+        passwordHash:
+          type: string
+        encryptionKey:
+          type: string
+        previousPasswordHash:
+          type: string
+        passwordChangeTime:
+          type: string
+          format: date-time
+        plan:
+          $ref: "#/components/schemas/Plan"
+        credentials:
+          type: array
+          items:
+            $ref: "#/components/schemas/Credential"
+        reviews:
+          type: array
+          items:
+            $ref: "#/components/schemas/Review"
+        profileImage:
+          $ref: "#/components/schemas/Image"
+        admin:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        loginCount:
+          type: integer
+          format: int32
+        loginCountWindowStart:
+          type: string
+          format: date-time
+        securityTimeoutMinutes:
+          type: integer
+          format: int32
+        lastLogin:
+          type: string
+          format: date-time
+        failedAttempts:
+          type: integer
+          format: int32
+        security:
+          type: string
+        tenure:
+          type: string
+        twoFactorAuth:
+          type: string
+        paymentStatus:
+          type: string

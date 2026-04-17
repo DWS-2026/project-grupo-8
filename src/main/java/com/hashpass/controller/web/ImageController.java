@@ -1,4 +1,4 @@
-package com.hashpass.controller;
+package com.hashpass.controller.web;
 
 import java.util.Optional;
 
