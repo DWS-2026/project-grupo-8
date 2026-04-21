@@ -218,13 +218,24 @@ public class WebSecurityConfig {
 
 		http
 				.authorizeHttpRequests(authorize -> authorize
+
+						//Images API
+						//.requestMatchers(HttpMethod.POST, "/api/v1/images/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers(HttpMethod.GET, "/api/v1/images/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers(HttpMethod.PUT, "/api/v1/images/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers(HttpMethod.DELETE, "/api/v1/images/**").hasAnyRole("USER", "ADMIN")
+						
+						//Users API
 						.requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers(HttpMethod.POST, "/api/v1/users/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole("ADMIN")
+
+						//Plans API
+						.requestMatchers(HttpMethod.GET, "/api/v1/plans/**").hasAnyRole("USER", "ADMIN")
+						.requestMatchers(HttpMethod.POST, "/api/v1/plans/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.PUT, "/api/v1/plans/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.DELETE, "/api/v1/plans/**").hasRole("ADMIN")
 						.anyRequest().authenticated());
 
 		// Disable form login for REST endpoints and use HTTP Basic for API clients
