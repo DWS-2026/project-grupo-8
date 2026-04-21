@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.hashpass.model.Plan;
 import com.hashpass.model.User;
+import com.hashpass.repository.PlanRepository;
 import com.hashpass.repository.UserRepository;
 
 @Service
@@ -18,6 +21,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PlanRepository planRepository;
 
     public Optional<User> getLoggedUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -69,12 +75,20 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public Page<User> findAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
     public boolean existsById(Long id) {
         return userRepository.existsById(id);
     }
 
     public void deleteById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public Optional<Plan> findPlanById(Long id) {
+        return planRepository.findById(id);
     }
     
 }

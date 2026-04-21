@@ -135,6 +135,14 @@ public class ImageService {
 		return "/images/profile/" + user.get().getId() + "?v=" + version;
 	}
 
+	public void deleteProfileImage(Long userId) {
+		if (userId == null) {
+			return;
+		}
+
+		imageRepository.findByUserId(userId).ifPresent(imageRepository::delete);
+	}
+
 	public String saveCredentialImage(Long credentialId, MultipartFile file, User currentUser) {
 		if (currentUser == null || currentUser.getId() == null) {
 			return "Debes iniciar sesión para subir una imagen.";
