@@ -219,19 +219,25 @@ public class WebSecurityConfig {
 		http
 				.authorizeHttpRequests(authorize -> authorize
 
-						//Images API
+						// Reviews API
+						.requestMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll()
+						.requestMatchers(HttpMethod.POST, "/api/v1/reviews/**").hasAnyRole("USER", "ADMIN")
+						.requestMatchers(HttpMethod.PUT, "/api/v1/reviews/**").hasAnyRole("USER", "ADMIN")
+						.requestMatchers(HttpMethod.DELETE, "/api/v1/reviews/**").hasAnyRole("USER", "ADMIN")
+						
+						// Images API
 						//.requestMatchers(HttpMethod.POST, "/api/v1/images/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers(HttpMethod.GET, "/api/v1/images/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers(HttpMethod.PUT, "/api/v1/images/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers(HttpMethod.DELETE, "/api/v1/images/**").hasAnyRole("USER", "ADMIN")
 						
-						//Users API
+						// Users API
 						.requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers(HttpMethod.POST, "/api/v1/users/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole("ADMIN")
 
-						//Plans API
+						// Plans API
 						.requestMatchers(HttpMethod.GET, "/api/v1/plans/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers(HttpMethod.POST, "/api/v1/plans/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.PUT, "/api/v1/plans/**").hasRole("ADMIN")
