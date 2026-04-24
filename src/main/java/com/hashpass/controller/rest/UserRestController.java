@@ -61,9 +61,10 @@ public class UserRestController {
     public ResponseEntity<?> createUser(@RequestBody CreateUserRequest request) {
         if (request.name() == null || request.name().isBlank()
                 || request.email() == null || request.email().isBlank()
-                || request.password() == null || request.password().isBlank()) {
+                || request.password() == null || request.password().isBlank()
+                || request.password2() == null || request.password2().isBlank()) {
             return ResponseEntity.badRequest().body(Map.of(
-                    "message", "Los campos name, email y password son obligatorios."));
+                "message", "Los campos name, email, password y confirm-password son obligatorios."));
         }
 
         try {
@@ -71,6 +72,7 @@ public class UserRestController {
                     request.name().trim(),
                     request.email().trim(),
                     request.password(),
+                    request.password2(),
                     request.planId(),
                     true);
 
@@ -183,7 +185,7 @@ public class UserRestController {
                 user.getFailedAttempts());
     }
 
-    public record CreateUserRequest(String name, String email, String password, Long planId) {
+    public record CreateUserRequest(String name, String email, String password, String password2, Long planId) {
     }
 
     public record UpdateUserRequest(String name, String email, Long planId, Boolean admin, Integer securityTimeoutMinutes) {

@@ -35,13 +35,19 @@ public class AuthService {
         return userRepository.existsByEmail(email);
     }
 
-    public User registerUser(String name, String email, String password, Long selectedPlanId, boolean allowPaidPlan) {
+    public User registerUser(String name, String email, String password,String password2, Long selectedPlanId, boolean allowPaidPlan) {
         String normalizedEmail = email == null ? "" : email.trim().toLowerCase();
         if (normalizedEmail.isBlank()) {
             throw new IllegalArgumentException("El correo electrónico es obligatorio.");
         }
         if (isEmailRegistered(normalizedEmail)) {
             throw new IllegalStateException("El correo ya está registrado.");
+        }
+        if (password == null || password.isBlank()) {
+            throw new IllegalArgumentException("La contraseña es obligatoria.");
+        }
+        if (!password.equals(password2)) {
+            throw new IllegalArgumentException("Las contraseñas no coinciden.");
         }
 
         User newUser = new User();

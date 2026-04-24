@@ -86,6 +86,7 @@ public class UserController {
     public String processRegister(@RequestParam String name,
             @RequestParam String email,
             @RequestParam String password,
+            @RequestParam String password2,
             @RequestParam(required = false) Long plan,
             @RequestParam(required = false, name = "avatar") MultipartFile avatar,
             HttpServletRequest request,
@@ -102,7 +103,7 @@ public class UserController {
 
         User registeredUser;
         try {
-            registeredUser = authService.registerUser(name, email, password, plan, hasPrepaidForSelectedPlan);
+            registeredUser = authService.registerUser(name, email, password,password2, plan, hasPrepaidForSelectedPlan);
         } catch (IllegalArgumentException | IllegalStateException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("selectedPlanId", plan == null ? "" : plan);

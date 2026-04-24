@@ -110,9 +110,9 @@
 						</div>
 
 						<div class="mb-3">
-							<label for="confirm-password" class="form-label">Confirmar Contraseña</label>
+							<label for="password2" class="form-label">Confirmar Contraseña</label>
 							<div class="input-group">
-								<input type="password" id="confirm-password" name="confirm-password"
+								<input type="password" id="password2" name="password2"
 									class="form-control login-email-input" placeholder="Repite tu contraseña" required>
 								<button class="btn btn-outline-secondary" type="button" aria-label="Mostrar contraseña"
 									onclick="toggleConfirmPasswordRegister(event)"><i class="bi bi-eye"></i></button>
@@ -212,7 +212,7 @@
 		}
 
 		function toggleConfirmPasswordRegister(ev) {
-			const input = document.getElementById('confirm-password');
+			const input = document.getElementById('password2');
 			const icon = ev.currentTarget.querySelector('i');
 
 			if (input.type === "password") {
@@ -251,7 +251,7 @@
 			const fullname = document.getElementById('fullname').value.trim();
 			const email = document.getElementById('email').value.trim();
 			const password = document.getElementById('password').value.trim();
-			const confirmPassword = document.getElementById('confirm-password').value.trim();
+			const confirmPassword = document.getElementById('password2').value.trim();
 			const terms = document.getElementById('terms').checked;
 
 			const btn = document.getElementById('registerBtn');
@@ -275,7 +275,7 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('fullname').addEventListener('input', validateForm);
 			document.getElementById('password').addEventListener('input', validateForm);
-			document.getElementById('confirm-password').addEventListener('input', validateForm);
+			document.getElementById('password2').addEventListener('input', validateForm);
 			document.getElementById('terms').addEventListener('change', validateForm);
 
 			const registerForm = document.getElementById('registerForm');
