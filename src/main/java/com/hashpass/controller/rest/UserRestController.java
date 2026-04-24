@@ -39,7 +39,19 @@ public class UserRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        var loggedUserOpt = userService.getLoggedUser();
+        if (loggedUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Debes iniciar sesión para acceder a este recurso."));
+        }
+
+        var loggedUser = loggedUserOpt.get();
+        if (!loggedUser.isAdmin() && !loggedUser.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("message", "No puedes ver la información de otros usuarios."));
+        }
+
         return userService.findById(id)
                 .map(user -> ResponseEntity.ok(toResponse(user)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
