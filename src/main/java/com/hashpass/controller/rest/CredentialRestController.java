@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +41,7 @@ public class CredentialRestController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllCredentials() {
+    public ResponseEntity<?> getAllCredentials(Pageable pageable) {
         User currentUser = userService.getLoggedUser().orElse(null);
         if (currentUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -47,10 +49,7 @@ public class CredentialRestController {
         }
 
         try {
-            List<Credential> credentials = entryService.listCurrentUser();
-            List<CredentialResponse> responses = credentials.stream()
-                    .map(this::toResponse)
-                    .toList();
+            Page<CredentialResponse> responses = entryService.listCurrentUser(pageable).map(this::toResponse);
             return ResponseEntity.ok(responses);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

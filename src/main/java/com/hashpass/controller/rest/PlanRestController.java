@@ -1,12 +1,13 @@
 package com.hashpass.controller.rest;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 
 import com.hashpass.model.Plan;
 import com.hashpass.service.PlanService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -31,12 +32,8 @@ public class PlanRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PlanResponse>> getAllPlans() {
-        List<Plan> plans = planService.findAll();
-        List<PlanResponse> responses = plans.stream()
-                .map(this::toResponse)
-                .toList();
-        return ResponseEntity.ok(responses);
+    public Page<PlanResponse> getAllPlans(Pageable pageable) {
+        return planService.findAll(pageable).map(this::toResponse);
     }
 
     @GetMapping("/{id}")

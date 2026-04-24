@@ -3,6 +3,8 @@ package com.hashpass.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.hashpass.model.Plan;
@@ -19,6 +21,10 @@ public class PlanService {
 
     public List<Plan> findAll() {
         return planRepository.findAll();
+    }
+
+    public Page<Plan> findAll(Pageable pageable) {
+        return planRepository.findAll(pageable);
     }
 
     public Optional<Plan> findById(Long id) {

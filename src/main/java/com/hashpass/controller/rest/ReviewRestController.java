@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,11 +38,8 @@ public class ReviewRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReviewResponse>> getAllReviews() {
-        List<ReviewResponse> reviews = reviewService.findAllByOrderByCreatedAtDesc().stream()
-                .map(this::toResponse)
-                .toList();
-        return ResponseEntity.ok(reviews);
+    public Page<ReviewResponse> getAllReviews(Pageable pageable) {
+        return reviewService.findAllByOrderByCreatedAtDesc(pageable).map(this::toResponse);
     }
 
     @GetMapping("/top")

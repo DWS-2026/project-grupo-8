@@ -5,6 +5,8 @@ import java.time.ZoneOffset;
 import java.util.Locale;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -116,6 +118,14 @@ public class ImageService {
 
 	public Optional<CredentialImage> findCredentialImage(Long credentialId) {
 		return credentialImageRepository.findByCredentialId(credentialId);
+	}
+
+	public Page<Image> listProfileImages(Pageable pageable) {
+		return imageRepository.findAll(pageable);
+	}
+
+	public Page<CredentialImage> listCredentialImages(Pageable pageable) {
+		return credentialImageRepository.findAll(pageable);
 	}
 
 	public String getProfileImageUrl(Optional<User> user) {

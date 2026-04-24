@@ -3,6 +3,8 @@ package com.hashpass.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.hashpass.model.Review;
@@ -31,6 +33,10 @@ public class ReviewService {
 
     public List<Review> findAllByOrderByCreatedAtDesc() {
         return reviewRepository.findAllByOrderByCreatedAtDesc();
+    }
+
+    public Page<Review> findAllByOrderByCreatedAtDesc(Pageable pageable) {
+        return reviewRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 
     public List<Review> findTop3ByOrderByRatingDescCreatedAtDesc() {

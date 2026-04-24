@@ -10,6 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,10 +30,68 @@ public class UserRestController {
 
     private final AuthService authService;
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
 
-    public UserRestController(AuthService authService, UserService userService) {
+    public UserRestController(AuthService authService, UserService userService,
+            AuthenticationManager authenticationManager) {
         this.authService = authService;
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        if (request == null || request.email() == null || request.email().isBlank()
+                || request.password() == null || request.password().isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "message", "Los campos email y password son obligatorios."));
+        }
+
+        String email = request.email().trim().toLowerCase();
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, request.password()));
+
+            authService.loginSuccess(email);
+            return ResponseEntity.ok(Map.of("message", "Login successful."));
+        } catch (AuthenticationException ex) {
+            authService.loginFailed(email);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Invalid credentials."));
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody CreateUserRequest request) {
+        if (request == null || request.name() == null || request.name().isBlank()
+                || request.email() == null || request.email().isBlank()
+                || request.password() == null || request.password().isBlank()
+                || request.password2() == null || request.password2().isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "message", "Los campos name, email, password y confirm-password son obligatorios."));
+        }
+
+        try {
+            User createdUser = authService.registerUser(
+                    request.name().trim(),
+                    request.email().trim(),
+                    request.password(),
+                    request.password2(),
+                    request.planId(),
+                    false);
+
+            var location = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("/api/v1/users/{id}")
+                    .buildAndExpand(createdUser.getId())
+                    .toUri();
+
+            return ResponseEntity.created(location).body(toResponse(createdUser));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", e.getMessage()));
+        }
     }
 
     @GetMapping
@@ -186,6 +247,9 @@ public class UserRestController {
     }
 
     public record CreateUserRequest(String name, String email, String password, String password2, Long planId) {
+    }
+
+    public record LoginRequest(String email, String password) {
     }
 
     public record UpdateUserRequest(String name, String email, Long planId, Boolean admin, Integer securityTimeoutMinutes) {

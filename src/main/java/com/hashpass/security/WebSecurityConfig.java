@@ -218,6 +218,8 @@ public class WebSecurityConfig {
 
 		http
 				.authorizeHttpRequests(authorize -> authorize
+						.requestMatchers(HttpMethod.POST, "/api/v1/users/login").permitAll()
+						.requestMatchers(HttpMethod.POST, "/api/v1/users/register").permitAll()
 
 						// Reviews API
 						.requestMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll()
@@ -246,7 +248,7 @@ public class WebSecurityConfig {
 						.requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAnyRole("USER", "ADMIN")
 
 						// Plans API
-						.requestMatchers(HttpMethod.GET, "/api/v1/plans/**").hasAnyRole("USER", "ADMIN")
+						.requestMatchers(HttpMethod.GET, "/api/v1/plans/**").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/v1/plans/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.PUT, "/api/v1/plans/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.DELETE, "/api/v1/plans/**").hasRole("ADMIN")

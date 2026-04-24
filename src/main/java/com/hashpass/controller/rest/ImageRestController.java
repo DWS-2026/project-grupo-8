@@ -3,6 +3,8 @@ package com.hashpass.controller.rest;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,6 +42,32 @@ public class ImageRestController {
 		this.imageService = imageService;
 		this.userService = userService;
 		this.entryService = entryService;
+	}
+
+	@GetMapping("/profiles")
+	public ResponseEntity<Page<ProfileImageResponse>> listProfileImages(Pageable pageable) {
+		Page<ProfileImageResponse> responses = imageService.listProfileImages(pageable)
+				.map(img -> new ProfileImageResponse(
+						img.getId(),
+						img.getUser() != null ? img.getUser().getId() : null,
+						img.getFilename(),
+						img.getContentType(),
+						img.getCreatedAt(),
+						img.getUpdatedAt()));
+		return ResponseEntity.ok(responses);
+	}
+
+	@GetMapping("/credentials")
+	public ResponseEntity<Page<CredentialImageResponse>> listCredentialImages(Pageable pageable) {
+		Page<CredentialImageResponse> responses = imageService.listCredentialImages(pageable)
+				.map(img -> new CredentialImageResponse(
+						img.getId(),
+						img.getCredential() != null ? img.getCredential().getId() : null,
+						img.getFilename(),
+						img.getContentType(),
+						img.getCreatedAt(),
+						img.getUpdatedAt()));
+		return ResponseEntity.ok(responses);
 	}
 
 	@GetMapping("/profile/{userId}")
@@ -200,5 +228,21 @@ public class ImageRestController {
 			return false;
 		}
 		return currentUser.isAdmin() || currentUser.getId().equals(credential.getUser().getId());
+	}
+
+	public record ProfileImageResponse(Long id,
+			Long userId,
+			String filename,
+			String contentType,
+			java.time.LocalDateTime createdAt,
+			java.time.LocalDateTime updatedAt) {
+	}
+
+	public record CredentialImageResponse(Long id,
+			Long credentialId,
+			String filename,
+			String contentType,
+			java.time.LocalDateTime createdAt,
+			java.time.LocalDateTime updatedAt) {
 	}
 }

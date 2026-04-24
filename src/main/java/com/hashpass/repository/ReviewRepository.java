@@ -2,6 +2,8 @@ package com.hashpass.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
 
@@ -13,6 +15,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @EntityGraph(attributePaths = "user")
     List<Review> findAllByOrderByCreatedAtDesc();
+
+    @EntityGraph(attributePaths = "user")
+    Page<Review> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     @EntityGraph(attributePaths = "user")
     List<Review> findTop3ByOrderByRatingDescCreatedAtDesc();

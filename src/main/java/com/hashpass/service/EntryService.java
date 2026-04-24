@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.hashpass.model.Credential;
@@ -32,6 +34,14 @@ public class EntryService {
             throw new IllegalStateException("No hay usuario en sesión");
         }
         return credentialRepository.findByUserId(u.get().getId());
+    }
+
+    public Page<Credential> listCurrentUser(Pageable pageable) {
+        Optional<User> u = userService.getLoggedUser();
+        if (u.isEmpty()) {
+            throw new IllegalStateException("No hay usuario en sesión");
+        }
+        return credentialRepository.findByUserId(u.get().getId(), pageable);
     }
 
     /**
