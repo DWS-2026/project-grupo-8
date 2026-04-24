@@ -232,10 +232,11 @@ public class WebSecurityConfig {
 						.requestMatchers(HttpMethod.DELETE, "/api/v1/images/**").hasAnyRole("USER", "ADMIN")
 						
 						// Users API
+						.requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers(HttpMethod.POST, "/api/v1/users/**").hasRole("ADMIN")
-						.requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasRole("ADMIN")
-						.requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasAnyRole("USER", "ADMIN")
+						.requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAnyRole("USER", "ADMIN")
 
 						// Plans API
 						.requestMatchers(HttpMethod.GET, "/api/v1/plans/**").hasAnyRole("USER", "ADMIN")

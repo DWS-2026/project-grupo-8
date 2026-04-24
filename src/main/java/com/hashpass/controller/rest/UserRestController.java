@@ -88,6 +88,18 @@ public class UserRestController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest request) {
+        var loggedUserOpt = userService.getLoggedUser();
+        if (loggedUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Debes iniciar sesión para acceder a este recurso."));
+        }
+
+        var loggedUser = loggedUserOpt.get();
+        if (!loggedUser.isAdmin() && !loggedUser.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("message", "No puedes modificar la información de otros usuarios."));
+        }
+
         User user = userService.findById(id).orElse(null);
         if (user == null) {
             return ResponseEntity.notFound().build();
@@ -139,6 +151,16 @@ public class UserRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        var loggedUserOpt = userService.getLoggedUser();
+        if (loggedUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        var loggedUser = loggedUserOpt.get();
+        if (!loggedUser.isAdmin() && !loggedUser.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         if (!userService.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
