@@ -26,7 +26,7 @@
 
         <div class="d-flex justify-content-end mb-4">
             {{#isLogged}}
-            <button class="btn btn-outline-light rounded-pill hover-scale" data-bs-toggle="modal"
+            <button id="newReviewBtn" class="btn btn-outline-light rounded-pill hover-scale" data-bs-toggle="modal"
                 data-bs-target="#modalOpinion">
                 <i class="bi bi-pencil-square me-2"></i>Escribir una reseña
             </button>
@@ -59,7 +59,7 @@
                         <h5 class="text-white fs-6 fw-bold mb-0">{{title}}</h5>
                         <span class="text-secondary small">{{createdAt}}</span>
                     </div>
-                    <p class="text-secondary mb-0">{{comment}}</p>
+                    <div class="text-secondary mb-0 review-richtext">{{{comment}}}</div>
                     <div class="mt-3 d-flex justify-content-end gap-2">
                         {{#canEdit}}
                         <a href="/reviews?editId={{id}}" class="btn btn-sm btn-outline-light">Editar</a>
@@ -120,8 +120,11 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label text-white small">Comentario</label>
-                            <textarea name="comment" class="form-control bg-dark text-white border-secondary" rows="4"
-                                maxlength="1000" placeholder="¿Qué te parece la app?" required>{{reviewComment}}</textarea>
+                            <!-- Quill editor -->
+                            <div id="quillEditor" class="review-quill-editor" style="background-color: var(--fondo-tarjeta); border: 1px solid var(--color-borde); border-radius: 0.375rem; min-height: 150px;"></div>
+                            <!-- Hidden input used to submit Quill HTML to the server -->
+                            <textarea name="comment" id="commentHidden" class="d-none">{{reviewComment}}</textarea>
+                            <small class="text-muted d-block mt-2">Máximo 1000 caracteres (sin formato)</small>
                         </div>
                         <div class="modal-footer border-secondary border-opacity-25 px-0 pb-0">
                             <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
@@ -138,16 +141,142 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" async></script>
+    <!-- Quill.js CSS and JS -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    
     {{#openReviewModal}}
     <script>
+        window.shouldOpenReviewModal = true;
+    </script>
+    {{/openReviewModal}}
+    
+    {{#editMode}}
+    <script>
+        window.isEditMode = true;
+    </script>
+    {{/editMode}}
+    
+    <script>
+        let quillInstance = null;
+        let isEditMode = window.isEditMode || false;
+
         document.addEventListener('DOMContentLoaded', function () {
-            const reviewModal = document.getElementById('modalOpinion');
-            if (reviewModal) {
-                new bootstrap.Modal(reviewModal).show();
+            // Initialize Quill editor if present
+            const quillEditorDiv = document.getElementById('quillEditor');
+            const commentHidden = document.getElementById('commentHidden');
+            
+            if (quillEditorDiv) {
+                // Create Quill instance with toolbar
+                quillInstance = new Quill('#quillEditor', {
+                    theme: 'snow',
+                    placeholder: '¿Qué te parece la app?',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline'],
+                            ['blockquote', 'code-block'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['link']
+                        ]
+                    }
+                });
+
+                // Load previous content when editing
+                if (commentHidden && commentHidden.value) {
+                    quillInstance.root.innerHTML = commentHidden.value;
+                }
+
+                // Sync editor content into the hidden textarea before submitting
+                const form = quillEditorDiv.closest('form');
+                if (form) {
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    const titleInput = form.querySelector('input[name="title"]');
+                    const ratingSelect = form.querySelector('select[name="rating"]');
+
+                    function setCreateMode() {
+                        isEditMode = false;
+                        form.action = '/reviews';
+
+                        const idInput = form.querySelector('input[name="id"]');
+                        if (idInput) {
+                            idInput.remove();
+                        }
+
+                        if (submitBtn) {
+                            submitBtn.textContent = 'Publicar';
+                        }
+
+                        if (titleInput) {
+                            titleInput.value = '';
+                        }
+
+                        if (ratingSelect && ratingSelect.options.length > 0) {
+                            ratingSelect.selectedIndex = 0;
+                        }
+
+                        if (commentHidden) {
+                            commentHidden.value = '';
+                        }
+
+                        if (quillInstance) {
+                            quillInstance.setContents([]);
+                        }
+                    }
+
+                    form.addEventListener('submit', function (e) {
+                        // Copy Quill HTML content into hidden textarea
+                        const content = quillInstance.root.innerHTML;
+                        commentHidden.value = content;
+
+                        // Validate plain text length (max 1000 chars)
+                        const plainText = quillInstance.getText().trim();
+                        if (plainText.length === 0) {
+                            e.preventDefault();
+                            alert('El comentario no puede estar vacío');
+                            return false;
+                        }
+                        if (plainText.length > 1000) {
+                            e.preventDefault();
+                            alert('El comentario no puede exceder 1000 caracteres (sin formato)');
+                            return false;
+                        }
+                    });
+
+                    // Handle modal close
+                    const reviewModal = document.getElementById('modalOpinion');
+                    if (reviewModal) {
+                        reviewModal.addEventListener('hidden.bs.modal', function () {
+                            // If current state is edit mode, reset to create mode
+                            if (isEditMode) {
+                                // Clean URL query parameters
+                                window.history.replaceState({}, document.title, window.location.pathname);
+                                setCreateMode();
+                            }
+                        });
+                    }
+
+                    const newReviewBtn = document.getElementById('newReviewBtn');
+                    if (newReviewBtn) {
+                        newReviewBtn.addEventListener('click', function () {
+                            if (window.location.search.includes('editId')) {
+                                window.history.replaceState({}, document.title, window.location.pathname);
+                            }
+                            setCreateMode();
+                        });
+                    }
+                }
+            }
+
+            // Open modal when server requests it
+            if (window.shouldOpenReviewModal) {
+                const reviewModal = document.getElementById('modalOpinion');
+                if (reviewModal) {
+                    const modal = new bootstrap.Modal(reviewModal);
+                    modal.show();
+                }
             }
         });
     </script>
-    {{/openReviewModal}}
 </body>
 
 </html>

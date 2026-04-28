@@ -761,3 +761,81 @@ p.small.text-secondary {
   word-wrap: break-word;
   line-height: 1.6;
 }
+
+/* === QUILL EDITOR STYLES === */
+/* Customize Quill editor for dark theme */
+.ql-toolbar.ql-snow {
+  background-color: var(--fondo-tarjeta) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 0.375rem 0.375rem 0 0 !important;
+}
+
+.ql-container.ql-snow {
+  background-color: var(--fondo-tarjeta) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-top: none !important;
+  border-radius: 0 0 0.375rem 0.375rem !important;
+}
+
+.ql-editor {
+  background-color: var(--fondo-tarjeta) !important;
+  color: var(--texto-blanco) !important;
+  min-height: 150px !important;
+  font-family: inherit;
+}
+
+.ql-editor.ql-blank::before {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-style: italic;
+}
+
+.ql-snow .ql-stroke {
+  stroke: rgba(255, 255, 255, 0.6) !important;
+}
+
+.ql-snow .ql-fill,
+.ql-snow .ql-stroke.ql-fill {
+  fill: rgba(255, 255, 255, 0.6) !important;
+}
+
+.ql-snow.ql-toolbar button:hover,
+.ql-snow.ql-toolbar button.ql-active,
+.ql-snow.ql-toolbar button:focus,
+.ql-snow.ql-toolbar button:active {
+  stroke: var(--verde-principal) !important;
+  fill: var(--verde-principal) !important;
+}
+
+.ql-snow .ql-toolbar button:hover .ql-stroke,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke,
+.ql-snow.ql-toolbar button:hover .ql-fill,
+.ql-snow.ql-toolbar button.ql-active .ql-fill {
+  stroke: var(--verde-principal) !important;
+  fill: var(--verde-principal) !important;
+}
+
+.ql-snow .ql-picker-label {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.ql-picker-options {
+  background-color: var(--fondo-tarjeta) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.ql-picker-options .ql-selected {
+  color: var(--verde-principal) !important;
+  background-color: rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Custom class for the review editor container */
+.review-quill-editor {
+  border-radius: 0.375rem;
+}
+
+.review-richtext {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  line-height: 1.6;
+}

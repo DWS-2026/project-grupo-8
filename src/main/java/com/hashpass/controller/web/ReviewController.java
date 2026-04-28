@@ -93,9 +93,10 @@ public class ReviewController {
         }
 
         String normalizedTitle = title == null ? "" : title.trim();
-        String normalizedComment = comment == null ? "" : comment.trim();
+        String normalizedComment = reviewService.sanitizeRichText(comment);
+        String plainTextComment = reviewService.extractPlainText(normalizedComment);
 
-        if (normalizedTitle.isBlank() || normalizedComment.isBlank()) {
+        if (normalizedTitle.isBlank() || plainTextComment.isBlank()) {
             return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
                     false, "Debes completar el título y el comentario.");
         }
@@ -105,7 +106,7 @@ public class ReviewController {
                     false, "El título no puede superar los 120 caracteres.");
         }
 
-        if (normalizedComment.length() > 1000) {
+        if (plainTextComment.length() > 1000) {
             return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
                     false, "El comentario no puede superar los 1000 caracteres.");
         }
@@ -150,9 +151,10 @@ public class ReviewController {
         }
 
         String normalizedTitle = title == null ? "" : title.trim();
-        String normalizedComment = comment == null ? "" : comment.trim();
+        String normalizedComment = reviewService.sanitizeRichText(comment);
+        String plainTextComment = reviewService.extractPlainText(normalizedComment);
 
-        if (normalizedTitle.isBlank() || normalizedComment.isBlank()) {
+        if (normalizedTitle.isBlank() || plainTextComment.isBlank()) {
             return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
                     true, "Debes completar el título y el comentario.", id);
         }
@@ -162,7 +164,7 @@ public class ReviewController {
                     true, "El título no puede superar los 120 caracteres.", id);
         }
 
-        if (normalizedComment.length() > 1000) {
+        if (plainTextComment.length() > 1000) {
             return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
                     true, "El comentario no puede superar los 1000 caracteres.", id);
         }
@@ -247,7 +249,7 @@ public class ReviewController {
 
             mappedReview.put("id", review.getId());
             mappedReview.put("title", review.getTitle());
-            mappedReview.put("comment", review.getComment());
+            mappedReview.put("comment", reviewService.sanitizeRichText(review.getComment()));
             mappedReview.put("authorName", authorName);
             mappedReview.put("avatarUrl", avatarUrl != null ? avatarUrl : buildAvatarFallback(authorName));
             mappedReview.put("createdAt", review.getCreatedAt() == null ? "" : REVIEW_DATE_FORMAT.format(review.getCreatedAt()));

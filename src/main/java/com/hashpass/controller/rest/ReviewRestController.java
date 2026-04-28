@@ -73,7 +73,7 @@ public class ReviewRestController {
 
         Review review = new Review();
         review.setTitle(request.title().trim());
-        review.setComment(request.comment().trim());
+        review.setComment(reviewService.sanitizeRichText(request.comment()));
         review.setRating(request.rating());
         review.setUser(currentUser);
 
@@ -110,7 +110,7 @@ public class ReviewRestController {
         }
 
         review.setTitle(request.title().trim());
-        review.setComment(request.comment().trim());
+        review.setComment(reviewService.sanitizeRichText(request.comment()));
         review.setRating(request.rating());
         Review updatedReview = reviewService.save(review);
         return ResponseEntity.ok(toResponse(updatedReview));
@@ -155,17 +155,17 @@ public class ReviewRestController {
             return Optional.of(ResponseEntity.badRequest().body(Map.of("message", "El título es obligatorio.")));
         }
 
-        if (request.comment() == null || request.comment().isBlank()) {
+        String title = request.title().trim();
+        String comment = reviewService.sanitizeRichText(request.comment());
+        String plainTextComment = reviewService.extractPlainText(comment);
+        if (plainTextComment.isBlank()) {
             return Optional.of(ResponseEntity.badRequest().body(Map.of("message", "El comentario es obligatorio.")));
         }
-
-        String title = request.title().trim();
-        String comment = request.comment().trim();
         if (title.length() > 120) {
             return Optional.of(ResponseEntity.badRequest().body(Map.of("message", "El título no puede superar los 120 caracteres.")));
         }
 
-        if (comment.length() > 1000) {
+        if (plainTextComment.length() > 1000) {
             return Optional.of(ResponseEntity.badRequest().body(Map.of("message", "El comentario no puede superar los 1000 caracteres.")));
         }
 
@@ -184,7 +184,7 @@ public class ReviewRestController {
         return new ReviewResponse(
                 review.getId(),
                 review.getTitle(),
-                review.getComment(),
+            reviewService.sanitizeRichText(review.getComment()),
                 review.getRating(),
                 user != null ? user.getId() : null,
                 user != null ? user.getName() : null,
