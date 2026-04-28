@@ -8,7 +8,9 @@ import com.hashpass.service.UserService;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -229,6 +233,103 @@ public class UserRestController {
         }
         userService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Upload a document for a user.
+     * POST /api/v1/users/{id}/document
+     */
+    @PostMapping("/{id}/document")
+    public ResponseEntity<?> uploadUserDocument(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+        var loggedUserOpt = userService.getLoggedUser();
+        if (loggedUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Debes iniciar sesión para acceder a este recurso."));
+        }
+
+        var loggedUser = loggedUserOpt.get();
+        if (!loggedUser.isAdmin() && !loggedUser.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("message", "No puedes subir documentos para otros usuarios."));
+        }
+
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "El archivo está vacío."));
+        }
+
+        try {
+            User updatedUser = userService.uploadUserDocument(id, file);
+            return ResponseEntity.ok(Map.of(
+                    "message", "Documento subido exitosamente.",
+                    "originalFilename", userService.getUserDocumentOriginalFilename(id),
+                    "user", toResponse(updatedUser)));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "Error al subir el documento: " + e.getMessage()));
+        }
+    }
+
+    /**
+     * Download a document for a user.
+     * GET /api/v1/users/{id}/document
+     */
+    @GetMapping("/{id}/document")
+    public ResponseEntity<?> downloadUserDocument(@PathVariable Long id) {
+        var loggedUserOpt = userService.getLoggedUser();
+        if (loggedUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        var loggedUser = loggedUserOpt.get();
+        if (!loggedUser.isAdmin() && !loggedUser.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        try {
+            if (!userService.userHasDocument(id)) {
+                return ResponseEntity.notFound().build();
+            }
+
+            byte[] fileContent = userService.getUserDocument(id);
+            String originalFilename = userService.getUserDocumentOriginalFilename(id);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + originalFilename + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                    .body(fileContent);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * Delete a document for a user.
+     * DELETE /api/v1/users/{id}/document
+     */
+    @DeleteMapping("/{id}/document")
+    public ResponseEntity<Void> deleteUserDocument(@PathVariable Long id) {
+        var loggedUserOpt = userService.getLoggedUser();
+        if (loggedUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        var loggedUser = loggedUserOpt.get();
+        if (!loggedUser.isAdmin() && !loggedUser.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        try {
+            userService.deleteUserDocument(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     private UserResponse toResponse(User user) {

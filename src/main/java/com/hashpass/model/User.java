@@ -79,6 +79,9 @@ public class User {
 	@Column
 	private LocalDateTime lastLogin;
 
+	@Column(length = 255)
+	private String documentFileName;
+
 	@Column(nullable = false)
 	private Integer failedAttempts = 0;
 
@@ -292,5 +295,13 @@ public class User {
 
 	public void setFailedAttempts(Integer failedAttempts) {
 		this.failedAttempts = failedAttempts;
+	}
+
+	public String getDocumentFileName() {
+		return documentFileName;
+	}
+
+	public void setDocumentFileName(String documentFileName) {
+		this.documentFileName = documentFileName;
 	}
 }

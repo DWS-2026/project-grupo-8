@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.Optional;
 
@@ -137,6 +138,73 @@ public class UserController {
             redirectAttributes.addFlashAttribute("success", "Foto de perfil actualizada correctamente.");
         } else {
             redirectAttributes.addFlashAttribute("error", error);
+        }
+        return "redirect:/config-user";
+    }
+
+    @PostMapping("/config-user/document")
+    public String uploadDocument(@RequestParam("document") MultipartFile document,
+            RedirectAttributes redirectAttributes) {
+        User currentUser = userService.getLoggedUser().orElse(null);
+        if (currentUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Debes iniciar sesión.");
+            return "redirect:/login";
+        }
+
+        if (document.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "El archivo está vacío.");
+            return "redirect:/config-user";
+        }
+
+        try {
+            userService.uploadUserDocument(currentUser.getId(), document);
+            redirectAttributes.addFlashAttribute("success", "Documento subido correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al subir el documento: " + e.getMessage());
+        }
+        return "redirect:/config-user";
+    }
+
+    @GetMapping("/config-user/document/download")
+    public String downloadDocument(HttpServletResponse response) {
+        User currentUser = userService.getLoggedUser().orElse(null);
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            if (!userService.userHasDocument(currentUser.getId())) {
+                return "redirect:/config-user";
+            }
+
+            byte[] fileContent = userService.getUserDocument(currentUser.getId());
+            String originalFilename = userService.getUserDocumentOriginalFilename(currentUser.getId());
+
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + originalFilename + "\"");
+            response.setHeader("Content-Type", "application/octet-stream");
+            response.setContentLength(fileContent.length);
+            response.getOutputStream().write(fileContent);
+            response.getOutputStream().flush();
+
+            return null; // Response handled manually
+        } catch (Exception e) {
+            return "redirect:/config-user";
+        }
+    }
+
+    @PostMapping("/config-user/document/delete")
+    public String deleteDocument(RedirectAttributes redirectAttributes) {
+        User currentUser = userService.getLoggedUser().orElse(null);
+        if (currentUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Debes iniciar sesión.");
+            return "redirect:/login";
+        }
+
+        try {
+            userService.deleteUserDocument(currentUser.getId());
+            redirectAttributes.addFlashAttribute("success", "Documento eliminado correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al eliminar el documento: " + e.getMessage());
         }
         return "redirect:/config-user";
     }
