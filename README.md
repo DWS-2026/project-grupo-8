@@ -355,9 +355,14 @@ Desarrollo general del backend, configuración de base de datos, autenticación,
 📄 **[Especificación OpenAPI (YAML)](/api-docs/api-docs.yaml)**
 
 #### **Documentación HTML**
-📖 **[Documentación API REST (HTML)](https://raw.githack.com/[usuario]/[repositorio]/main/api-docs/api-docs.html)**
+📖 **[Documentación API REST (HTML)](https://raw.githack.com/DWS-2026/project-grupo-8/main/api-docs/api-docs.html)**
 
 > La documentación de la API REST se encuentra en la carpeta `/api-docs` del repositorio. Se ha generado automáticamente con SpringDoc a partir de las anotaciones en el código Java.
+
+#### **Colección Postman**
+📮 **[api.postman_collection.json](api.postman_collection.json)**
+
+> Colección funcional con ejemplos de peticiones a todos los endpoints de la API REST, usando la variable `{{baseUrl}}` para funcionar tanto en localhost como en despliegues remotos.
 
 ### **Diagrama de Clases y Templates Actualizado**
 
