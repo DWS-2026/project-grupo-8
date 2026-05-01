@@ -87,23 +87,17 @@ public class CredentialRestController {
                     .body(Map.of("message", "Debes iniciar sesión para crear credenciales."));
         }
 
-        Optional<ResponseEntity<?>> validationError = validateCreateCredentialRequest(request);
-        if (validationError.isPresent()) {
-            return validationError.get();
+        if (request == null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "El cuerpo de la solicitud es obligatorio."));
         }
 
         try {
             Credential credential = new Credential();
-            credential.setSiteName(request.siteName().trim());
-            credential.setUsername(request.username().trim());
+            credential.setSiteName(request.siteName());
+            credential.setUsername(request.username());
             
-            if (request.siteUrl() != null && !request.siteUrl().isBlank()) {
-                credential.setSiteUrl(request.siteUrl().trim());
-            }
-            
-            if (request.note() != null && !request.note().isBlank()) {
-                credential.setNote(request.note().trim());
-            }
+            credential.setSiteUrl(request.siteUrl());
+            credential.setNote(request.note());
 
             Credential createdCredential = entryService.save(credential, request.password());
             
@@ -145,18 +139,17 @@ public class CredentialRestController {
                     .body(Map.of("message", "No tienes permiso para editar esta credencial."));
         }
 
-        Optional<ResponseEntity<?>> validationError = validateUpdateCredentialRequest(request);
-        if (validationError.isPresent()) {
-            return validationError.get();
+        if (request == null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "El cuerpo de la solicitud es obligatorio."));
         }
 
         try {
             if (request.siteName() != null && !request.siteName().isBlank()) {
-                credential.setSiteName(request.siteName().trim());
+                credential.setSiteName(request.siteName());
             }
 
             if (request.username() != null && !request.username().isBlank()) {
-                credential.setUsername(request.username().trim());
+                credential.setUsername(request.username());
             }
 
             if (request.password() != null && !request.password().isBlank()) {
@@ -169,11 +162,11 @@ public class CredentialRestController {
             }
 
             if (request.siteUrl() != null) {
-                credential.setSiteUrl(request.siteUrl().isBlank() ? null : request.siteUrl().trim());
+                credential.setSiteUrl(request.siteUrl());
             }
 
             if (request.note() != null) {
-                credential.setNote(request.note().isBlank() ? null : request.note().trim());
+                credential.setNote(request.note());
             }
 
             Credential updatedCredential = entryService.findById(id).orElse(credential);
@@ -220,79 +213,6 @@ public class CredentialRestController {
             return false;
         }
         return currentUser.isAdmin() || currentUser.getId().equals(credential.getUser().getId());
-    }
-
-    private Optional<ResponseEntity<?>> validateCreateCredentialRequest(CreateCredentialRequest request) {
-        if (request == null) {
-            return Optional.of(ResponseEntity.badRequest()
-                    .body(Map.of("message", "El cuerpo de la solicitud es obligatorio.")));
-        }
-
-        if (request.siteName() == null || request.siteName().isBlank()) {
-            return Optional.of(ResponseEntity.badRequest()
-                    .body(Map.of("message", "El nombre del sitio es obligatorio.")));
-        }
-
-        if (request.username() == null || request.username().isBlank()) {
-            return Optional.of(ResponseEntity.badRequest()
-                    .body(Map.of("message", "El usuario es obligatorio.")));
-        }
-
-        if (request.password() == null || request.password().isBlank()) {
-            return Optional.of(ResponseEntity.badRequest()
-                    .body(Map.of("message", "La contraseña es obligatoria.")));
-        }
-
-        if (request.siteName().trim().length() > 120) {
-            return Optional.of(ResponseEntity.badRequest()
-                    .body(Map.of("message", "El nombre del sitio no puede superar 120 caracteres.")));
-        }
-
-        if (request.username().trim().length() > 120) {
-            return Optional.of(ResponseEntity.badRequest()
-                    .body(Map.of("message", "El usuario no puede superar 120 caracteres.")));
-        }
-
-        if (request.note() != null && request.note().trim().length() > 1000) {
-            return Optional.of(ResponseEntity.badRequest()
-                    .body(Map.of("message", "La nota no puede superar 1000 caracteres.")));
-        }
-
-        return Optional.empty();
-    }
-
-    private Optional<ResponseEntity<?>> validateUpdateCredentialRequest(UpdateCredentialRequest request) {
-        if (request == null) {
-            return Optional.of(ResponseEntity.badRequest()
-                    .body(Map.of("message", "El cuerpo de la solicitud es obligatorio.")));
-        }
-
-        if (request.siteName() != null && request.siteName().isBlank()) {
-            return Optional.of(ResponseEntity.badRequest()
-                    .body(Map.of("message", "El nombre del sitio no puede estar vacío.")));
-        }
-
-        if (request.username() != null && request.username().isBlank()) {
-            return Optional.of(ResponseEntity.badRequest()
-                    .body(Map.of("message", "El usuario no puede estar vacío.")));
-        }
-
-        if (request.siteName() != null && request.siteName().trim().length() > 120) {
-            return Optional.of(ResponseEntity.badRequest()
-                    .body(Map.of("message", "El nombre del sitio no puede superar 120 caracteres.")));
-        }
-
-        if (request.username() != null && request.username().trim().length() > 120) {
-            return Optional.of(ResponseEntity.badRequest()
-                    .body(Map.of("message", "El usuario no puede superar 120 caracteres.")));
-        }
-
-        if (request.note() != null && request.note().trim().length() > 1000) {
-            return Optional.of(ResponseEntity.badRequest()
-                    .body(Map.of("message", "La nota no puede superar 1000 caracteres.")));
-        }
-
-        return Optional.empty();
     }
 
     private CredentialResponse toResponse(Credential credential) {

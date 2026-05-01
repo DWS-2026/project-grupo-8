@@ -1,0 +1,27 @@
+{{>partials/header}}
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h2 class="mb-0">{{post.title}}</h2>
+        <small class="text-muted">&#128100; By {{post.author.name}}</small>
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{post.text}}</p>
+      </div>
+      <div class="card-footer d-flex flex-wrap gap-2 align-items-center">
+        {{#isOwner}}
+        <form action="/removepost/{{post.id}}" method="post" class="d-inline">
+          <button type="submit" class="btn btn-danger btn-sm"> Remove</button>
+          <input type="hidden" name="_csrf" value="{{token}}"/>
+        </form>
+        <a href="/editpost/{{post.id}}" class="btn btn-warning btn-sm text-dark"> Edit</a>
+        {{/isOwner}}
+        <a href="/" class="btn btn-secondary btn-sm ms-auto">Back to all posts</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{>partials/footer}}

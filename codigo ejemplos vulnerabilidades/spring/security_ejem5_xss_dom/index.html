@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Laboratorio: DOM XSS</title>
+    <style> body { font-family: sans-serif; padding: 20px; } </style>
+</head>
+<body>
+    <h1>Panel de Usuario</h1>
+    
+    <div id="mensaje-bienvenida">Cargando...</div>
+
+    <script>
+        let nombreUsuario = decodeURIComponent(window.location.hash.substring(1));
+
+        if (!nombreUsuario) {
+            nombreUsuario = "Invitado";
+        }
+
+        let divSaludo = document.getElementById("mensaje-bienvenida");
+        divSaludo.innerHTML = "Hola, " + nombreUsuario + ". ¡Qué bueno verte!";
+    </script>
+</body>
+</html>

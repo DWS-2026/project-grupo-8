@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import com.hashpass.model.Plan;
 import com.hashpass.model.User;
+import com.hashpass.security.HtmlSanitizer;
 import com.hashpass.service.ImageService;
 import com.hashpass.service.PlanService;
 import com.hashpass.service.UserService;
@@ -31,12 +32,14 @@ public class PlanController {
 
     private final ImageService imageService;
     private final PlanService planService;
+    private final HtmlSanitizer htmlSanitizer;
 
     public PlanController(ImageService imageService,
-            PlanService planService, UserService userService) {
+            PlanService planService, UserService userService, HtmlSanitizer htmlSanitizer) {
         this.imageService = imageService;
         this.planService = planService;
         this.userService = userService;
+        this.htmlSanitizer = htmlSanitizer;
     }
 
     @ModelAttribute("user")
@@ -204,15 +207,17 @@ public class PlanController {
             return "redirect:/admin";
         }
 
-        // Validate that the plan does not already exist
-        if (planService.findByName(name).isPresent()) {
-            redirectAttributes.addFlashAttribute("error", "Ya existe un plan con ese nombre.");
+        String sanitizedName = htmlSanitizer.sanitizePlainText(name);
+        String sanitizedDescription = htmlSanitizer.sanitizeOptionalPlainText(description);
+
+        // Validate fields
+        if (sanitizedName == null || sanitizedName.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "El nombre del plan es requerido.");
             return "redirect:/admin/plan/add";
         }
 
-        // Validate fields
-        if (name == null || name.trim().isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "El nombre del plan es requerido.");
+        if (planService.findByName(sanitizedName).isPresent()) {
+            redirectAttributes.addFlashAttribute("error", "Ya existe un plan con ese nombre.");
             return "redirect:/admin/plan/add";
         }
 
@@ -222,12 +227,12 @@ public class PlanController {
         }
 
         Plan newPlan = new Plan();
-        newPlan.setName(name.trim());
+        newPlan.setName(sanitizedName);
         newPlan.setPriceMonthly(priceMonthly);
-        newPlan.setDescription(description != null ? description.trim() : "");
+        newPlan.setDescription(sanitizedDescription == null ? "" : sanitizedDescription);
 
         planService.save(newPlan);
-        redirectAttributes.addFlashAttribute("success", "Plan '" + name + "' creado exitosamente.");
+        redirectAttributes.addFlashAttribute("success", "Plan '" + sanitizedName + "' creado exitosamente.");
 
         return "redirect:/admin/plans";
     }
@@ -268,16 +273,19 @@ public class PlanController {
 
         Plan plan = planOpt.get();
 
-        // Validate that the new name is unique (unless it is the same plan)
-        Optional<Plan> existingPlan = planService.findByName(name);
-        if (existingPlan.isPresent() && existingPlan.get().getId() != id) {
-            redirectAttributes.addFlashAttribute("error", "Ya existe otro plan con ese nombre.");
+        String sanitizedName = htmlSanitizer.sanitizePlainText(name);
+        String sanitizedDescription = htmlSanitizer.sanitizeOptionalPlainText(description);
+
+        // Validate fields
+        if (sanitizedName == null || sanitizedName.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "El nombre del plan es requerido.");
             return "redirect:/admin/plan/edit/" + id;
         }
 
-        // Validate fields
-        if (name == null || name.trim().isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "El nombre del plan es requerido.");
+        // Validate that the new name is unique (unless it is the same plan)
+        Optional<Plan> existingPlan = planService.findByName(sanitizedName);
+        if (existingPlan.isPresent() && existingPlan.get().getId() != id) {
+            redirectAttributes.addFlashAttribute("error", "Ya existe otro plan con ese nombre.");
             return "redirect:/admin/plan/edit/" + id;
         }
 
@@ -286,12 +294,12 @@ public class PlanController {
             return "redirect:/admin/plan/edit/" + id;
         }
 
-        plan.setName(name.trim());
+        plan.setName(sanitizedName);
         plan.setPriceMonthly(priceMonthly);
-        plan.setDescription(description != null ? description.trim() : "");
+        plan.setDescription(sanitizedDescription == null ? "" : sanitizedDescription);
 
         planService.save(plan);
-        redirectAttributes.addFlashAttribute("success", "Plan '" + name + "' actualizado exitosamente.");
+        redirectAttributes.addFlashAttribute("success", "Plan '" + sanitizedName + "' actualizado exitosamente.");
 
         return "redirect:/admin/plans";
     }

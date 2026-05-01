@@ -232,8 +232,8 @@ public class CredentialController {
         Credential c = new Credential();
         c.setSiteName(normalizedService);
         c.setUsername(normalizedUsername);
-        c.setSiteUrl(url);
-        c.setNote(note);
+        c.setSiteUrl(url == null || url.isBlank() ? null : url.trim());
+        c.setNote(note == null || note.isBlank() ? null : note.trim());
         Credential saved;
         try {
             saved = entryService.save(c, normalizedPassword);
@@ -337,8 +337,8 @@ public class CredentialController {
 
         c.setSiteName(normalizedService);
         c.setUsername(normalizedUsername);
-        c.setSiteUrl(url);
-        c.setNote(note);
+        c.setSiteUrl(url == null || url.isBlank() ? null : url.trim());
+        c.setNote(note == null || note.isBlank() ? null : note.trim());
 
         Credential saved;
         try {

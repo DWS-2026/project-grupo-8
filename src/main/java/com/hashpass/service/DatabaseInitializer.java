@@ -17,6 +17,7 @@ import com.hashpass.model.Credential;
 import com.hashpass.model.Plan;
 import com.hashpass.model.Review;
 import com.hashpass.model.User;
+import com.hashpass.security.HtmlSanitizer;
 import com.hashpass.repository.CredentialRepository;
 import com.hashpass.repository.PlanRepository;
 import com.hashpass.repository.ReviewRepository;
@@ -34,14 +35,17 @@ public class DatabaseInitializer {
 	private final ReviewRepository reviewRepository;
 	private final PlanRepository planRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final HtmlSanitizer htmlSanitizer;
 
 	public DatabaseInitializer(UserRepository userRepository, CredentialRepository credentialRepository,
-			ReviewRepository reviewRepository, PlanRepository planRepository, PasswordEncoder passwordEncoder) {
+			ReviewRepository reviewRepository, PlanRepository planRepository, PasswordEncoder passwordEncoder,
+			HtmlSanitizer htmlSanitizer) {
 		this.userRepository = userRepository;
 		this.credentialRepository = credentialRepository;
 		this.reviewRepository = reviewRepository;
 		this.planRepository = planRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.htmlSanitizer = htmlSanitizer;
 	}
 
 	/**
@@ -88,7 +92,7 @@ public class DatabaseInitializer {
 		String adminEmail = "adminhashpass@gmail.com";
 		if (userRepository.findByEmail(adminEmail).isEmpty()) {
 			User admin = new User();
-			admin.setName("Admin");
+			admin.setName(htmlSanitizer.sanitizePlainText("Admin"));
 			admin.setEmail(adminEmail);
 			admin.setPasswordHash(passwordEncoder.encode("admin123"));
 			admin.setEncryptionKey(deriveKey("admin123"));
@@ -112,7 +116,7 @@ public class DatabaseInitializer {
 			String[][] reviewsData, Plan freePlan) {
 		User user = userRepository.findByEmail(email).orElseGet(() -> {
 			User newUser = new User();
-			newUser.setName(name);
+			newUser.setName(htmlSanitizer.sanitizePlainText(name));
 			newUser.setEmail(email);
 			newUser.setPasswordHash(passwordEncoder.encode(rawPassword));
 			newUser.setEncryptionKey(deriveKey(rawPassword));
@@ -155,10 +159,10 @@ public class DatabaseInitializer {
 			}
 			Credential credential = new Credential();
 			credential.setUser(user);
-			credential.setSiteName(siteName);
-			credential.setSiteUrl(data[1]);
-			credential.setUsername(data[2]);
-			credential.setNote(data[3]);
+			credential.setSiteName(htmlSanitizer.sanitizePlainText(siteName));
+			credential.setSiteUrl(htmlSanitizer.sanitizeUrl(data[1]));
+			credential.setUsername(htmlSanitizer.sanitizePlainText(data[2]));
+			credential.setNote(htmlSanitizer.sanitizeOptionalPlainText(data[3]));
 			credential.setPasswordEncrypted(encryptForUser(siteName + "@2026", encryptionKey));
 			credentialRepository.save(credential);
 		}
@@ -184,8 +188,8 @@ public class DatabaseInitializer {
 			}
 			Review review = new Review();
 			review.setUser(user);
-			review.setTitle(title);
-			review.setComment(data[1]);
+			review.setTitle(htmlSanitizer.sanitizePlainText(title));
+			review.setComment(htmlSanitizer.sanitizeRichText(data[1]));
 			review.setRating(Integer.parseInt(data[2]));
 			reviewRepository.save(review);
 		}
@@ -201,9 +205,9 @@ public class DatabaseInitializer {
 	private void createPlanIfNotExists(String name, BigDecimal price, String description) {
 		if (planRepository.findByName(name).isEmpty()) {
 			Plan plan = new Plan();
-			plan.setName(name);
+			plan.setName(htmlSanitizer.sanitizePlainText(name));
 			plan.setPriceMonthly(price);
-			plan.setDescription(description);
+			plan.setDescription(htmlSanitizer.sanitizeOptionalPlainText(description));
 			planRepository.save(plan);
 			System.out.println("✓ Plan '" + name + "' creado exitosamente.");
 		}

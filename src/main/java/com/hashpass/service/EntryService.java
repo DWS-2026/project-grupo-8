@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.hashpass.model.Credential;
 import com.hashpass.model.Plan;
 import com.hashpass.model.User;
+import com.hashpass.security.HtmlSanitizer;
 import com.hashpass.repository.CredentialRepository;
 
 @Service
@@ -25,6 +26,9 @@ public class EntryService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private HtmlSanitizer htmlSanitizer;
     /**
      * obtains the list of credentials of the current logged user. If there is no user in session, throws an exception.
      */
@@ -60,12 +64,25 @@ public class EntryService {
             throw new IllegalArgumentException("La credencial no puede ser nula.");
         }
 
-        String normalizedSiteName = cred.getSiteName() == null ? "" : cred.getSiteName().trim();
-        String normalizedUsername = cred.getUsername() == null ? "" : cred.getUsername().trim();
+        String normalizedSiteName = htmlSanitizer.sanitizePlainText(cred.getSiteName());
+        String normalizedUsername = htmlSanitizer.sanitizePlainText(cred.getUsername());
         String normalizedPassword = plainPassword == null ? "" : plainPassword.trim();
+        String normalizedSiteUrl = htmlSanitizer.sanitizeUrl(cred.getSiteUrl());
+        String normalizedNote = htmlSanitizer.sanitizeOptionalPlainText(cred.getNote());
 
-        if (normalizedSiteName.isBlank() || normalizedUsername.isBlank() || normalizedPassword.isBlank()) {
+        if (normalizedSiteName == null || normalizedSiteName.isBlank()
+                || normalizedUsername == null || normalizedUsername.isBlank()
+                || normalizedPassword.isBlank()) {
             throw new IllegalArgumentException("Debes completar servicio, usuario y contraseña.");
+        }
+        if (normalizedSiteName.length() > 120) {
+            throw new IllegalArgumentException("El servicio no puede superar 120 caracteres.");
+        }
+        if (normalizedUsername.length() > 120) {
+            throw new IllegalArgumentException("El usuario no puede superar 120 caracteres.");
+        }
+        if (normalizedNote != null && normalizedNote.length() > 1000) {
+            throw new IllegalArgumentException("La nota no puede superar 1000 caracteres.");
         }
 
         boolean isNewCredential = cred.getId() == null;
@@ -78,6 +95,8 @@ public class EntryService {
 
         cred.setSiteName(normalizedSiteName);
         cred.setUsername(normalizedUsername);
+        cred.setSiteUrl(normalizedSiteUrl);
+        cred.setNote(normalizedNote);
         cred.setUser(u.get());
         cred.setPasswordEncrypted(encrypt(normalizedPassword, u));
         return credentialRepository.save(cred);

@@ -1,0 +1,29 @@
+{{>partials/header}}
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-4">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white text-center">
+        <h4 class="mb-0">&#128274; Sign In</h4>
+      </div>
+      <div class="card-body p-4">
+        <form action="/login" method="post">
+          <div class="mb-3">
+            <label class="form-label fw-bold">Username</label>
+            <input type="text" class="form-control" name="username" placeholder="Enter username"/>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Password</label>
+            <input type="password" class="form-control" name="password" placeholder="Enter password"/>
+          </div>
+          <input type="hidden" name="_csrf" value="{{token}}"/>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Sign In</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{>partials/footer}}

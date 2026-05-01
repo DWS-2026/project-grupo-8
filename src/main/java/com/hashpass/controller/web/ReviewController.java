@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hashpass.model.Review;
 import com.hashpass.model.User;
+import com.hashpass.security.HtmlSanitizer;
 import com.hashpass.service.ImageService;
 import com.hashpass.service.ReviewService;
 import com.hashpass.service.UserService;
@@ -32,11 +33,14 @@ public class ReviewController {
     private final UserService userService;
     private final ImageService imageService;
     private final ReviewService reviewService;
+    private final HtmlSanitizer htmlSanitizer;
 
-    public ReviewController(UserService userService, ImageService imageService, ReviewService reviewService) {
+    public ReviewController(UserService userService, ImageService imageService, ReviewService reviewService,
+            HtmlSanitizer htmlSanitizer) {
         this.userService = userService;
         this.imageService = imageService;
         this.reviewService = reviewService;
+        this.htmlSanitizer = htmlSanitizer;
     }
 
     @ModelAttribute("user")
@@ -92,9 +96,9 @@ public class ReviewController {
             return "redirect:/login?redirectTo=/reviews";
         }
 
-        String normalizedTitle = title == null ? "" : title.trim();
-        String normalizedComment = reviewService.sanitizeRichText(comment);
-        String plainTextComment = reviewService.extractPlainText(normalizedComment);
+        String normalizedTitle = htmlSanitizer.sanitizePlainText(title);
+        String normalizedComment = htmlSanitizer.sanitizeRichText(comment);
+        String plainTextComment = htmlSanitizer.extractPlainText(normalizedComment);
 
         if (normalizedTitle.isBlank() || plainTextComment.isBlank()) {
             return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
@@ -150,9 +154,9 @@ public class ReviewController {
             return "redirect:/reviews";
         }
 
-        String normalizedTitle = title == null ? "" : title.trim();
-        String normalizedComment = reviewService.sanitizeRichText(comment);
-        String plainTextComment = reviewService.extractPlainText(normalizedComment);
+        String normalizedTitle = htmlSanitizer.sanitizePlainText(title);
+        String normalizedComment = htmlSanitizer.sanitizeRichText(comment);
+        String plainTextComment = htmlSanitizer.extractPlainText(normalizedComment);
 
         if (normalizedTitle.isBlank() || plainTextComment.isBlank()) {
             return redirectWithReviewFormError(redirectAttributes, normalizedTitle, normalizedComment, rating,
@@ -249,7 +253,7 @@ public class ReviewController {
 
             mappedReview.put("id", review.getId());
             mappedReview.put("title", review.getTitle());
-            mappedReview.put("comment", reviewService.sanitizeRichText(review.getComment()));
+            mappedReview.put("comment", htmlSanitizer.sanitizeRichText(review.getComment()));
             mappedReview.put("authorName", authorName);
             mappedReview.put("avatarUrl", avatarUrl != null ? avatarUrl : buildAvatarFallback(authorName));
             mappedReview.put("createdAt", review.getCreatedAt() == null ? "" : REVIEW_DATE_FORMAT.format(review.getCreatedAt()));

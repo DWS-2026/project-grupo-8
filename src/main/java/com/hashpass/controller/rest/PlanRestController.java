@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 import com.hashpass.model.Plan;
+import com.hashpass.security.HtmlSanitizer;
 import com.hashpass.service.PlanService;
 
 import org.springframework.data.domain.Page;
@@ -26,9 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class PlanRestController {
 
     private final PlanService planService;
+    private final HtmlSanitizer htmlSanitizer;
 
-    public PlanRestController(PlanService planService) {
+    public PlanRestController(PlanService planService, HtmlSanitizer htmlSanitizer) {
         this.planService = planService;
+        this.htmlSanitizer = htmlSanitizer;
     }
 
     @GetMapping
@@ -45,7 +48,15 @@ public class PlanRestController {
 
     @PostMapping
     public ResponseEntity<?> createPlan(@RequestBody CreatePlanRequest request) {
-        if (request.name() == null || request.name().isBlank()) {
+        if (request == null) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "message", "El cuerpo de la solicitud es obligatorio."));
+        }
+
+        String sanitizedName = htmlSanitizer.sanitizePlainText(request.name());
+        String sanitizedDescription = htmlSanitizer.sanitizeOptionalPlainText(request.description());
+
+        if (sanitizedName == null || sanitizedName.isBlank()) {
             return ResponseEntity.badRequest().body(Map.of(
                     "message", "El campo name es obligatorio."));
         }
@@ -55,18 +66,16 @@ public class PlanRestController {
                     "message", "El priceMonthly debe ser mayor a 0."));
         }
 
-        if (planService.findByName(request.name().trim()).isPresent()) {
+        if (planService.findByName(sanitizedName).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
                     "message", "Ya existe un plan con este nombre."));
         }
 
         try {
             Plan plan = new Plan();
-            plan.setName(request.name().trim());
+            plan.setName(sanitizedName);
             plan.setPriceMonthly(request.priceMonthly());
-            if (request.description() != null && !request.description().isBlank()) {
-                plan.setDescription(request.description().trim());
-            }
+            plan.setDescription(sanitizedDescription);
 
             Plan createdPlan = planService.save(plan);
 
@@ -91,7 +100,7 @@ public class PlanRestController {
         }
 
         if (request.name() != null && !request.name().isBlank()) {
-            String newName = request.name().trim();
+            String newName = htmlSanitizer.sanitizePlainText(request.name());
             if (!newName.equals(plan.getName())) {
                 if (planService.findByName(newName).isPresent()) {
                     return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -110,7 +119,7 @@ public class PlanRestController {
         }
 
         if (request.description() != null) {
-            plan.setDescription(request.description().isBlank() ? null : request.description().trim());
+            plan.setDescription(htmlSanitizer.sanitizeOptionalPlainText(request.description()));
         }
 
         Plan updatedPlan = planService.save(plan);

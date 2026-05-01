@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.hashpass.model.Plan;
 import com.hashpass.model.User;
+import com.hashpass.security.HtmlSanitizer;
 import com.hashpass.repository.PlanRepository;
 import com.hashpass.repository.UserRepository;
 
@@ -22,13 +23,16 @@ public class AuthService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final EntryService entryService;
+    private final HtmlSanitizer htmlSanitizer;
 
-    public AuthService(UserRepository userRepository, PlanRepository planRepository, UserService userService, PasswordEncoder passwordEncoder, EntryService entryService) {
+    public AuthService(UserRepository userRepository, PlanRepository planRepository, UserService userService,
+            PasswordEncoder passwordEncoder, EntryService entryService, HtmlSanitizer htmlSanitizer) {
         this.userRepository = userRepository;
         this.planRepository = planRepository;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.entryService = entryService;
+        this.htmlSanitizer = htmlSanitizer;
     }
 
     public boolean isEmailRegistered(String email) {
@@ -36,9 +40,16 @@ public class AuthService {
     }
 
     public User registerUser(String name, String email, String password,String password2, Long selectedPlanId, boolean allowPaidPlan) {
-        String normalizedEmail = email == null ? "" : email.trim().toLowerCase();
-        if (normalizedEmail.isBlank()) {
+        String normalizedEmail = htmlSanitizer.normalizeEmail(email);
+        String normalizedName = htmlSanitizer.sanitizePlainText(name);
+        if (normalizedEmail == null || normalizedEmail.isBlank()) {
             throw new IllegalArgumentException("El correo electrónico es obligatorio.");
+        }
+        if (normalizedName == null || normalizedName.isBlank()) {
+            throw new IllegalArgumentException("El nombre es obligatorio.");
+        }
+        if (normalizedName.length() > 120) {
+            throw new IllegalArgumentException("El nombre no puede superar los 120 caracteres.");
         }
         if (isEmailRegistered(normalizedEmail)) {
             throw new IllegalStateException("El correo ya está registrado.");
@@ -51,7 +62,7 @@ public class AuthService {
         }
 
         User newUser = new User();
-        newUser.setName(name);
+        newUser.setName(normalizedName);
         newUser.setEmail(normalizedEmail);
         // Store a password hash using BCrypt
         newUser.setPasswordHash(passwordEncoder.encode(password));
@@ -103,10 +114,14 @@ public class AuthService {
         if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
             return "Contraseña incorrecta.";
         }
-        if (isEmailRegistered(newEmail)) {
+        String normalizedEmail = htmlSanitizer.normalizeEmail(newEmail);
+        if (normalizedEmail == null || normalizedEmail.isBlank()) {
+            return "El correo electrónico es obligatorio.";
+        }
+        if (isEmailRegistered(normalizedEmail)) {
             return "El correo electrónico ya está registrado.";
         }
-        user.setEmail(newEmail);
+        user.setEmail(normalizedEmail);
         userRepository.save(user);
         return null; // Success
     }

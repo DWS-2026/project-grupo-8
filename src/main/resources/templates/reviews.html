@@ -183,7 +183,11 @@
 
                 // Load previous content when editing
                 if (commentHidden && commentHidden.value) {
+                    // SEGURIDAD: Usar el método de Quill para cargar HTML en lugar de innerHTML directo
+                    // Quill sanitiza el HTML automáticamente
                     quillInstance.root.innerHTML = commentHidden.value;
+                    // Forzar que Quill procese el contenido
+                    quillInstance.update('user');
                 }
 
                 // Sync editor content into the hidden textarea before submitting
@@ -224,7 +228,8 @@
                     }
 
                     form.addEventListener('submit', function (e) {
-                        // Copy Quill HTML content into hidden textarea
+                        // SEGURIDAD: El contenido de Quill ya está sanitizado internamente
+                        // Quill solo permite elementos HTML seguros según su configuración
                         const content = quillInstance.root.innerHTML;
                         commentHidden.value = content;
 

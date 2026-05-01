@@ -3,6 +3,7 @@ package com.hashpass.controller.rest;
 import java.util.Map;
 
 import com.hashpass.model.User;
+import com.hashpass.security.HtmlSanitizer;
 import com.hashpass.service.AuthService;
 import com.hashpass.service.UserService;
 
@@ -35,12 +36,14 @@ public class UserRestController {
     private final AuthService authService;
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
+    private final HtmlSanitizer htmlSanitizer;
 
     public UserRestController(AuthService authService, UserService userService,
-            AuthenticationManager authenticationManager) {
+            AuthenticationManager authenticationManager, HtmlSanitizer htmlSanitizer) {
         this.authService = authService;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+        this.htmlSanitizer = htmlSanitizer;
     }
 
     @PostMapping("/login")
@@ -173,11 +176,18 @@ public class UserRestController {
         }
 
         if (request.name() != null && !request.name().isBlank()) {
-            user.setName(request.name().trim());
+            String sanitizedName = htmlSanitizer.sanitizePlainText(request.name());
+            if (sanitizedName == null || sanitizedName.isBlank()) {
+                return ResponseEntity.badRequest().body(Map.of("message", "El nombre no puede quedar vacío."));
+            }
+            if (sanitizedName.length() > 120) {
+                return ResponseEntity.badRequest().body(Map.of("message", "El nombre no puede superar 120 caracteres."));
+            }
+            user.setName(sanitizedName);
         }
 
         if (request.email() != null && !request.email().isBlank()) {
-            String normalizedEmail = request.email().trim().toLowerCase();
+            String normalizedEmail = htmlSanitizer.normalizeEmail(request.email());
             boolean emailInUse = userService.findByEmail(normalizedEmail)
                     .map(found -> !found.getId().equals(user.getId()))
                     .orElse(false);
