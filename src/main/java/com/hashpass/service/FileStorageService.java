@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,15 +34,25 @@ public class FileStorageService {
     private String storagePath;
     
     private Path normalizedStoragePath;
+    private Path canonicalStoragePath;
     
     /**
      * Initialize and normalize storage path for consistent security checks.
-     * Called during bean initialization.
+     * Called automatically on bean initialization.
      */
+    @PostConstruct
     public void initStoragePath() throws IOException {
         Path path = Paths.get(storagePath).toAbsolutePath().normalize();
         Files.createDirectories(path);
         this.normalizedStoragePath = path;
+        
+        // Cache canonical path for faster validation (resolves symlinks)
+        try {
+            this.canonicalStoragePath = normalizedStoragePath.toRealPath();
+        } catch (IOException e) {
+            // Fallback to normalized path if toRealPath() fails
+            this.canonicalStoragePath = normalizedStoragePath;
+        }
     }
 
     /**
@@ -90,6 +101,19 @@ public class FileStorageService {
         if (!filePath.startsWith(normalizedStoragePath)) {
             throw new IOException("Invalid file path - path traversal attempt detected");
         }
+        
+        // Additional security: validate canonical paths to prevent symlink attacks
+        try {
+            Path canonicalFilePath = filePath.toRealPath();
+            if (!canonicalFilePath.startsWith(canonicalStoragePath)) {
+                throw new IOException("Invalid file path - symlink attack detected");
+            }
+        } catch (IOException e) {
+            if (e.getMessage().contains("symlink")) {
+                throw e;
+            }
+            // File doesn't exist yet (expected), which is fine
+        }
 
         // Save file to disk
         Files.write(filePath, file.getBytes());
@@ -99,6 +123,7 @@ public class FileStorageService {
 
     /**
      * Retrieves a file from disk as byte array.
+     * Validates both normalized and canonical paths to prevent traversal and symlink attacks.
      *
      * @param uniqueFilename Unique filename to retrieve
      * @return File bytes
@@ -117,7 +142,7 @@ public class FileStorageService {
         // Resolve and normalize the file path
         Path filePath = normalizedStoragePath.resolve(uniqueFilename).normalize();
 
-        // Security check: ensure file is within storage directory and exists
+        // Security check: ensure file is within storage directory (normalized check)
         if (!filePath.startsWith(normalizedStoragePath)) {
             throw new IOException("Invalid file path - access denied");
         }
@@ -126,7 +151,20 @@ public class FileStorageService {
             throw new IOException("File not found: " + uniqueFilename);
         }
 
-        // Additional check: ensure it's a regular file, not a directory
+        // Additional security: validate canonical path to prevent symlink attacks
+        try {
+            Path canonicalFilePath = filePath.toRealPath();
+            if (!canonicalFilePath.startsWith(canonicalStoragePath)) {
+                throw new IOException("Invalid file path - symlink attack detected");
+            }
+        } catch (IOException e) {
+            if (e.getMessage().contains("symlink")) {
+                throw e;
+            }
+            throw new IOException("Cannot verify file path security: " + e.getMessage());
+        }
+        
+        // Ensure it's a regular file, not a directory
         if (!Files.isRegularFile(filePath)) {
             throw new IOException("Path is not a regular file: " + uniqueFilename);
         }
@@ -223,30 +261,65 @@ public class FileStorageService {
      * @param filename Original filename
      * @return Sanitized filename
      */
+    /**
+     * Sanitizes filename to prevent path traversal and other attacks.
+     * Removes or replaces dangerous characters following OWASP recommendations.
+     * The original filename is preserved (sanitized) as per requirements.
+     * 
+     * Security measures applied:
+     * - Removes path separators (.., /, \\\\)
+     * - Removes special characters that could cause issues on different filesystems
+     * - Removes leading dots (hidden files on Unix)
+     * - Replaces forbidden characters with underscores
+     * - Removes null bytes to prevent string termination attacks
+     * - Limits filename length to prevent buffer overflows
+     *
+     * @param filename Original filename to sanitize
+     * @return Sanitized filename (original name with dangerous chars removed/replaced)
+     */
     private String sanitizeFilename(String filename) {
         // Remove any path separators and parent directory references
         String sanitized = filename
             .replaceAll("\\\\", "") // Remove backslashes
             .replaceAll("/", "")    // Remove forward slashes
-            .replaceAll("\\.\\.", "") // Remove double dots
+            .replaceAll("\\\\.\\\\.", "") // Remove double dots
             .replaceAll("^\\.", ""); // Remove leading dots
+        
+        // Replace null bytes which could terminate strings in C-based APIs
+        sanitized = sanitized.replaceAll("\\u0000", "");
 
-        // Remove forbidden characters
+        // Remove forbidden characters (Windows forbidden chars + others)
         for (char c : FORBIDDEN_CHARS.toCharArray()) {
             sanitized = sanitized.replace(c, '_');
+        }
+        
+        // Ensure the filename is not empty after sanitization
+        if (sanitized.isEmpty()) {
+            sanitized = "file";
+        }
+        
+        // Limit filename length to prevent buffer overflows
+        if (sanitized.length() > 200) {
+            sanitized = sanitized.substring(0, 200);
         }
 
         return sanitized;
     }
 
     /**
-     * Generates a unique filename to avoid collisions.
+     * Generates a unique filename to avoid collisions while preserving the original filename.
      * Format: timestamp_originalfilename
+     * 
+     * Security note:
+     * - Original filename is preserved as required
+     * - Timestamp ensures uniqueness (multiple uploads of same file)
+     * - Filename is already sanitized before this call
      *
-     * @param originalFilename Original filename
-     * @return Unique filename
+     * @param originalFilename Original filename (already sanitized)
+     * @return Unique filename preserving the original name
      */
     private String generateUniqueFilename(String originalFilename) {
+        // Use timestamp for uniqueness while preserving original filename
         long timestamp = Instant.now().toEpochMilli();
         return timestamp + "_" + originalFilename;
     }

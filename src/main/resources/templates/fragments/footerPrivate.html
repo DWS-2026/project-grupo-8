@@ -16,3 +16,38 @@
         </div>
     </div>
 </footer>
+<script>
+// Attach CSRF token to same-origin fetch requests automatically.
+(function () {
+    try {
+        const tokenMeta = document.querySelector('meta[name="_csrf"]');
+        const headerMeta = document.querySelector('meta[name="_csrf_header"]');
+        const csrfToken = tokenMeta ? tokenMeta.getAttribute('content') : null;
+        const csrfHeader = headerMeta ? headerMeta.getAttribute('content') : null;
+        if (!csrfToken || !csrfHeader) return;
+
+        const nativeFetch = window.fetch.bind(window);
+        window.fetch = function (input, init) {
+            init = init || {};
+            // Normalize to URL string
+            const url = (typeof input === 'string') ? input : (input && input.url) || '';
+            try {
+                const resolved = new URL(url, location.href);
+                if (resolved.origin === location.origin) {
+                    init.headers = init.headers || {};
+                    if (init.headers instanceof Headers) {
+                        init.headers.set(csrfHeader, csrfToken);
+                    } else {
+                        init.headers[csrfHeader] = csrfToken;
+                    }
+                }
+            } catch (e) {
+                // ignore URL parsing errors
+            }
+            return nativeFetch(input, init);
+        };
+    } catch (e) {
+        console.error('CSRF helper error', e);
+    }
+})();
+</script>

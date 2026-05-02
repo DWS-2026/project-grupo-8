@@ -71,7 +71,7 @@ public class ReviewController {
                     model.addAttribute("editMode", true);
                     model.addAttribute("reviewId", review.getId());
                     model.addAttribute("reviewTitle", review.getTitle());
-                    model.addAttribute("reviewComment", review.getComment());
+                    model.addAttribute("reviewComment", htmlSanitizer.sanitizeRichText(review.getComment()));
                     model.addAttribute("reviewRating", review.getRating());
                     model.addAttribute("openReviewModal", true);
                 } else {

@@ -18,7 +18,8 @@
         }
 
         let divSaludo = document.getElementById("mensaje-bienvenida");
-        divSaludo.innerHTML = "Hola, " + nombreUsuario + ". ¡Qué bueno verte!";
+        // Usar textContent para evitar inyección de HTML en el DOM
+        divSaludo.textContent = "Hola, " + nombreUsuario + ". ¡Qué bueno verte!";
     </script>
 </body>
 </html>

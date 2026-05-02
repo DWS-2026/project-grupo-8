@@ -30,6 +30,9 @@ class CSRFHandlerInterceptor implements HandlerInterceptor {
 			CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
 			if (token != null) {
 				modelAndView.addObject("token", token.getToken());
+				// Expose header and parameter names so client-side JS can add the CSRF header
+				modelAndView.addObject("csrfHeaderName", token.getHeaderName());
+				modelAndView.addObject("csrfParameterName", token.getParameterName());
 			}
 		}
 	}

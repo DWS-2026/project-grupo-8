@@ -19,7 +19,7 @@
                     </p>
                 </section>
 
-                <!-- PLANES -->
+                <!-- PLANS -->
                 <section class="pb-5">
                     <div class="row row-cols-1 row-cols-md-3 g-4">
 
@@ -53,9 +53,7 @@
                                 </form>
                                 {{/isFree}}
                                 {{^isFree}}
-                                <button class="btn plan-cta plan-cta-premium w-100 mt-3" onclick="window.location.href='/payment?plan={{id}}'">
-                                    Ir al pago
-                                </button>
+                                <a class="btn plan-cta plan-cta-premium w-100 mt-3" href="/payment?plan={{id}}">Ir al pago</a>
                                 {{/isFree}}
                                 {{/isCurrentPlan}}
                             </div>
@@ -80,7 +78,7 @@
         </p>
     </section>
 
-    <!-- PLANES -->
+    <!-- PLANS -->
     <section class="container pb-5">
         <div class="row row-cols-1 row-cols-md-3 g-4">
 
@@ -96,14 +94,10 @@
                     <p class="text-center text-secondary mb-4">por mes</p>
 
                     {{#isFree}}
-                    <button class="btn plan-cta plan-cta-premium w-100 mt-3" onclick="window.location.href='/register?plan={{id}}'">
-                        Elegir plan
-                    </button>
+                    <a class="btn plan-cta plan-cta-premium w-100 mt-3" href="/register?plan={{id}}">Elegir plan</a>
                     {{/isFree}}
                     {{^isFree}}
-                    <button class="btn plan-cta plan-cta-premium w-100 mt-3" onclick="window.location.href='/payment?plan={{id}}'">
-                        Ir al pago
-                    </button>
+                    <a class="btn plan-cta plan-cta-premium w-100 mt-3" href="/payment?plan={{id}}">Ir al pago</a>
                     {{/isFree}}
                 </div>
             </div>

@@ -291,8 +291,8 @@
                             return;
                         }
 
-                        // SEGURIDAD: Usar replaceChildren en lugar de innerHTML para evitar DOM XSS
-                        // Clonamos los nodos para asegurar que provienen de un documento parseado seguro
+                        // SECURITY: Use replaceChildren instead of innerHTML to avoid DOM XSS
+                        // Clone the nodes to ensure they come from a safely parsed document
                         adminResults.replaceChildren(...Array.from(nextResults.childNodes).map(node => node.cloneNode(true)));
 
                         if (replaceHistory) {
