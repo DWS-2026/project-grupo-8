@@ -102,8 +102,32 @@ public class UserRestController {
     }
 
     @GetMapping
-    public Page<UserResponse> getAllUsers(Pageable pageable) {
-        return userService.findAllUsers(pageable).map(this::toResponse);
+    public ResponseEntity<?> getAllUsers(Pageable pageable) {
+        var loggedUserOpt = userService.getLoggedUser();
+        if (loggedUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Debes iniciar sesión para acceder a este recurso."));
+        }
+
+        var loggedUser = loggedUserOpt.get();
+        // Only admins can list all users (prevents user enumeration)
+        if (!loggedUser.isAdmin()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("message", "No tienes permisos para acceder a este recurso."));
+        }
+
+        return ResponseEntity.ok(userService.findAllUsers(pageable).map(this::toResponse));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser() {
+        var loggedUserOpt = userService.getLoggedUser();
+        if (loggedUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Debes iniciar sesión para acceder a este recurso."));
+        }
+
+        return ResponseEntity.ok(toResponse(loggedUserOpt.get()));
     }
 
     @GetMapping("/{id}")
@@ -117,7 +141,7 @@ public class UserRestController {
         var loggedUser = loggedUserOpt.get();
         if (!loggedUser.isAdmin() && !loggedUser.getId().equals(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("message", "No puedes ver la información de otros usuarios."));
+                    .body(Map.of("message", "No tienes permisos para acceder a este recurso."));
         }
 
         return userService.findById(id)
@@ -167,7 +191,7 @@ public class UserRestController {
         var loggedUser = loggedUserOpt.get();
         if (!loggedUser.isAdmin() && !loggedUser.getId().equals(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("message", "No puedes modificar la información de otros usuarios."));
+                    .body(Map.of("message", "No tienes permisos para acceder a este recurso."));
         }
 
         User user = userService.findById(id).orElse(null);
