@@ -1,7 +1,10 @@
 package com.hashpass.service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
+
+import javax.crypto.spec.IvParameterSpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -145,13 +148,24 @@ public class EntryService {
         }
 
         try {
-            // 2. We close the AES lock using the user's personal key
+            // 2. Generate a random IV
+            byte[] iv = new byte[16];
+            SecureRandom random = new SecureRandom();
+            random.nextBytes(iv);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+            // 3. We close the AES lock using the user's personal key
             java.security.Key key = new javax.crypto.spec.SecretKeySpec(userKey.getBytes(java.nio.charset.StandardCharsets.UTF_8), "AES");
-            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES");
-            cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, key);
+            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, key, ivSpec);
             
             byte[] encryptedBytes = cipher.doFinal(raw.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-            return java.util.Base64.getEncoder().encodeToString(encryptedBytes);
+
+            // 4. Prepend IV to encrypted data and encode as Base64
+            byte[] ivAndEncrypted = new byte[iv.length + encryptedBytes.length];
+            System.arraycopy(iv, 0, ivAndEncrypted, 0, iv.length);
+            System.arraycopy(encryptedBytes, 0, ivAndEncrypted, iv.length, encryptedBytes.length);
+            return java.util.Base64.getEncoder().encodeToString(ivAndEncrypted);
         } catch (Exception e) {
             throw new RuntimeException("Error al cifrar la contraseña", e);
         }
@@ -171,13 +185,25 @@ public class EntryService {
         }
 
         try {
-            // 2. We close the AES lock using the user's personal key
-            java.security.Key key = new javax.crypto.spec.SecretKeySpec(userKey.getBytes(java.nio.charset.StandardCharsets.UTF_8), "AES");
-            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES");
-            cipher.init(javax.crypto.Cipher.DECRYPT_MODE, key);
-            
+            // 2. Decode Base64
             byte[] decodedBytes = java.util.Base64.getDecoder().decode(encrypted);
-            byte[] decryptedBytes = cipher.doFinal(decodedBytes);
+
+            // 3. Extract IV (first 16 bytes) and encrypted data
+            if (decodedBytes.length < 16) {
+                throw new IllegalArgumentException("Datos cifrados inválidos");
+            }
+            byte[] iv = new byte[16];
+            byte[] encryptedBytes = new byte[decodedBytes.length - 16];
+            System.arraycopy(decodedBytes, 0, iv, 0, 16);
+            System.arraycopy(decodedBytes, 16, encryptedBytes, 0, encryptedBytes.length);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+            // 4. We close the AES lock using the user's personal key
+            java.security.Key key = new javax.crypto.spec.SecretKeySpec(userKey.getBytes(java.nio.charset.StandardCharsets.UTF_8), "AES");
+            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(javax.crypto.Cipher.DECRYPT_MODE, key, ivSpec);
+            
+            byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
             return new String(decryptedBytes, java.nio.charset.StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException("Error al descifrar la contraseña. ¿Llave incorrecta?", e);
@@ -218,12 +244,24 @@ public class EntryService {
         if (raw == null) return null;
         
         try {
+            // 1. Generate a random IV
+            byte[] iv = new byte[16];
+            SecureRandom random = new SecureRandom();
+            random.nextBytes(iv);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+            // 2. We close the AES lock using the provided key
             java.security.Key key = new javax.crypto.spec.SecretKeySpec(encryptionKey.getBytes(java.nio.charset.StandardCharsets.UTF_8), "AES");
-            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES");
-            cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, key);
+            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, key, ivSpec);
             
             byte[] encryptedBytes = cipher.doFinal(raw.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-            return java.util.Base64.getEncoder().encodeToString(encryptedBytes);
+
+            // 3. Prepend IV to encrypted data and encode as Base64
+            byte[] ivAndEncrypted = new byte[iv.length + encryptedBytes.length];
+            System.arraycopy(iv, 0, ivAndEncrypted, 0, iv.length);
+            System.arraycopy(encryptedBytes, 0, ivAndEncrypted, iv.length, encryptedBytes.length);
+            return java.util.Base64.getEncoder().encodeToString(ivAndEncrypted);
         } catch (Exception e) {
             throw new RuntimeException("Error al cifrar la contraseña", e);
         }
@@ -237,12 +275,25 @@ public class EntryService {
         if (encrypted == null) return null;
         
         try {
-            java.security.Key key = new javax.crypto.spec.SecretKeySpec(encryptionKey.getBytes(java.nio.charset.StandardCharsets.UTF_8), "AES");
-            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES");
-            cipher.init(javax.crypto.Cipher.DECRYPT_MODE, key);
-            
+            // 1. Decode Base64
             byte[] decodedBytes = java.util.Base64.getDecoder().decode(encrypted);
-            byte[] decryptedBytes = cipher.doFinal(decodedBytes);
+
+            // 2. Extract IV (first 16 bytes) and encrypted data
+            if (decodedBytes.length < 16) {
+                throw new IllegalArgumentException("Datos cifrados inválidos");
+            }
+            byte[] iv = new byte[16];
+            byte[] encryptedBytes = new byte[decodedBytes.length - 16];
+            System.arraycopy(decodedBytes, 0, iv, 0, 16);
+            System.arraycopy(decodedBytes, 16, encryptedBytes, 0, encryptedBytes.length);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+            // 3. We close the AES lock using the provided key
+            java.security.Key key = new javax.crypto.spec.SecretKeySpec(encryptionKey.getBytes(java.nio.charset.StandardCharsets.UTF_8), "AES");
+            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(javax.crypto.Cipher.DECRYPT_MODE, key, ivSpec);
+            
+            byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
             return new String(decryptedBytes, java.nio.charset.StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException("Error al descifrar la contraseña. ¿Llave incorrecta?", e);

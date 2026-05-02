@@ -2,12 +2,14 @@ package com.hashpass.service;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -246,11 +248,23 @@ public class DatabaseInitializer {
 	 */
 	private String encryptForUser(String raw, String userKey) {
 		try {
+			// 1. Generate a random IV
+			byte[] iv = new byte[16];
+			SecureRandom random = new SecureRandom();
+			random.nextBytes(iv);
+			IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+			// 2. Encrypt using AES/CBC
 			SecretKeySpec key = new SecretKeySpec(userKey.getBytes(StandardCharsets.UTF_8), "AES");
-			Cipher cipher = Cipher.getInstance("AES");
-			cipher.init(Cipher.ENCRYPT_MODE, key);
+			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			cipher.init(Cipher.ENCRYPT_MODE, key, ivSpec);
 			byte[] encryptedBytes = cipher.doFinal(raw.getBytes(StandardCharsets.UTF_8));
-			return Base64.getEncoder().encodeToString(encryptedBytes);
+
+			// 3. Prepend IV to encrypted data and encode as Base64
+			byte[] ivAndEncrypted = new byte[iv.length + encryptedBytes.length];
+			System.arraycopy(iv, 0, ivAndEncrypted, 0, iv.length);
+			System.arraycopy(encryptedBytes, 0, ivAndEncrypted, iv.length, encryptedBytes.length);
+			return Base64.getEncoder().encodeToString(ivAndEncrypted);
 		} catch (Exception e) {
 			throw new RuntimeException("Error cifrando credencial demo", e);
 		}
