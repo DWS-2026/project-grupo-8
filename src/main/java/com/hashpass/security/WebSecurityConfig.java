@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.authentication.LockedException;
 
 
 import java.net.URLEncoder;
@@ -29,6 +30,8 @@ import com.hashpass.repository.UserRepository;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+	private static final int MAX_FAILED_LOGIN_ATTEMPTS = 5;
+	private static final int LOCK_MINUTES = 15;
 
 	@Autowired
 	RepositoryUserDetailsService userDetailsService;
@@ -109,10 +112,17 @@ public class WebSecurityConfig {
 						.passwordParameter("password")
 						.failureHandler((request, response, exception) -> {
 							String email = request.getParameter("email");
+							boolean locked = exception instanceof LockedException;
 							if (email != null) {
 								userRepository.findByEmail(email).ifPresent(user -> {
-									int actuales = (user.getFailedAttempts() == null) ? 0 : user.getFailedAttempts();
-									user.setFailedAttempts(actuales + 1);
+									if (!locked) {
+										int actuales = (user.getFailedAttempts() == null) ? 0 : user.getFailedAttempts();
+										int failedAttempts = actuales + 1;
+										user.setFailedAttempts(failedAttempts);
+										if (failedAttempts >= MAX_FAILED_LOGIN_ATTEMPTS) {
+											user.setLockedUntil(LocalDateTime.now().plusMinutes(LOCK_MINUTES));
+										}
+									}
 									userRepository.save(user);
 								});
 							}
@@ -121,10 +131,11 @@ public class WebSecurityConfig {
 								email = "";
 							}
 							String encodedEmail = URLEncoder.encode(email, StandardCharsets.UTF_8);
+							String errorParam = locked ? "locked=1" : "error=1";
 							String redirectParam = redirectTo.isBlank()
 									? ""
 									: "&redirectTo=" + URLEncoder.encode(redirectTo, StandardCharsets.UTF_8);
-							response.sendRedirect("/password-login?email=" + encodedEmail + "&error=1" + redirectParam);
+							response.sendRedirect("/password-login?email=" + encodedEmail + "&" + errorParam + redirectParam);
 						})
 						.defaultSuccessUrl("/dashboard")
 						.successHandler((request, response, auth) -> {
@@ -137,6 +148,7 @@ public class WebSecurityConfig {
 								request.getSession().setMaxInactiveInterval(user.getSecurityTimeoutMinutes() * 60);
 								user.setLastLogin(LocalDateTime.now()); // Actual successful login timestamp
 								user.setFailedAttempts(0);
+								user.setLockedUntil(null);
 
 								// Update 30-day login counter (simple and persisted in User)
 								LocalDateTime now = LocalDateTime.now();

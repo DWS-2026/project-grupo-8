@@ -101,6 +101,7 @@ public class CredentialController {
     public String passwordLogin(@RequestParam(required = false) String email,
                                 @RequestParam(required = false) String redirectTo,
                                 @RequestParam(required = false) String error,
+                                @RequestParam(required = false) String locked,
                                 Model model) {
         if (email == null || email.isBlank()) {
             return "redirect:/login";
@@ -111,6 +112,11 @@ public class CredentialController {
 
         model.addAttribute("email", email);
         model.addAttribute("redirectTo", sanitizeRedirectTarget(redirectTo));
+
+        if (locked != null) {
+            model.addAttribute("error", "Cuenta bloqueada temporalmente por demasiados intentos fallidos.");
+            return "password-login";
+        }
 
         if (error != null) {
             model.addAttribute("error", "Contraseña maestra incorrecta.");

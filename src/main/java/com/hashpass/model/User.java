@@ -85,6 +85,9 @@ public class User {
 	@Column(nullable = false)
 	private Integer failedAttempts = 0;
 
+	@Column
+	private LocalDateTime lockedUntil;
+
 	@PrePersist
 	void onCreate() {
 		LocalDateTime now = LocalDateTime.now();
@@ -295,6 +298,14 @@ public class User {
 
 	public void setFailedAttempts(Integer failedAttempts) {
 		this.failedAttempts = failedAttempts;
+	}
+
+	public LocalDateTime getLockedUntil() {
+		return lockedUntil;
+	}
+
+	public void setLockedUntil(LocalDateTime lockedUntil) {
+		this.lockedUntil = lockedUntil;
 	}
 
 	public String getDocumentFileName() {
