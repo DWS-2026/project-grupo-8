@@ -119,7 +119,14 @@ public class PlanController {
             return "redirect:/login?discountLocked=1";
         }
 
-        BigDecimal discount = baseDiscount.add(discountApplication.couponDiscount());
+        // If a coupon is applied, use only the coupon discount (10% of original price)
+        // If no coupon, use the base discount (plan-specific automatic discount)
+        BigDecimal discount;
+        if (discountApplication.couponDiscount().compareTo(BigDecimal.ZERO) > 0) {
+            discount = discountApplication.couponDiscount();
+        } else {
+            discount = baseDiscount;
+        }
         boolean applied = discountApplication.couponDiscount().compareTo(BigDecimal.ZERO) > 0;
 
         BigDecimal total = price.subtract(discount == null ? BigDecimal.ZERO : discount);
