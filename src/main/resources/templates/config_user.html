@@ -91,14 +91,19 @@
                             <form method="post" action="/config-user/document" enctype="multipart/form-data" class="mb-4">
                                 <input type="hidden" name="_csrf" value="{{token}}">
                                 <div class="mb-3">
-                                    <label for="documentInput" class="form-label text-secondary">Seleccionar archivo</label>
-                                    <div class="input-group">
-                                        <input type="file" id="documentInput" name="document" class="form-control bg-transparent text-white border-secondary" accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,.txt,.jpg,.jpeg,.png" required>
-                                        <button type="submit" class="btn btn-primary">Subir documento</button>
+                                    <input type="file" id="documentInput" name="document" class="d-none" accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,.txt,.jpg,.jpeg,.png" required onchange="updateFileName(this)">
+                                    <label for="documentInput" class="btn btn-outline-light btn-sm rounded-pill px-3 hover-scale" style="cursor: pointer; margin-bottom: 0.25rem;">
+                                        <i class="bi bi-file-earmark-arrow-up me-2"></i>Seleccionar documento
+                                    </label>
+                                    <div id="selectedFile" class="text-secondary small mt-2" style="display: none;">
+                                        <i class="bi bi-check-circle me-2"></i><span id="fileName"></span>
                                     </div>
                                     <div class="text-white-50 small mt-2">
-                                        Formatos permitidos: PDF, DOC, DOCX, XLS, XLSX, ZIP, TXT, JPG, PNG. Máx. 10MB
+                                        Máx. 10MB (PDF, DOC, DOCX, XLS, XLSX, ZIP, TXT, JPG, PNG)
                                     </div>
+                                    <button type="submit" class="btn btn-primary btn-sm mt-3">
+                                        <i class="bi bi-cloud-arrow-up me-2"></i>Subir documento
+                                    </button>
                                 </div>
                             </form>
 
@@ -186,6 +191,17 @@
             input.type = isHidden ? 'text' : 'password';
             icon.classList.toggle('bi-eye', !isHidden);
             icon.classList.toggle('bi-eye-slash', isHidden);
+        }
+
+        function updateFileName(input) {
+            const selectedFile = document.getElementById('selectedFile');
+            const fileName = document.getElementById('fileName');
+            if (input.files && input.files[0]) {
+                fileName.textContent = input.files[0].name;
+                selectedFile.style.display = 'block';
+            } else {
+                selectedFile.style.display = 'none';
+            }
         }
     </script>
 
