@@ -24,13 +24,10 @@ import com.hashpass.security.HtmlSanitizer;
 import com.hashpass.service.ImageService;
 import com.hashpass.service.PlanService;
 import com.hashpass.service.UserService;
+import com.hashpass.service.DatabaseInitializer;
 
 @Controller
 public class PlanController {
-
-    private static final String DEFAULT_DISCOUNT_CODE = "HASHPASS10";
-    private static final BigDecimal DISCOUNT_RATE = new BigDecimal("0.10");
-    private static final String DISCOUNT_FAILS_SESSION_KEY = "discountCodeFailedAttempts";
 
     private final UserService userService;
 
@@ -165,7 +162,7 @@ public class PlanController {
 
         // If a discount code was provided, validate it on the backend; if invalid, send back to payment
         if (discountCode != null && !discountCode.isBlank()) {
-            if (!DEFAULT_DISCOUNT_CODE.equalsIgnoreCase(discountCode.trim())) {
+            if (!DatabaseInitializer.DEFAULT_DISCOUNT_CODE.equalsIgnoreCase(discountCode.trim())) {
                 boolean lockedOut = registerDiscountFailure(request);
                 if (lockedOut) {
                     return "redirect:/login?expired=1";
@@ -189,9 +186,9 @@ public class PlanController {
         }
 
         String normalized = discountCode.trim();
-        if (DEFAULT_DISCOUNT_CODE.equalsIgnoreCase(normalized)) {
+        if (DatabaseInitializer.DEFAULT_DISCOUNT_CODE.equalsIgnoreCase(normalized)) {
             resetDiscountFailureCounter(request);
-            BigDecimal couponDiscount = price.multiply(DISCOUNT_RATE).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal couponDiscount = price.multiply(DatabaseInitializer.DISCOUNT_RATE).setScale(2, RoundingMode.HALF_UP);
             return new DiscountApplication(couponDiscount, false, false);
         }
 
@@ -201,7 +198,7 @@ public class PlanController {
 
     private boolean registerDiscountFailure(HttpServletRequest request) {
         int attempts = getDiscountFailureCounter(request) + 1;
-        request.getSession().setAttribute(DISCOUNT_FAILS_SESSION_KEY, attempts);
+        request.getSession().setAttribute(DatabaseInitializer.DISCOUNT_FAILS_SESSION_KEY, attempts);
         if (attempts > 5) {
             request.getSession().invalidate();
             userService.logout();
@@ -211,11 +208,11 @@ public class PlanController {
     }
 
     private void resetDiscountFailureCounter(HttpServletRequest request) {
-        request.getSession().setAttribute(DISCOUNT_FAILS_SESSION_KEY, 0);
+        request.getSession().setAttribute(DatabaseInitializer.DISCOUNT_FAILS_SESSION_KEY, 0);
     }
 
     private int getDiscountFailureCounter(HttpServletRequest request) {
-        Object value = request.getSession().getAttribute(DISCOUNT_FAILS_SESSION_KEY);
+        Object value = request.getSession().getAttribute(DatabaseInitializer.DISCOUNT_FAILS_SESSION_KEY);
         if (value instanceof Integer) {
             return (Integer) value;
         }
