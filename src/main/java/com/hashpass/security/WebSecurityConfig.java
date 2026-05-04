@@ -242,7 +242,8 @@ public class WebSecurityConfig {
 						.requestMatchers(HttpMethod.DELETE, "/api/v1/reviews/**").hasAnyRole("USER", "ADMIN")
 						
 						// Images API
-						//.requestMatchers(HttpMethod.POST, "/api/v1/images/**").hasAnyRole("USER", "ADMIN")
+						.requestMatchers(HttpMethod.GET, "/api/v1/images/profiles").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.GET, "/api/v1/images/credentials").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.GET, "/api/v1/images/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers(HttpMethod.PUT, "/api/v1/images/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers(HttpMethod.DELETE, "/api/v1/images/**").hasAnyRole("USER", "ADMIN")
