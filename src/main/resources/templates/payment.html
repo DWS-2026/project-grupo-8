@@ -226,6 +226,10 @@
                 paymentPlanInput.value = 'premium';
             }
 
+            if (paymentDiscountCodeInput && discountCodeInput) {
+                paymentDiscountCodeInput.value = discountCodeInput.value.trim();
+            }
+
             if (!methodCard.checked) {
                 paymentSubmitForm.submit();
                 return;
@@ -236,10 +240,6 @@
             updatePayButtonState();
 
             if (complete) {
-                // ensure discount code value is copied when submitting
-                if (paymentDiscountCodeInput && document.getElementById('discountCodeInput')) {
-                    paymentDiscountCodeInput.value = document.getElementById('discountCodeInput').value.trim();
-                }
                 paymentSubmitForm.submit();
             }
         });

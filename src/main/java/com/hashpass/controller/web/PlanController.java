@@ -28,6 +28,10 @@ import com.hashpass.service.UserService;
 @Controller
 public class PlanController {
 
+    private static final String DEFAULT_DISCOUNT_CODE = "HASHPASS10";
+    private static final BigDecimal DISCOUNT_RATE = new BigDecimal("0.10");
+    private static final String DISCOUNT_FAILS_SESSION_KEY = "discountCodeFailedAttempts";
+
     private final UserService userService;
 
     private final ImageService imageService;
@@ -96,13 +100,11 @@ public class PlanController {
         return "plan";
     }
 
-    private static final String DEFAULT_DISCOUNT_CODE = "HASHPASS10";
-    private static final BigDecimal DISCOUNT_RATE = new BigDecimal("0.10");
-
     @GetMapping("/payment")
     public String payment(@RequestParam(required = false) String plan,
                           @RequestParam(required = false) String discountCode,
                           @RequestParam(required = false) String discountError,
+                          HttpServletRequest request,
                           Model model) {
         Plan selectedPlan = findPlanFromInput(plan)
             .or(() -> planService.findByName("Premium"))
@@ -113,19 +115,15 @@ public class PlanController {
         }
 
         BigDecimal price = selectedPlan.getPriceMonthly() == null ? BigDecimal.ZERO : selectedPlan.getPriceMonthly();
-        BigDecimal discount = getDiscountForPlan(selectedPlan.getName(), price);
+        BigDecimal baseDiscount = getDiscountForPlan(selectedPlan.getName(), price);
+        DiscountApplication discountApplication = resolveDiscountApplication(discountCode, request, price);
 
-        boolean applied = false;
-        if (discountCode != null && !discountCode.isBlank()) {
-            if (DEFAULT_DISCOUNT_CODE.equalsIgnoreCase(discountCode.trim())) {
-                // apply 10% discount (only once per purchase - handled at confirm time)
-                discount = price.multiply(DISCOUNT_RATE).setScale(2, RoundingMode.HALF_UP);
-                applied = true;
-            } else {
-                // invalid code requested via GET
-                model.addAttribute("discountError", true);
-            }
+        if (discountApplication.lockedOut()) {
+            return "redirect:/login?expired=1";
         }
+
+        BigDecimal discount = baseDiscount.add(discountApplication.couponDiscount());
+        boolean applied = discountApplication.couponDiscount().compareTo(BigDecimal.ZERO) > 0;
 
         BigDecimal total = price.subtract(discount == null ? BigDecimal.ZERO : discount);
 
@@ -137,7 +135,7 @@ public class PlanController {
         model.addAttribute("paymentTotal", formatEur(total));
         model.addAttribute("discountCode", discountCode == null ? "" : discountCode.trim());
         model.addAttribute("discountApplied", applied);
-        model.addAttribute("discountError", discountError != null || model.containsAttribute("discountError"));
+        model.addAttribute("discountError", discountError != null || discountApplication.invalid());
 
         return "payment";
     }
@@ -168,10 +166,13 @@ public class PlanController {
         // If a discount code was provided, validate it on the backend; if invalid, send back to payment
         if (discountCode != null && !discountCode.isBlank()) {
             if (!DEFAULT_DISCOUNT_CODE.equalsIgnoreCase(discountCode.trim())) {
-                // invalid -> redirect back to payment with error
-                return "redirect:/payment?plan=" + targetPlan.getId() + "&discountError=1";
+                boolean lockedOut = registerDiscountFailure(request);
+                if (lockedOut) {
+                    return "redirect:/login?expired=1";
+                }
+                return "redirect:/payment?plan=" + targetPlan.getId() + "&discountCode=" + urlEncode(discountCode) + "&discountError=1";
             }
-            // valid -> we could record discount usage here if necessary
+            resetDiscountFailureCounter(request);
         }
 
         if (userService.updateLoggedUserPlan(targetPlan).isEmpty()) {
@@ -181,6 +182,51 @@ public class PlanController {
 
         return "redirect:/dashboard";
     }
+
+    private DiscountApplication resolveDiscountApplication(String discountCode, HttpServletRequest request, BigDecimal price) {
+        if (discountCode == null || discountCode.isBlank()) {
+            return new DiscountApplication(BigDecimal.ZERO, false, false);
+        }
+
+        String normalized = discountCode.trim();
+        if (DEFAULT_DISCOUNT_CODE.equalsIgnoreCase(normalized)) {
+            resetDiscountFailureCounter(request);
+            BigDecimal couponDiscount = price.multiply(DISCOUNT_RATE).setScale(2, RoundingMode.HALF_UP);
+            return new DiscountApplication(couponDiscount, false, false);
+        }
+
+        boolean lockedOut = registerDiscountFailure(request);
+        return new DiscountApplication(BigDecimal.ZERO, true, lockedOut);
+    }
+
+    private boolean registerDiscountFailure(HttpServletRequest request) {
+        int attempts = getDiscountFailureCounter(request) + 1;
+        request.getSession().setAttribute(DISCOUNT_FAILS_SESSION_KEY, attempts);
+        if (attempts > 5) {
+            request.getSession().invalidate();
+            userService.logout();
+            return true;
+        }
+        return false;
+    }
+
+    private void resetDiscountFailureCounter(HttpServletRequest request) {
+        request.getSession().setAttribute(DISCOUNT_FAILS_SESSION_KEY, 0);
+    }
+
+    private int getDiscountFailureCounter(HttpServletRequest request) {
+        Object value = request.getSession().getAttribute(DISCOUNT_FAILS_SESSION_KEY);
+        if (value instanceof Integer) {
+            return (Integer) value;
+        }
+        return 0;
+    }
+
+    private String urlEncode(String value) {
+        return java.net.URLEncoder.encode(value, java.nio.charset.StandardCharsets.UTF_8);
+    }
+
+    private record DiscountApplication(BigDecimal couponDiscount, boolean invalid, boolean lockedOut) {}
 
     @PostMapping("/plan/select")
     public String selectPlan(@RequestParam String plan) {
@@ -375,14 +421,6 @@ public class PlanController {
     // =====================================================
     // HELPER METHODS
     // =====================================================
-
-    private String requireLogin(Model model, String view) {
-        if (userService.getLoggedUser().isEmpty()) {
-            return "redirect:/login";
-        }
-        // user already added by populateUser()
-        return view;
-    }
 
     private boolean hasCurrentPlan(String planName) {
         Optional<User> userOpt = userService.getLoggedUser();
