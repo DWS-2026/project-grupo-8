@@ -44,6 +44,17 @@ public class HtmlSanitizer {
         return normalizedEmail.toLowerCase(Locale.ROOT);
     }
 
+    public String sanitizePhoneNumber(String input) {
+        String sanitizedPhone = sanitizeOptionalPlainText(input);
+        if (sanitizedPhone == null) {
+            return null;
+        }
+        if (!sanitizedPhone.matches("[0-9+()\\s-]{6,32}")) {
+            return null;
+        }
+        return sanitizedPhone;
+    }
+
     public String sanitizeRichText(String rawHtml) {
         if (rawHtml == null || rawHtml.isBlank()) {
             return "";

@@ -33,6 +33,10 @@
                                 class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 text-secondary mb-2">
                                 <i class="bi bi-envelope"></i> {{user.email}}
                             </div>
+                            <div
+                                class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 text-secondary mb-2">
+                                <i class="bi bi-telephone"></i> {{#user.phone}}{{user.phone}}{{/user.phone}}{{^user.phone}}No disponible{{/user.phone}}
+                            </div>
                         </div>
                         <div class="ms-auto d-none d-md-block">
                             <a href="/config-user" class="btn btn-dark-custom">

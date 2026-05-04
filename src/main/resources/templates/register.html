@@ -87,7 +87,8 @@
 									<option value="+27">🇿🇦 +27 (Sudáfrica)</option>
 								</select>
 								<input type="tel" id="phone" name="phone" class="form-control login-email-input"
-									placeholder="Número de teléfono" style="border-radius: 0 6px 6px 0 !important;">
+									placeholder="Número de teléfono" value="{{selectedPhone}}"
+									style="border-radius: 0 6px 6px 0 !important;">
 							</div>
 						</div>
 
@@ -162,6 +163,8 @@
 	<script>
 		const passwordInput = document.getElementById('password');
 		const emailInput = document.getElementById('email');
+		const phoneInput = document.getElementById('phone');
+		const countryCodeInput = document.getElementById('country-code');
 		const strengthBar = document.getElementById('strengthBar');
 		const strengthText = document.getElementById('strengthText');
 		const emailError = document.getElementById('emailError');
@@ -281,6 +284,10 @@
 			const registerForm = document.getElementById('registerForm');
 			const registerBtn = document.getElementById('registerBtn');
 			registerForm.addEventListener('submit', () => {
+				const phoneValue = phoneInput.value.trim();
+				if (phoneValue && !phoneValue.startsWith('+')) {
+					phoneInput.value = `${countryCodeInput.value} ${phoneValue}`.trim();
+				}
 				registerBtn.disabled = true;
 				registerBtn.textContent = 'Creando cuenta...';
 			});

@@ -79,6 +79,7 @@ public class UserController {
             @RequestParam(required = false) String paid,
             Model model) {
         model.addAttribute("selectedPlanId", plan == null ? "" : plan);
+        model.addAttribute("selectedPhone", "");
         model.addAttribute("paidSelection", paid != null);
         return "register";
     }
@@ -86,6 +87,7 @@ public class UserController {
     @PostMapping("/register")
     public String processRegister(@RequestParam String name,
             @RequestParam String email,
+            @RequestParam(required = false) String phone,
             @RequestParam String password,
             @RequestParam String password2,
             @RequestParam(required = false) Long plan,
@@ -99,15 +101,18 @@ public class UserController {
         if (authService.isEmailRegistered(email)) {
             model.addAttribute("error", "El correo ya está registrado.");
             model.addAttribute("selectedPlanId", plan == null ? "" : plan);
+            model.addAttribute("selectedPhone", phone == null ? "" : phone);
             return "register";
         }
 
         User registeredUser;
         try {
-            registeredUser = authService.registerUser(name, email, password,password2, plan, hasPrepaidForSelectedPlan);
+            registeredUser = authService.registerUser(name, email, phone, password, password2, plan,
+                    hasPrepaidForSelectedPlan);
         } catch (IllegalArgumentException | IllegalStateException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("selectedPlanId", plan == null ? "" : plan);
+            model.addAttribute("selectedPhone", phone == null ? "" : phone);
             return "register";
         }
 
@@ -398,6 +403,7 @@ public class UserController {
         model.addAttribute("detailId", u.getId());
         model.addAttribute("detailName", u.getName());
         model.addAttribute("detailEmail", u.getEmail());
+        model.addAttribute("detailPhone", u.getPhone() == null || u.getPhone().isBlank() ? "No disponible" : u.getPhone());
         model.addAttribute("detailPlan", u.getPlan() == null ? "Gratuito" : u.getPlan().getName());
         model.addAttribute("detailCreatedAt",
                 u.getCreatedAt() == null ? "-" : u.getCreatedAt().toLocalDate().toString());

@@ -82,6 +82,7 @@ public class UserRestController {
             User createdUser = authService.registerUser(
                     request.name().trim(),
                     request.email().trim(),
+                    request.phone(),
                     request.password(),
                     request.password2(),
                     request.planId(),
@@ -163,6 +164,7 @@ public class UserRestController {
             User createdUser = authService.registerUser(
                     request.name().trim(),
                     request.email().trim(),
+                    request.phone(),
                     request.password(),
                     request.password2(),
                     request.planId(),
@@ -220,6 +222,17 @@ public class UserRestController {
                         .body(Map.of("message", "El correo ya está registrado."));
             }
             user.setEmail(normalizedEmail);
+        }
+
+        if (request.phone() != null) {
+            String sanitizedPhone = htmlSanitizer.sanitizePhoneNumber(request.phone());
+            if (request.phone().isBlank()) {
+                user.setPhone(null);
+            } else if (sanitizedPhone == null) {
+                return ResponseEntity.badRequest().body(Map.of("message", "El teléfono no es válido."));
+            } else {
+                user.setPhone(sanitizedPhone);
+            }
         }
 
         if (request.planId() != null) {
@@ -371,6 +384,7 @@ public class UserRestController {
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
+                user.getPhone(),
                 user.isAdmin(),
                 user.getPlan() != null ? user.getPlan().getId() : null,
                 user.getPlan() != null ? user.getPlan().getName() : "Gratuito",
@@ -381,18 +395,19 @@ public class UserRestController {
                 user.getFailedAttempts());
     }
 
-    public record CreateUserRequest(String name, String email, String password, String password2, Long planId) {
+    public record CreateUserRequest(String name, String email, String phone, String password, String password2, Long planId) {
     }
 
     public record LoginRequest(String email, String password) {
     }
 
-    public record UpdateUserRequest(String name, String email, Long planId, Boolean admin, Integer securityTimeoutMinutes) {
+    public record UpdateUserRequest(String name, String email, String phone, Long planId, Boolean admin, Integer securityTimeoutMinutes) {
     }
 
     public record UserResponse(Long id,
             String name,
             String email,
+            String phone,
             boolean admin,
             Long planId,
             String planName,

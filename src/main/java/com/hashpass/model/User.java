@@ -33,6 +33,9 @@ public class User {
 	@Column(nullable = false, length = 150)
 	private String email;
 
+	@Column(length = 32)
+	private String phone;
+
 	@Column(nullable = false, length = 255)
 	private String passwordHash;
 
@@ -122,6 +125,14 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public String getPasswordHash() {

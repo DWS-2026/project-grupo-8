@@ -39,9 +39,11 @@ public class AuthService {
         return userRepository.existsByEmail(email);
     }
 
-    public User registerUser(String name, String email, String password,String password2, Long selectedPlanId, boolean allowPaidPlan) {
+    public User registerUser(String name, String email, String phone, String password, String password2,
+            Long selectedPlanId, boolean allowPaidPlan) {
         String normalizedEmail = htmlSanitizer.normalizeEmail(email);
         String normalizedName = htmlSanitizer.sanitizePlainText(name);
+        String normalizedPhone = htmlSanitizer.sanitizePhoneNumber(phone);
         if (normalizedEmail == null || normalizedEmail.isBlank()) {
             throw new IllegalArgumentException("El correo electrónico es obligatorio.");
         }
@@ -50,6 +52,9 @@ public class AuthService {
         }
         if (normalizedName.length() > 120) {
             throw new IllegalArgumentException("El nombre no puede superar los 120 caracteres.");
+        }
+        if (phone != null && !phone.isBlank() && normalizedPhone == null) {
+            throw new IllegalArgumentException("El teléfono no es válido.");
         }
         if (isEmailRegistered(normalizedEmail)) {
             throw new IllegalStateException("El correo ya está registrado.");
@@ -64,6 +69,7 @@ public class AuthService {
         User newUser = new User();
         newUser.setName(normalizedName);
         newUser.setEmail(normalizedEmail);
+        newUser.setPhone(normalizedPhone);
         // Store a password hash using BCrypt
         newUser.setPasswordHash(passwordEncoder.encode(password));
         newUser.setEncryptionKey(deriveEncryptionKey(password));

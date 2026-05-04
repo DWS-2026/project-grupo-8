@@ -70,14 +70,14 @@ public class DatabaseInitializer {
 		createAdminUserIfNotExists();
 
 		// Create demo users
-		seedDemoUser("Usuario Demo Uno", "demo1@hashpass.local", "Demo123!", new String[][] {
+		seedDemoUser("Usuario Demo Uno", "demo1@hashpass.local", "+34 600 111 111", "Demo123!", new String[][] {
 				{ "Gmail", "https://mail.google.com", "demo1@gmail.com", "Correo principal" },
 				{ "Netflix", "https://www.netflix.com", "demo1.netflix", "Streaming familiar" }
 		}, new String[][] {
 				{ "Recomendada", "La uso desde hace meses y funciona genial.", "4" }
 		}, freePlan);
 
-		seedDemoUser("Usuario Demo Dos", "demo2@hashpass.local", "Demo123!", new String[][] {
+		seedDemoUser("Usuario Demo Dos", "demo2@hashpass.local", "+34 600 222 222", "Demo123!", new String[][] {
 				{ "GitHub", "https://github.com", "demo2dev", "Cuenta de desarrollo" },
 				{ "Banco", "https://www.bbva.es", "demo2.banco", "Acceso banca online" }
 		}, new String[][] {
@@ -96,6 +96,7 @@ public class DatabaseInitializer {
 			User admin = new User();
 			admin.setName(htmlSanitizer.sanitizePlainText("Admin"));
 			admin.setEmail(adminEmail);
+			admin.setPhone("+34 600 000 000");
 			admin.setPasswordHash(passwordEncoder.encode("admin123"));
 			admin.setEncryptionKey(deriveKey("admin123"));
 			admin.setAdmin(true);
@@ -114,12 +115,13 @@ public class DatabaseInitializer {
 	 * @param reviewsData Array of [title, comment, rating]
 	 * @param freePlan Plan to assign to the user
 	 */
-	private void seedDemoUser(String name, String email, String rawPassword, String[][] credentialsData,
+	private void seedDemoUser(String name, String email, String phone, String rawPassword, String[][] credentialsData,
 			String[][] reviewsData, Plan freePlan) {
 		User user = userRepository.findByEmail(email).orElseGet(() -> {
 			User newUser = new User();
 			newUser.setName(htmlSanitizer.sanitizePlainText(name));
 			newUser.setEmail(email);
+			newUser.setPhone(htmlSanitizer.sanitizePhoneNumber(phone));
 			newUser.setPasswordHash(passwordEncoder.encode(rawPassword));
 			newUser.setEncryptionKey(deriveKey(rawPassword));
 			newUser.setAdmin(false);
