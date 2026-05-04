@@ -55,6 +55,7 @@ public class UserController {
     public String login(@RequestParam(required = false) String deleted,
             @RequestParam(required = false) String logout,
             @RequestParam(required = false) String expired,
+            @RequestParam(required = false) String discountLocked,
             @RequestParam(required = false) String error,
             @RequestParam(required = false) String redirectTo,
             Model model) {
@@ -64,7 +65,9 @@ public class UserController {
         if (logout != null) {
             model.addAttribute("success", "Sesión cerrada correctamente.");
         }
-        if (expired != null && logout == null) {
+        if (discountLocked != null) {
+            model.addAttribute("discountLocked", "Demasiados intentos de código de descuento inválido. Tu sesión ha sido cerrada. Vuelve a iniciar sesión.");
+        } else if (expired != null && logout == null) {
             model.addAttribute("expired", "Tu sesión ha expirado por inactividad. Vuelve a iniciar sesión.");
         }
         if (error != null) {

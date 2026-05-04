@@ -116,7 +116,7 @@ public class PlanController {
         DiscountApplication discountApplication = resolveDiscountApplication(discountCode, request, price);
 
         if (discountApplication.lockedOut()) {
-            return "redirect:/login?expired=1";
+            return "redirect:/login?discountLocked=1";
         }
 
         BigDecimal discount = baseDiscount.add(discountApplication.couponDiscount());
@@ -165,7 +165,7 @@ public class PlanController {
             if (!DatabaseInitializer.DEFAULT_DISCOUNT_CODE.equalsIgnoreCase(discountCode.trim())) {
                 boolean lockedOut = registerDiscountFailure(request);
                 if (lockedOut) {
-                    return "redirect:/login?expired=1";
+                    return "redirect:/login?discountLocked=1";
                 }
                 return "redirect:/payment?plan=" + targetPlan.getId() + "&discountCode=" + urlEncode(discountCode) + "&discountError=1";
             }

@@ -35,9 +35,8 @@ import com.hashpass.repository.UserRepository;
 public class DatabaseInitializer {
 	private static final Logger log = LoggerFactory.getLogger(DatabaseInitializer.class);
 
-	// =====================================================
+
 	// DISCOUNT CODE CONSTANTS
-	// =====================================================
 	public static final String DEFAULT_DISCOUNT_CODE = "HASHPASS10";
 	public static final BigDecimal DISCOUNT_RATE = new BigDecimal("0.10");
 	public static final String DISCOUNT_FAILS_SESSION_KEY = "discountCodeFailedAttempts";
