@@ -17,9 +17,13 @@ import com.hashpass.model.Plan;
 import com.hashpass.model.User;
 import com.hashpass.repository.PlanRepository;
 import com.hashpass.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -120,7 +124,7 @@ public class UserService {
                 fileStorageService.deleteFile(user.getDocumentFileName());
             } catch (IOException e) {
                 // Log but don't fail - old file may be missing
-                System.err.println("Warning: Could not delete old document: " + e.getMessage());
+                log.warn("Could not delete old document userId={} reason={}", userId, e.getMessage(), e);
             }
         }
 

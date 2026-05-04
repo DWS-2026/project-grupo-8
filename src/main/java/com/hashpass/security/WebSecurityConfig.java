@@ -18,7 +18,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.authentication.LockedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -30,6 +33,7 @@ import com.hashpass.repository.UserRepository;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+	private static final Logger log = LoggerFactory.getLogger(WebSecurityConfig.class);
 	private static final int MAX_FAILED_LOGIN_ATTEMPTS = 5;
 	private static final int LOCK_MINUTES = 15;
 
@@ -112,12 +116,15 @@ public class WebSecurityConfig {
 						.passwordParameter("password")
 						.failureHandler((request, response, exception) -> {
 							String email = request.getParameter("email");
+							String normalizedEmail = normalizeIdentifier(email);
 							boolean locked = exception instanceof LockedException;
+							final int[] failedAttemptsRef = new int[] { 0 };
 							if (email != null) {
-								userRepository.findByEmail(email).ifPresent(user -> {
+								userRepository.findByEmail(normalizedEmail).ifPresent(user -> {
 									if (!locked) {
 										int actuales = (user.getFailedAttempts() == null) ? 0 : user.getFailedAttempts();
 										int failedAttempts = actuales + 1;
+										failedAttemptsRef[0] = failedAttempts;
 										user.setFailedAttempts(failedAttempts);
 										if (failedAttempts >= MAX_FAILED_LOGIN_ATTEMPTS) {
 											user.setLockedUntil(LocalDateTime.now().plusMinutes(LOCK_MINUTES));
@@ -126,6 +133,7 @@ public class WebSecurityConfig {
 									userRepository.save(user);
 								});
 							}
+							logLoginFailure(request, normalizedEmail, locked, failedAttemptsRef[0], exception);
 							String redirectTo = sanitizeRedirectTarget(request.getParameter("redirectTo"));
 							if (email == null) {
 								email = "";
@@ -141,6 +149,7 @@ public class WebSecurityConfig {
 						.successHandler((request, response, auth) -> {
 							String password = request.getParameter("password");
 							String email = auth.getName();
+							logLoginSuccess(request, email);
 							String redirectTo = sanitizeRedirectTarget(request.getParameter("redirectTo"));
 							userRepository.findByEmail(email).ifPresent(user -> {
 								userService.setUser(user);
@@ -172,13 +181,21 @@ public class WebSecurityConfig {
 										response.sendRedirect("/dashboard");
 									}
 								} catch (java.io.IOException e) {
+										log.error("SECURITY_EVENT=LOGIN_REDIRECT_FAILED user={} ip={} reason={} ",
+												maskIdentifier(email),
+												resolveClientIp(request),
+												e.getClass().getSimpleName(),
+												e);
 									throw new RuntimeException(e);
 								}
 							});
 						})
 						.permitAll())
 				.exceptionHandling(exceptionHandling -> exceptionHandling
-						.accessDeniedPage("/error/403"))
+						.accessDeniedHandler((request, response, accessDeniedException) -> {
+							logAccessDenied(request, accessDeniedException);
+							response.sendRedirect("/error/403");
+						}))
 				.sessionManagement(sessionManagement -> sessionManagement
 						.invalidSessionUrl("/login?expired=1"))
 				.logout(logout -> logout
@@ -228,6 +245,16 @@ public class WebSecurityConfig {
 		http
 				.securityMatcher("/api/**");
 				//.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
+
+		http.exceptionHandling(handling -> handling
+				.authenticationEntryPoint((request, response, authException) -> {
+					logUnauthorized(request, authException);
+					response.sendError(401, "Unauthorized");
+				})
+				.accessDeniedHandler((request, response, accessDeniedException) -> {
+					logAccessDenied(request, accessDeniedException);
+					response.sendError(403, "Forbidden");
+				}));
 
 		http
 				.authorizeHttpRequests(authorize -> authorize
@@ -285,5 +312,78 @@ public class WebSecurityConfig {
 		//http.addFilterBefore(new JwtRequestFilter(userDetailService, jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
+	}
+
+	private void logLoginSuccess(HttpServletRequest request, String principal) {
+		log.info("SECURITY_EVENT=LOGIN_SUCCESS user={} ip={} path={} userAgent={}",
+				maskIdentifier(principal),
+				resolveClientIp(request),
+				request.getRequestURI(),
+				sanitizeUserAgent(request.getHeader("User-Agent")));
+	}
+
+	private void logLoginFailure(HttpServletRequest request, String principal, boolean locked, int failedAttempts,
+				Exception exception) {
+		log.warn("SECURITY_EVENT=LOGIN_FAILURE user={} ip={} path={} locked={} failedAttempts={} reason={} userAgent={}",
+				maskIdentifier(principal),
+				resolveClientIp(request),
+				request.getRequestURI(),
+				locked,
+				failedAttempts,
+				exception.getClass().getSimpleName(),
+				sanitizeUserAgent(request.getHeader("User-Agent")));
+	}
+
+	private void logUnauthorized(HttpServletRequest request, Exception exception) {
+		log.warn("SECURITY_EVENT=UNAUTHORIZED ip={} path={} reason={} userAgent={}",
+				resolveClientIp(request),
+				request.getRequestURI(),
+				exception.getClass().getSimpleName(),
+				sanitizeUserAgent(request.getHeader("User-Agent")));
+	}
+
+	private void logAccessDenied(HttpServletRequest request, Exception exception) {
+		String principal = request.getUserPrincipal() == null ? "anonymous" : request.getUserPrincipal().getName();
+		log.warn("SECURITY_EVENT=ACCESS_DENIED user={} ip={} path={} reason={} userAgent={}",
+				maskIdentifier(principal),
+				resolveClientIp(request),
+				request.getRequestURI(),
+				exception.getClass().getSimpleName(),
+				sanitizeUserAgent(request.getHeader("User-Agent")));
+	}
+
+	private String normalizeIdentifier(String value) {
+		if (value == null) {
+			return "";
+		}
+		return value.trim().toLowerCase();
+	}
+
+	private String maskIdentifier(String value) {
+		if (value == null || value.isBlank()) {
+			return "unknown";
+		}
+		String trimmed = value.trim();
+		if (trimmed.length() <= 2) {
+			return "**";
+		}
+		return trimmed.substring(0, 2) + "***";
+	}
+
+	private String resolveClientIp(HttpServletRequest request) {
+		String forwarded = request.getHeader("X-Forwarded-For");
+		if (forwarded != null && !forwarded.isBlank()) {
+			int commaIndex = forwarded.indexOf(',');
+			return commaIndex > 0 ? forwarded.substring(0, commaIndex).trim() : forwarded.trim();
+		}
+		return request.getRemoteAddr();
+	}
+
+	private String sanitizeUserAgent(String userAgent) {
+		if (userAgent == null || userAgent.isBlank()) {
+			return "unknown";
+		}
+		String trimmed = userAgent.trim();
+		return trimmed.length() > 120 ? trimmed.substring(0, 120) : trimmed;
 	}
 }

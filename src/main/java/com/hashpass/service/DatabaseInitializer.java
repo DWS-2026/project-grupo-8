@@ -12,6 +12,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,7 @@ import com.hashpass.repository.UserRepository;
  */
 @Service
 public class DatabaseInitializer {
+	private static final Logger log = LoggerFactory.getLogger(DatabaseInitializer.class);
 
 	private final UserRepository userRepository;
 	private final CredentialRepository credentialRepository;
@@ -57,7 +60,7 @@ public class DatabaseInitializer {
 	 * - Creates demo users with credentials and reviews
 	 */
 	public void initializeDatabase() {
-		System.out.println("🔧 Inicializando base de datos...");
+		log.info("Inicializando base de datos...");
 
 		// Initialize plans if they do not exist
 		createPlanIfNotExists("Gratuito", BigDecimal.ZERO, "- Hasta 10 credenciales\n- Sin soporte técnico\n- Almacenamiento 100MB\n- Contraseña maestra estándar");
@@ -84,7 +87,7 @@ public class DatabaseInitializer {
 				{ "Muy util", "Me ayuda a no repetir contrasenas y tener todo ordenado.", "5" },
 		}, freePlan);
 
-		System.out.println("✅ Base de datos inicializada correctamente.");
+		log.info("Base de datos inicializada correctamente.");
 	}
 
 	/**
@@ -101,7 +104,7 @@ public class DatabaseInitializer {
 			admin.setEncryptionKey(deriveKey("admin123"));
 			admin.setAdmin(true);
 			userRepository.save(admin);
-			System.out.println("✓ Usuario administrador creado.");
+			log.info("Usuario administrador creado.");
 		}
 	}
 
@@ -138,7 +141,7 @@ public class DatabaseInitializer {
 		// Create demo reviews
 		seedDemoReviews(user, reviewsData);
 
-		System.out.println("✓ Usuario demo '" + name + "' creado con datos de ejemplo.");
+		log.info("Usuario demo creado con datos de ejemplo. name={}", name);
 	}
 
 	/**
@@ -213,7 +216,7 @@ public class DatabaseInitializer {
 			plan.setPriceMonthly(price);
 			plan.setDescription(htmlSanitizer.sanitizeOptionalPlainText(description));
 			planRepository.save(plan);
-			System.out.println("✓ Plan '" + name + "' creado exitosamente.");
+			log.info("Plan creado exitosamente. name={}", name);
 		}
 	}
 

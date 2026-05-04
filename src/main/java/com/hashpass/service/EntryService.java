@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import javax.crypto.spec.IvParameterSpec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,8 @@ import com.hashpass.repository.CredentialRepository;
 
 @Service
 public class EntryService {
+
+    private static final Logger log = LoggerFactory.getLogger(EntryService.class);
 
     private static final int FREE_PLAN_CREDENTIAL_LIMIT = 10;
     public static final String FREE_PLAN_LIMIT_MESSAGE =
@@ -332,12 +336,15 @@ public class EntryService {
                     credentialRepository.save(cred);
                 } catch (Exception e) {
                     // If a credential fails, log the error but continue
-                    System.err.println("Error re-encrypting credential " + cred.getId() + ": " + e.getMessage());
+                    log.warn("SECURITY_EVENT=CREDENTIAL_REENCRYPT_FAILED credentialId={} userId={} reason={}",
+                            cred.getId(), userId, e.getClass().getSimpleName(), e);
                 }
             }
             
             return null; // Success
         } catch (Exception e) {
+            log.error("SECURITY_EVENT=CREDENTIAL_REENCRYPT_BATCH_FAILED userId={} reason={}",
+                    userId, e.getClass().getSimpleName(), e);
             return "Error al re-cifrar las credenciales: " + e.getMessage();
         }
     }
