@@ -110,6 +110,17 @@
                         <div class="text-white">{{paymentPrice}}</div>
                     </div>
 
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small">Código de descuento</label>
+                        <div class="input-group">
+                            <input class="form-control bg-dark text-white border-secondary" type="text" id="discountCodeInput" name="discountCode" placeholder="Introduce código" value="{{discountCode}}">
+                            <a href="/payment?plan={{paymentPlanKey}}&discountCode={{discountCode}}" id="applyDiscountBtn" class="btn btn-outline-success">Aplicar</a>
+                        </div>
+                        {{#discountError}}
+                        <div class="text-danger small mt-1">Código inválido. Inténtalo de nuevo.</div>
+                        {{/discountError}}
+                    </div>
+
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="text-secondary small">Descuento (Promo)</div>
                         <div class="text-success small">{{paymentDiscount}}</div>
@@ -129,6 +140,7 @@
                     <form id="paymentSubmitForm" method="post" action="/payment/confirm" class="d-none">
                         <input type="hidden" name="_csrf" value="{{token}}">
                         <input type="hidden" id="paymentPlanInput" name="plan" value="{{paymentPlanKey}}">
+                        <input type="hidden" id="paymentDiscountCodeInput" name="discountCode" value="{{discountCode}}">
                     </form>
 
                     <p id="paymentValidationMessage" class="text-danger small mb-3 d-none">
@@ -167,6 +179,7 @@
         const payButton = document.getElementById('payButton');
         const paymentSubmitForm = document.getElementById('paymentSubmitForm');
         const paymentPlanInput = document.getElementById('paymentPlanInput');
+        const paymentDiscountCodeInput = document.getElementById('paymentDiscountCodeInput');
         const methodCard = document.getElementById('methodCard');
         const validationMessage = document.getElementById('paymentValidationMessage');
         let hasTriedPay = false;
@@ -223,6 +236,10 @@
             updatePayButtonState();
 
             if (complete) {
+                // ensure discount code value is copied when submitting
+                if (paymentDiscountCodeInput && document.getElementById('discountCodeInput')) {
+                    paymentDiscountCodeInput.value = document.getElementById('discountCodeInput').value.trim();
+                }
                 paymentSubmitForm.submit();
             }
         });
@@ -324,6 +341,22 @@
         }
 
         updatePayButtonState();
+
+        // Apply discount button behaviour: navigate to /payment GET with plan and discountCode
+        const applyDiscountBtn = document.getElementById('applyDiscountBtn');
+        const discountCodeInput = document.getElementById('discountCodeInput');
+        if (applyDiscountBtn && discountCodeInput) {
+            applyDiscountBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const code = discountCodeInput.value.trim();
+                const planKey = paymentPlanInput ? paymentPlanInput.value : '';
+                let url = '/payment' + (planKey ? '?plan=' + encodeURIComponent(planKey) : '');
+                if (code) {
+                    url += (url.indexOf('?') === -1 ? '?' : '&') + 'discountCode=' + encodeURIComponent(code);
+                }
+                window.location.href = url;
+            });
+        }
     </script>
 
 </body>

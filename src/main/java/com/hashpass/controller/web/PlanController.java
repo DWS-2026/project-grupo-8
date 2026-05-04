@@ -96,8 +96,14 @@ public class PlanController {
         return "plan";
     }
 
+    private static final String DEFAULT_DISCOUNT_CODE = "HASHPASS10";
+    private static final BigDecimal DISCOUNT_RATE = new BigDecimal("0.10");
+
     @GetMapping("/payment")
-    public String payment(@RequestParam(required = false) String plan, Model model) {
+    public String payment(@RequestParam(required = false) String plan,
+                          @RequestParam(required = false) String discountCode,
+                          @RequestParam(required = false) String discountError,
+                          Model model) {
         Plan selectedPlan = findPlanFromInput(plan)
             .or(() -> planService.findByName("Premium"))
                 .orElse(null);
@@ -108,7 +114,20 @@ public class PlanController {
 
         BigDecimal price = selectedPlan.getPriceMonthly() == null ? BigDecimal.ZERO : selectedPlan.getPriceMonthly();
         BigDecimal discount = getDiscountForPlan(selectedPlan.getName(), price);
-        BigDecimal total = price.subtract(discount);
+
+        boolean applied = false;
+        if (discountCode != null && !discountCode.isBlank()) {
+            if (DEFAULT_DISCOUNT_CODE.equalsIgnoreCase(discountCode.trim())) {
+                // apply 10% discount (only once per purchase - handled at confirm time)
+                discount = price.multiply(DISCOUNT_RATE).setScale(2, RoundingMode.HALF_UP);
+                applied = true;
+            } else {
+                // invalid code requested via GET
+                model.addAttribute("discountError", true);
+            }
+        }
+
+        BigDecimal total = price.subtract(discount == null ? BigDecimal.ZERO : discount);
 
         model.addAttribute("paymentPlanKey", String.valueOf(selectedPlan.getId()));
         model.addAttribute("paymentPlanName", "Plan " + selectedPlan.getName());
@@ -116,12 +135,17 @@ public class PlanController {
         model.addAttribute("paymentPrice", formatEur(price));
         model.addAttribute("paymentDiscount", "-" + formatEur(discount));
         model.addAttribute("paymentTotal", formatEur(total));
+        model.addAttribute("discountCode", discountCode == null ? "" : discountCode.trim());
+        model.addAttribute("discountApplied", applied);
+        model.addAttribute("discountError", discountError != null || model.containsAttribute("discountError"));
 
         return "payment";
     }
 
     @PostMapping("/payment/confirm")
-    public String confirmPayment(@RequestParam String plan, HttpServletRequest request) {
+    public String confirmPayment(@RequestParam String plan,
+                                 @RequestParam(required = false) String discountCode,
+                                 HttpServletRequest request) {
         Plan targetPlan = findPlanFromInput(plan).orElse(null);
 
         if (targetPlan == null) {
@@ -133,8 +157,21 @@ public class PlanController {
             if (price.compareTo(BigDecimal.ZERO) <= 0) {
                 return "redirect:/register?plan=" + targetPlan.getId();
             }
+            // store prepaid plan id and preserve discount info in session for after-register flow
             request.getSession().setAttribute("prepaidPlanId", targetPlan.getId());
+            if (discountCode != null && !discountCode.isBlank()) {
+                request.getSession().setAttribute("prepaidDiscountCode", discountCode.trim());
+            }
             return "redirect:/register?plan=" + targetPlan.getId() + "&paid=1";
+        }
+
+        // If a discount code was provided, validate it on the backend; if invalid, send back to payment
+        if (discountCode != null && !discountCode.isBlank()) {
+            if (!DEFAULT_DISCOUNT_CODE.equalsIgnoreCase(discountCode.trim())) {
+                // invalid -> redirect back to payment with error
+                return "redirect:/payment?plan=" + targetPlan.getId() + "&discountError=1";
+            }
+            // valid -> we could record discount usage here if necessary
         }
 
         if (userService.updateLoggedUserPlan(targetPlan).isEmpty()) {
