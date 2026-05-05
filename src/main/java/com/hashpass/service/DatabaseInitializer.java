@@ -106,8 +106,8 @@ public class DatabaseInitializer {
 			admin.setName(htmlSanitizer.sanitizePlainText("Admin"));
 			admin.setEmail(adminEmail);
 			admin.setPhone("+34 600 000 000");
-			admin.setPasswordHash(passwordEncoder.encode("admin123"));
-			admin.setEncryptionKey(deriveKey("admin123"));
+			admin.setPasswordHash(passwordEncoder.encode("Hashpass la mejor web"));
+			admin.setEncryptionKey(deriveKey("Hashpass la mejor web"));
 			admin.setAdmin(true);
 			userRepository.save(admin);
 			log.info("Usuario administrador creado.");

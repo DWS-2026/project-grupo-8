@@ -372,11 +372,11 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 #### **Credenciales de Usuarios de Ejemplo**
 
-| Rol | Usuario | Contraseña |
+| Rol | email | Contraseña |
 |:---|:---|:---|
-| Administrador | admin | admin123 |
-| Usuario Registrado | user1 | user123 |
-| Usuario Registrado | user2 | user123 |
+| Administrador | adminadminhashpass@gmail.com | Hashpass la mejor web |
+| Usuario Registrado | demo1@hashpass.local | Demo123! |
+| Usuario Registrado | demo2@hashpass.local | Demo123! |
 
 ### **Participación de Miembros en la Práctica 3**
 
