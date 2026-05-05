@@ -394,13 +394,13 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 ---
 
-#### **Alumno 2 - [Nombre Completo]**
+#### **Alumno 2 - [Yago Contreras Nevares]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Encargado de la api de User e imágenes, ademas de arreglar vulnerabilidades como XSS, SSRF o Path Traversal entre otras]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
+|1| [Api de User e imagenes](https://github.com/DWS-2026/project-grupo-8/commit/2581f8332e41303e2c2059ee9dfca644b452b15e)  | [UserRestController, ImageRestController](https://github.com/DWS-2026/project-grupo-8/commit/2581f8332e41303e2c2059ee9dfca644b452b15e)   |
 |2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
 |3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
 |4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
