@@ -396,15 +396,15 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 #### **Alumno 2 - [Yago Contreras Nevares]**
 
-[Encargado de la api de User e imágenes, ademas de arreglar vulnerabilidades como XSS, SSRF o Path Traversal entre otras]
+[Encargado de la api de User e imágenes, junto con el conjunto de las peticiones postman, ademas de arreglar vulnerabilidades como XSS, SSRF o Path Traversal entre otras y también encargado de la implementación del texto enriquecido y la subida de archivos grandes]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Api de User e imagenes](https://github.com/DWS-2026/project-grupo-8/commit/2581f8332e41303e2c2059ee9dfca644b452b15e)  | [UserRestController, ImageRestController](https://github.com/DWS-2026/project-grupo-8/commit/2581f8332e41303e2c2059ee9dfca644b452b15e)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Api de User e imagenes](https://github.com/DWS-2026/project-grupo-8/commit/2581f8332e41303e2c2059ee9dfca644b452b15e)  | [UserRestController, ImageRestController, entre otros](https://github.com/DWS-2026/project-grupo-8/commit/2581f8332e41303e2c2059ee9dfca644b452b15e)   |
+|2| [Texto enriquecido](https://github.com/DWS-2026/project-grupo-8/commit/3b25d692703731bbc7a8eb7764f4075347d09e0e)  | [Todos los archivos relacionados con reviews](https://github.com/DWS-2026/project-grupo-8/commit/3b25d692703731bbc7a8eb7764f4075347d09e0e)   |
+|3| [Subida de archivos grandes y almacenamiento en disco](https://github.com/DWS-2026/project-grupo-8/commit/647d092991f6dac28d23a97a062862c07ad529be)  | [FileStorage.java y todos los archivos relacionados con User](https://github.com/DWS-2026/project-grupo-8/commit/647d092991f6dac28d23a97a062862c07ad529be)   |
+|4| [Api Postman collection](https://github.com/DWS-2026/project-grupo-8/commit/7a55123b112303bb094b6cc2e8fe34f5661486de)  | [api.postman_collection.json](https://github.com/DWS-2026/project-grupo-8/commit/7a55123b112303bb094b6cc2e8fe34f5661486de)   |
+|5| [Vulnerabilidad XSS](https://github.com/DWS-2026/project-grupo-8/commit/1951b6c54428a39ecc40acdd414d035d86bcfe23#diff-dbd1337d00de64e54f39aff7aeb4dfefae9a6b8f3f1879a73f6cca630c8b1a27)  | [HtmlSanitizer.java y casi todos los controllers y services](https://github.com/DWS-2026/project-grupo-8/commit/1951b6c54428a39ecc40acdd414d035d86bcfe23#diff-dbd1337d00de64e54f39aff7aeb4dfefae9a6b8f3f1879a73f6cca630c8b1a27)   |
 
 ---
 
