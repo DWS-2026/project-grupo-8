@@ -368,7 +368,7 @@ Desarrollo general del backend, configuración de base de datos, autenticación,
 
 Diagrama actualizado incluyendo los @RestController y su relación con los @Service compartidos:
 
-![Diagrama de Clases Actualizado](images/complete-classes-diagram.png)
+![Diagrama de Clases Actualizado](images/Diagrama_de_clases_parte_3.png)
 
 #### **Credenciales de Usuarios de Ejemplo**
 

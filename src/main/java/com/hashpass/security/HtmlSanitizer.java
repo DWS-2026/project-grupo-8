@@ -1,6 +1,9 @@
 package com.hashpass.security;
 
+import java.net.InetAddress;
+import java.net.IDN;
 import java.net.URI;
+import java.net.UnknownHostException;
 import java.util.Locale;
 
 import org.jsoup.Jsoup;
@@ -80,10 +83,48 @@ public class HtmlSanitizer {
                     && !"https".equalsIgnoreCase(scheme)) {
                 return null;
             }
+
+            String host = uri.getHost();
+            if (host == null || host.isBlank()) {
+                return null;
+            }
+
+            if (isBlockedHost(host)) {
+                return null;
+            }
             return sanitizedUrl;
         } catch (IllegalArgumentException ex) {
             return null;
         }
+    }
+
+    private boolean isBlockedHost(String host) {
+        String normalizedHost = IDN.toASCII(host.trim().toLowerCase(Locale.ROOT));
+        if (normalizedHost.isBlank()) {
+            return true;
+        }
+
+        if ("localhost".equals(normalizedHost)
+                || normalizedHost.endsWith(".localhost")
+                || normalizedHost.equals("metadata.google.internal")) {
+            return true;
+        }
+
+        try {
+            InetAddress[] addresses = InetAddress.getAllByName(normalizedHost);
+            for (InetAddress address : addresses) {
+                if (address.isAnyLocalAddress()
+                        || address.isLoopbackAddress()
+                        || address.isLinkLocalAddress()
+                        || address.isSiteLocalAddress()) {
+                    return true;
+                }
+            }
+        } catch (UnknownHostException ex) {
+            return true;
+        }
+
+        return false;
     }
 
     public String extractPlainText(String rawHtml) {

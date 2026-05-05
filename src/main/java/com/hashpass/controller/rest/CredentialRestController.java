@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.hashpass.model.Credential;
 import com.hashpass.model.User;
+import com.hashpass.security.HtmlSanitizer;
 import com.hashpass.service.EntryService;
 import com.hashpass.service.ImageService;
 import com.hashpass.service.UserService;
@@ -33,11 +34,14 @@ public class CredentialRestController {
     private final EntryService entryService;
     private final UserService userService;
     private final ImageService imageService;
+    private final HtmlSanitizer htmlSanitizer;
 
-    public CredentialRestController(EntryService entryService, UserService userService, ImageService imageService) {
+    public CredentialRestController(EntryService entryService, UserService userService, ImageService imageService,
+            HtmlSanitizer htmlSanitizer) {
         this.entryService = entryService;
         this.userService = userService;
         this.imageService = imageService;
+        this.htmlSanitizer = htmlSanitizer;
     }
 
     @GetMapping
@@ -95,8 +99,14 @@ public class CredentialRestController {
             Credential credential = new Credential();
             credential.setSiteName(request.siteName());
             credential.setUsername(request.username());
-            
-            credential.setSiteUrl(request.siteUrl());
+
+            String normalizedSiteUrl = normalizeSiteUrl(request.siteUrl());
+            if (request.siteUrl() != null && normalizedSiteUrl == null) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("message", "La URL del sitio no es válida o apunta a un destino no permitido."));
+            }
+
+            credential.setSiteUrl(normalizedSiteUrl);
             credential.setNote(request.note());
 
             Credential createdCredential = entryService.save(credential, request.password());
@@ -162,7 +172,12 @@ public class CredentialRestController {
             }
 
             if (request.siteUrl() != null) {
-                credential.setSiteUrl(request.siteUrl());
+                String normalizedSiteUrl = normalizeSiteUrl(request.siteUrl());
+                if (normalizedSiteUrl == null && !request.siteUrl().isBlank()) {
+                    return ResponseEntity.badRequest()
+                            .body(Map.of("message", "La URL del sitio no es válida o apunta a un destino no permitido."));
+                }
+                credential.setSiteUrl(normalizedSiteUrl);
             }
 
             if (request.note() != null) {
@@ -241,6 +256,13 @@ public class CredentialRestController {
                 imageUrl,
                 credential.getCreatedAt(),
                 credential.getUpdatedAt());
+    }
+
+    private String normalizeSiteUrl(String siteUrl) {
+        if (siteUrl == null || siteUrl.isBlank()) {
+            return null;
+        }
+        return htmlSanitizer.sanitizeUrl(siteUrl);
     }
 
     public record CreateCredentialRequest(String siteName, String siteUrl, String username, String password, String note) {

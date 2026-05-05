@@ -495,10 +495,10 @@ public class PlanController {
         }
         String normalized = normalizePlan(planName);
         if ("platinum".equals(normalized)) {
-            return new BigDecimal("2.99");
+            return new BigDecimal("0");
         }
         if ("premium".equals(normalized)) {
-            return new BigDecimal("1.99");
+            return new BigDecimal("0");
         }
         return BigDecimal.ZERO;
     }
