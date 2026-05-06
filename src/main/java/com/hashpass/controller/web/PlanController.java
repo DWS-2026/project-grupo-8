@@ -21,12 +21,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import com.hashpass.model.Plan;
 import com.hashpass.model.User;
 import com.hashpass.security.HtmlSanitizer;
+import com.hashpass.security.RateLimited;
 import com.hashpass.service.ImageService;
 import com.hashpass.service.PlanService;
 import com.hashpass.service.UserService;
 import com.hashpass.service.DatabaseInitializer;
 
 @Controller
+@RateLimited(requests = 180, minutes = 1)
 public class PlanController {
 
     private final UserService userService;

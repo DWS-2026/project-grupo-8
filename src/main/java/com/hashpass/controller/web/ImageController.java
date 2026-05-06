@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.hashpass.model.Image;
 import com.hashpass.model.CredentialImage;
+import com.hashpass.security.RateLimited;
 import com.hashpass.service.ImageService;
 
 @Controller
+@RateLimited(requests = 180, minutes = 1)
 public class ImageController {
 
 	private final ImageService imageService;

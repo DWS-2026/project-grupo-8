@@ -23,12 +23,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.hashpass.model.Credential;
 import com.hashpass.model.User;
 import com.hashpass.security.HtmlSanitizer;
+import com.hashpass.security.RateLimited;
 import com.hashpass.service.EntryService;
 import com.hashpass.service.ImageService;
 import com.hashpass.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/credentials")
+@RateLimited(requests = 180, minutes = 1)
 public class CredentialRestController {
 
     private final EntryService entryService;

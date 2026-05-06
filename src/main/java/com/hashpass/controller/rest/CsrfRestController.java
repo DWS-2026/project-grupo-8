@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hashpass.security.RateLimited;
+
 @RestController
 @RequestMapping("/api/v1")
+@RateLimited(requests = 60, minutes = 1)
 public class CsrfRestController {
 
     @GetMapping("/csrf")

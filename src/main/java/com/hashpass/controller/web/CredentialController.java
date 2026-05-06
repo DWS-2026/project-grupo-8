@@ -21,6 +21,7 @@ import java.util.Map;
 
 import com.hashpass.model.Credential;
 import com.hashpass.model.User;
+import com.hashpass.security.RateLimited;
 import com.hashpass.service.UserService;
 
 import com.hashpass.service.EntryService;
@@ -28,6 +29,7 @@ import com.hashpass.service.ImageService;
 import com.hashpass.service.ReviewService;
 
 @Controller
+@RateLimited(requests = 180, minutes = 1)
 public class CredentialController {
     @Autowired
     private UserService userService;
@@ -101,6 +103,7 @@ public class CredentialController {
     public String passwordLogin(@RequestParam(required = false) String email,
                                 @RequestParam(required = false) String redirectTo,
                                 @RequestParam(required = false) String error,
+                                @RequestParam(required = false) String rateLimited,
                                 @RequestParam(required = false) String locked,
                                 Model model) {
         if (email == null || email.isBlank()) {
@@ -115,6 +118,11 @@ public class CredentialController {
 
         if (locked != null) {
             model.addAttribute("error", "Cuenta bloqueada temporalmente por demasiados intentos fallidos.");
+            return "password-login";
+        }
+
+        if (rateLimited != null) {
+            model.addAttribute("error", "Demasiados intentos de acceso. Espera un momento y vuelve a intentarlo.");
             return "password-login";
         }
 

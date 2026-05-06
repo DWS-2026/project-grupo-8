@@ -24,12 +24,14 @@ import com.hashpass.model.Credential;
 import com.hashpass.model.CredentialImage;
 import com.hashpass.model.Image;
 import com.hashpass.model.User;
+import com.hashpass.security.RateLimited;
 import com.hashpass.service.EntryService;
 import com.hashpass.service.ImageService;
 import com.hashpass.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/images")
+@RateLimited(requests = 180, minutes = 1)
 public class ImageRestController {
 
 	private final ImageService imageService;

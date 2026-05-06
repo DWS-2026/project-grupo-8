@@ -17,11 +17,13 @@ import java.util.Optional;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.hashpass.model.User;
+import com.hashpass.security.RateLimited;
 import com.hashpass.service.AuthService;
 import com.hashpass.service.ImageService;
 import com.hashpass.service.UserService;
 
 @Controller
+@RateLimited(requests = 180, minutes = 1)
 public class UserController {
 
     private final AuthService authService;

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.hashpass.model.User;
 import com.hashpass.security.HtmlSanitizer;
+import com.hashpass.security.RateLimited;
 import com.hashpass.service.AuthService;
 import com.hashpass.service.UserService;
 
@@ -31,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@RateLimited(requests = 180, minutes = 1)
 public class UserRestController {
 
     private final AuthService authService;
@@ -47,6 +49,7 @@ public class UserRestController {
     }
 
     @PostMapping("/login")
+    @RateLimited(requests = 5, minutes = 15)
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         if (request == null || request.email() == null || request.email().isBlank()
                 || request.password() == null || request.password().isBlank()) {
@@ -69,6 +72,7 @@ public class UserRestController {
     }
 
     @PostMapping("/register")
+    @RateLimited(requests = 3, minutes = 60)
     public ResponseEntity<?> register(@RequestBody CreateUserRequest request) {
         if (request == null || request.name() == null || request.name().isBlank()
                 || request.email() == null || request.email().isBlank()

@@ -21,11 +21,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.hashpass.model.Review;
 import com.hashpass.model.User;
 import com.hashpass.security.HtmlSanitizer;
+import com.hashpass.security.RateLimited;
 import com.hashpass.service.ImageService;
 import com.hashpass.service.ReviewService;
 import com.hashpass.service.UserService;
 
 @Controller
+@RateLimited(requests = 180, minutes = 1)
 public class ReviewController {
 
     private static final DateTimeFormatter REVIEW_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");

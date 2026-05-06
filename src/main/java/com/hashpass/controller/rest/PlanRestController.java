@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.hashpass.model.Plan;
 import com.hashpass.security.HtmlSanitizer;
+import com.hashpass.security.RateLimited;
 import com.hashpass.service.PlanService;
 
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/plans")
+@RateLimited(requests = 180, minutes = 1)
 public class PlanRestController {
 
     private final PlanService planService;
