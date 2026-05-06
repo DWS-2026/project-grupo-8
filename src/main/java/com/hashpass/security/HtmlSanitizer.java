@@ -1,6 +1,7 @@
 package com.hashpass.security;
 
 import java.net.InetAddress;
+import java.net.Inet6Address;
 import java.net.IDN;
 import java.net.URI;
 import java.net.UnknownHostException;
@@ -83,13 +84,17 @@ public class HtmlSanitizer {
                     && !"https".equalsIgnoreCase(scheme)) {
                 return null;
             }
+            // disallow embedded credentials (user:pass@host)
+            if (uri.getUserInfo() != null) {
+                return null;
+            }
 
             String host = uri.getHost();
             if (host == null || host.isBlank()) {
                 return null;
             }
-
-            if (isBlockedHost(host)) {
+            String asciiHost = IDN.toASCII(host.trim().toLowerCase(Locale.ROOT));
+            if (isBlockedHost(asciiHost)) {
                 return null;
             }
             return sanitizedUrl;
@@ -99,11 +104,12 @@ public class HtmlSanitizer {
     }
 
     private boolean isBlockedHost(String host) {
-        String normalizedHost = IDN.toASCII(host.trim().toLowerCase(Locale.ROOT));
+        String normalizedHost = host == null ? "" : host.trim().toLowerCase(Locale.ROOT);
         if (normalizedHost.isBlank()) {
             return true;
         }
 
+        // quick textual checks
         if ("localhost".equals(normalizedHost)
                 || normalizedHost.endsWith(".localhost")
                 || normalizedHost.equals("metadata.google.internal")) {
@@ -113,14 +119,64 @@ public class HtmlSanitizer {
         try {
             InetAddress[] addresses = InetAddress.getAllByName(normalizedHost);
             for (InetAddress address : addresses) {
+                // general Java checks (covers many cases)
                 if (address.isAnyLocalAddress()
                         || address.isLoopbackAddress()
                         || address.isLinkLocalAddress()
-                        || address.isSiteLocalAddress()) {
+                        || address.isSiteLocalAddress()
+                        || address.isMulticastAddress()) {
                     return true;
+                }
+
+                byte[] addr = address.getAddress();
+                if (addr == null) {
+                    return true;
+                }
+
+                // IPv4 explicit checks (including CGNAT 100.64.0.0/10)
+                if (addr.length == 4) {
+                    int b0 = addr[0] & 0xFF;
+                    int b1 = addr[1] & 0xFF;
+
+                    if (b0 == 10) return true; // 10.0.0.0/8
+                    if (b0 == 127) return true; // 127.0.0.0/8
+                    if (b0 == 169 && b1 == 254) return true; // 169.254.0.0/16
+                    if (b0 == 172 && (b1 >= 16 && b1 <= 31)) return true; // 172.16.0.0/12
+                    if (b0 == 192 && b1 == 168) return true; // 192.168.0.0/16
+                    if (b0 == 100 && (b1 >= 64 && b1 <= 127)) return true; // 100.64.0.0/10 (CGNAT)
+                }
+
+                // IPv6 checks
+                if (addr.length == 16) {
+                    int first = addr[0] & 0xFF;
+
+                    // unique local fc00::/7 (fc or fd)
+                    if ((first & 0xFE) == 0xFC) return true;
+
+                    // link-local fe80::/10 (some JVMs covered by isLinkLocalAddress above)
+                    if (first == 0xFE) {
+                        int second = addr[1] & 0xFF;
+                        if ((second & 0xC0) == 0x80) return true; // fe80::/10
+                    }
+
+                    // IPv4-mapped IPv6 ::ffff:a.b.c.d -> check last 4 bytes
+                    boolean isIpv4Mapped = (addr[0] == 0 && addr[1] == 0 && addr[2] == 0 && addr[3] == 0
+                            && addr[4] == 0 && addr[5] == 0 && addr[6] == 0 && addr[7] == 0
+                            && addr[8] == 0 && addr[9] == 0 && addr[10] == (byte)0xFF && addr[11] == (byte)0xFF);
+                    if (isIpv4Mapped) {
+                        int b0 = addr[12] & 0xFF;
+                        int b1 = addr[13] & 0xFF;
+                        if (b0 == 10) return true;
+                        if (b0 == 127) return true;
+                        if (b0 == 169 && b1 == 254) return true;
+                        if (b0 == 172 && (b1 >= 16 && b1 <= 31)) return true;
+                        if (b0 == 192 && b1 == 168) return true;
+                        if (b0 == 100 && (b1 >= 64 && b1 <= 127)) return true;
+                    }
                 }
             }
         } catch (UnknownHostException ex) {
+            // If host cannot be resolved, be conservative and block
             return true;
         }
 

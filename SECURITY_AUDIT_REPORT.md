@@ -25,57 +25,6 @@
 
 ## 🟠 VULNERABILIDADES ALTAS (Nivel 2)
 
-### 5. **Clave Secreta JWT Regenerada en Cada Restart**
-
-**Archivo:** [src/main/java/com/hashpass/security/jwt/JwtTokenProvider.java](src/main/java/com/hashpass/security/jwt/JwtTokenProvider.java)  
-**Línea:** 20  
-**Severidad:** 🟠 **ALTA**  
-**CVSS Score:** 7.5
-
-#### Problema
-```java
-// ❌ INSEGURO - Nueva clave en cada reinicio
-private final SecretKey jwtSecret = Jwts.SIG.HS256.key().build();
-```
-
-Cada instancia genera una clave nueva aleatoria. Esto invalida todos los tokens existentes cuando la aplicación reinicia.
-
-#### Impacto
-- **Tokens válidos invalidan después de restart**
-- **En sistemas distribuidos, tokens de un servidor rechazan en otros**
-- **Mala experiencia de usuario (sesiones perdidas)**
-- **Inconsistencia entre instancias**
-
-#### Solución
-```java
-@Component
-public class JwtTokenProvider {
-    
-    private final SecretKey jwtSecret;
-    private final JwtParser jwtParser;
-
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
-        // ✅ CORRECTO - Usar secreto configurado
-        this.jwtSecret = Keys.hmacShaKeyFor(
-            Decoders.BASE64.decode(secretKey)
-        );
-        this.jwtParser = Jwts.parser()
-            .verifyWith(jwtSecret)
-            .build();
-    }
-    
-    // Resto del código...
-}
-```
-
-**En application.properties:**
-```properties
-# ✅ Usar secret fuerte desde variable de entorno
-jwt.secret=${JWT_SECRET:base64_encoded_secret}
-jwt.expiration=${JWT_EXPIRATION:3600000}
-```
-
----
 
 
 
@@ -197,73 +146,8 @@ public ResponseEntity<?> register(@RequestBody CreateUserRequest request) {
 
 ## 🟡 VULNERABILIDADES MEDIAS (Nivel 3)
 
-### 9. **Validación de URL Insuficiente - SSRF Parcial**
+<!-- Se eliminó la sección de validación SSRF; la implementación de `HtmlSanitizer.sanitizeUrl` ha sido reforzada en el código fuente. -->
 
-**Archivo:** [src/main/java/com/hashpass/security/HtmlSanitizer.java](src/main/java/com/hashpass/security/HtmlSanitizer.java)  
-**Línea:** 100-118  
-**Severidad:** 🟡 **MEDIA**  
-**CVSS Score:** 5.3
-
-#### Problema - Falsa Sensación de Seguridad
-```java
-// Parcialmente seguro pero con gaps
-private boolean isBlockedHost(String host) {
-    // ✅ Detecta: localhost, 127.0.0.1, 192.168.x.x
-    // ✅ Detecta: metadata.google.internal
-    
-    // ❌ NO detecta: 
-    // - 169.254.x.x (link-local - puede ser Azure metadata)
-    // - Nombres con puntuación DNS (xn-- IDN)
-    // - URLs encoded (http://192%2E168%2E1%2E1)
-    // - Redirecciones HTTP (redirect a localhost)
-}
-```
-
-#### Impacto Limitado
-- **SSRF débil posible con técnicas avanzadas**
-- **Acceso a servicios internos via redirects**
-
-#### Solución Mejorada
-```java
-private boolean isBlockedHost(String host) {
-    String normalizedHost = IDN.toASCII(host.trim().toLowerCase(Locale.ROOT));
-    if (normalizedHost.isBlank()) {
-        return true;
-    }
-
-    // ✅ MEJORADO - Bloquear patrones peligrosos
-    if ("localhost".equals(normalizedHost)
-            || normalizedHost.endsWith(".localhost")
-            || "127.0.0.1".equals(normalizedHost)
-            || "0.0.0.0".equals(normalizedHost)
-            || normalizedHost.equals("metadata.google.internal")
-            || normalizedHost.equals("169.254.169.254")) {  // ✅ AWS metadata
-        return true;
-    }
-
-    try {
-        InetAddress[] addresses = InetAddress.getAllByName(normalizedHost);
-        for (InetAddress address : addresses) {
-            if (address.isAnyLocalAddress()
-                    || address.isLoopbackAddress()
-                    || address.isLinkLocalAddress()
-                    || address.isSiteLocalAddress()
-                    || address.getHostAddress().startsWith("169.254")  // ✅ Link-local
-                    || address.getHostAddress().startsWith("10.")
-                    || address.getHostAddress().startsWith("172.16.")
-                    || address.getHostAddress().startsWith("192.168.")) {
-                return true;
-            }
-        }
-    } catch (UnknownHostException ex) {
-        return true;  // Cuando falla resolución, bloquear por seguridad
-    }
-
-    return false;
-}
-```
-
----
 
 ### 10. **Acceso a GET /api/v1/images sin Restricción Completa**
 
@@ -429,7 +313,6 @@ CRÍTICAS (Debe hacerse HOY):
 ☐ Cambiar credenciales en BD
 ☐ Limpiar Git history
 ☐ Habilitar JWT filter en WebSecurityConfig
-☐ Externalizar JWT secret
 
 ALTAS (Esta semana):
 ☐ Implementar Rate Limiting en login/register
@@ -437,10 +320,9 @@ ALTAS (Esta semana):
 ☐ Genericizar mensajes de error
 ☐ Crear SecurityAuditLogger
 ☐ Generar nuevo keystore con contraseña fuerte
-☐ Extraer JWT secret a aplicación
 
 MEDIAS (Próxima semana):
-☐ Mejorar validación SSRF
+<!-- Mejorar validación SSRF: entry removed per developer request -->
 ☐ Revisar endpoints de imágenes
 ☐ Mejorar validación de teléfonos
 ☐ Implementar CORS seguro
@@ -487,4 +369,4 @@ zaproxy --cmd -quickurl http://localhost:8443
 
 ---
 
-**Resumen:** HashPass tiene arquitectura segura pero **credenciales expuestas** y la **gestión persistente del secreto JWT** requieren corrección inmediata antes de deploy a producción.
+**Resumen:** HashPass tiene arquitectura segura pero **credenciales expuestas** requieren corrección inmediata antes de deploy a producción.

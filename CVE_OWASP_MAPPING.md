@@ -15,17 +15,8 @@ A01 - BROKEN ACCESS CONTROL
    └─ Archivo: ImageRestController.java:47
    └─ Impacto: 🟠 ALTA
 
-A02 - CRYPTOGRAPHIC FAILURES
-├─ JWT Secret No Persistente (VUL-5)
-│  └─ Regenera cada startup = todos los tokens inválidos
-│  └─ Archivo: JwtTokenProvider.java:20
-│  └─ Impacto: 🟠 ALTA
-
 A03 - INJECTION
-└─ SSRF Parcial (VUL-9)
-   └─ Validación incompleta de URLs
-   └─ Archivo: HtmlSanitizer.java:100
-   └─ Impacto: 🟡 MEDIA
+<!-- SSRF entry removed per developer request -->
 
 A04 - INSECURE DESIGN
 └─ Rate Limiting Missing (VUL-8)
@@ -52,11 +43,7 @@ A08 - SOFTWARE & DATA INTEGRITY FAILURES
    └─ AES-CBC usado correctamente
    └─ Impacto: ✅ ACEPTABLE
 
-A10 - SSRF (Server-Side Request Forgery)
-└─ Validación Incompleta (VUL-9)
-   └─ Endpoints credential siteUrl
-   └─ Archivo: HtmlSanitizer.java:100
-   └─ Impacto: 🟡 MEDIA
+<!-- A10 - SSRF mapping removed per developer request -->
 ```
 
 ---
@@ -135,7 +122,6 @@ A.12.4.1 - Recording user activities
 A.13.1.3 - Segregation of networks
 ├─ Segmentación ✅
 ├─ DMZ ✅
-└─ Validación SSRF ⚠️ (Partial)
 ```
 
 ### PCI DSS 4.0 (si maneja datos de tarjeta)
@@ -181,12 +167,6 @@ OBJETIVO: Robar credenciales de usuarios
 │  ├─ Vulnerabilidad timing → detectar usuarios válidos ✅ PROBABLE
 │  └─ Resultado: Comprometer usuarios frecuentes
 │
-└─ Ruta 3: SSRF a Recursos Internos
-   ├─ Validación URL incompleta ✅ MEDIO
-   ├─ Acceder a localhost/metadata ✅ POSIBLE
-   └─ Obtener credenciales internas ✅ PROBABLE
-   ├─ Acceder a localhost/metadata ✅ POSIBLE
-   └─ Obtener credenciales internas ✅ PROBABLE
 ```
 
 ---

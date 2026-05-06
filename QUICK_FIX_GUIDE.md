@@ -5,129 +5,6 @@
 > **Urgencia:** INMEDIATA - ANTES DE CUALQUIER DEPLOY A PRODUCCIÓN
 
 
-
-## 2️⃣ JWT TOKEN PROVIDER
-
-### Paso 2.1: Actualizar JwtTokenProvider para usar variable de entorno
-
-**Archivo:** `src/main/java/com/hashpass/security/jwt/JwtTokenProvider.java`
-
-```java
-package com.hashpass.security.jwt;
-
-import java.util.Date;
-import javax.crypto.SecretKey;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import java.util.Base64;
-
-@Component
-public class JwtTokenProvider {
-
-    private final SecretKey jwtSecret;
-    private final JwtParser jwtParser;
-    
-    @Value("${jwt.expiration:3600000}")
-    private long tokenExpiration;
-
-    // ✅ NUEVO: Inyectar secret desde propiedades
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKeyString) {
-        // Decodificar desde Base64
-        byte[] decodedKey = Base64.getDecoder().decode(secretKeyString);
-        this.jwtSecret = Keys.hmacShaKeyFor(decodedKey);
-        this.jwtParser = Jwts.parser()
-            .verifyWith(jwtSecret)
-            .build();
-    }
-
-    public String tokenStringFromHeaders(HttpServletRequest req) {
-        String bearerToken = req.getHeader(HttpHeaders.AUTHORIZATION);
-        if (bearerToken == null) {
-            throw new IllegalArgumentException("Missing Authorization header");
-        }
-        if (!bearerToken.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Authorization header does not start with Bearer: " + bearerToken);
-        }
-        return bearerToken.substring(7);
-    }
-
-    private String tokenStringFromCookies(HttpServletRequest request) {
-        var cookies = request.getCookies();
-        if (cookies == null) {
-            throw new IllegalArgumentException("No cookies found in request");
-        }
-
-        for (Cookie cookie : cookies) {
-            if (TokenType.ACCESS.cookieName.equals(cookie.getName())) {
-                String accessToken = cookie.getValue();
-                if (accessToken == null) {
-                    throw new IllegalArgumentException("Cookie %s has null value".formatted(TokenType.ACCESS.cookieName));
-                }
-                return accessToken;
-            }
-        }
-        throw new IllegalArgumentException("No access token cookie found in request");
-    }
-
-    public Claims validateToken(HttpServletRequest req, boolean fromCookie) {
-        var token = fromCookie ?
-                tokenStringFromCookies(req) :
-                tokenStringFromHeaders(req);
-        return validateToken(token);
-    }
-
-    public Claims validateToken(String token) {
-        return jwtParser.parseSignedClaims(token).getPayload();
-    }
-
-    public String generateAccessToken(UserDetails userDetails) {
-        return buildToken(TokenType.ACCESS, userDetails).compact();
-    }
-
-    public String generateRefreshToken(UserDetails userDetails) {
-        var token = buildToken(TokenType.REFRESH, userDetails);
-        return token.compact();
-    }
-
-    private JwtBuilder buildToken(TokenType tokenType, UserDetails userDetails) {
-        var currentDate = new Date();
-        var expiryDate = Date.from(new Date().toInstant().plus(tokenType.duration));
-        return Jwts.builder()
-                .claim("roles", userDetails.getAuthorities())
-                .claim("type", tokenType.name())
-                .subject(userDetails.getUsername())
-                .issuedAt(currentDate)
-                .expiration(expiryDate)
-                .signWith(jwtSecret, SignatureAlgorithm.HS256);
-    }
-}
-```
-
-**Generar JWT_SECRET seguro:**
-```bash
-# Linux/Mac
-openssl rand -base64 64 | tr -d '\n'
-
-# O desde Java
-java -jar -cp ".:spring-security-core*.jar" -c "
-    import javax.crypto.KeyGenerator;
-    KeyGenerator kg = KeyGenerator.getInstance(\"HmacSHA256\");
-    kg.init(256);
-    System.out.println(java.util.Base64.getEncoder().encodeToString(kg.generateKey().getEncoded()));
-"
-
-# Copiar output a .env.local
-# JWT_SECRET=<output aquí>
-```
-
----
-
 ## 3️⃣ IMPLEMENTAR RATE LIMITING
 
 ### Paso 3.1: Añadir dependencia en pom.xml
@@ -376,67 +253,8 @@ public class GlobalExceptionHandler {
 
 ---
 
-## 6️⃣ MEJORAR VALIDACIÓN SSRF
+<!-- Sección de mejora SSRF eliminada por petición del desarrollador; la lógica relevante fue aplicada directamente en el código fuente. -->
 
-### Editar HtmlSanitizer.java
-
-**Archivo:** `src/main/java/com/hashpass/security/HtmlSanitizer.java`
-
-En el método `isBlockedHost()`:
-
-```java
-private boolean isBlockedHost(String host) {
-    String normalizedHost = IDN.toASCII(host.trim().toLowerCase(Locale.ROOT));
-    if (normalizedHost.isBlank()) {
-        return true;
-    }
-
-    // ✅ MEJORADO - Bloquear todos los patrones peligrosos
-    if ("localhost".equals(normalizedHost)
-            || normalizedHost.endsWith(".localhost")
-            || "127.0.0.1".equals(normalizedHost)
-            || "0.0.0.0".equals(normalizedHost)
-            || "::1".equals(normalizedHost)  // IPv6 loopback
-            || normalizedHost.equals("metadata.google.internal")
-            || normalizedHost.equals("169.254.169.254")) {  // AWS metadata
-        return true;
-    }
-
-    try {
-        InetAddress[] addresses = InetAddress.getAllByName(normalizedHost);
-        for (InetAddress address : addresses) {
-            byte[] addr = address.getAddress();
-            
-            // ✅ Detectar redes privadas por octetos
-            if (addr.length == 4) {  // IPv4
-                if (addr[0] == 10 ||  // 10.0.0.0/8
-                    (addr[0] == 172 && addr[1] >= 16 && addr[1] <= 31) ||  // 172.16.0.0/12
-                    (addr[0] == 192 && addr[1] == 168) ||  // 192.168.0.0/16
-                    (addr[0] == 169 && addr[1] == 254) ||  // 169.254.0.0/16 (link-local)
-                    addr[0] == 127) {  // 127.0.0.0/8 (loopback)
-                    return true;
-                }
-            }
-            
-            // ✅ Detectar usando métodos de InetAddress
-            if (address.isAnyLocalAddress()
-                    || address.isLoopbackAddress()
-                    || address.isLinkLocalAddress()
-                    || address.isSiteLocalAddress()) {
-                return true;
-            }
-        }
-    } catch (UnknownHostException ex) {
-        // ✅ Si no se puede resolver, bloquear por seguridad
-        log.warn("Unable to resolve host: {} - blocking as SSRF protection", host);
-        return true;
-    }
-
-    return false;
-}
-```
-
----
 
 ## ✅ CHECKLIST DE APLICACIÓN
 
@@ -489,7 +307,6 @@ java \
   -Dspring.datasource.url=${DB_URL} \
   -Dspring.datasource.username=${DB_USERNAME} \
   -Dspring.datasource.password=${DB_PASSWORD} \
-  -Djwt.secret=${JWT_SECRET} \
   -Dserver.ssl.key-store-password=${SSL_KEYSTORE_PASSWORD} \
   -Dserver.ssl.key-password=${SSL_KEY_PASSWORD} \
   -jar target/hashpass.jar
@@ -497,7 +314,6 @@ java \
 # O usar Docker:
 docker build -t hashpass:latest .
 docker run -e DB_PASSWORD=$DB_PASSWORD \
-           -e JWT_SECRET=$JWT_SECRET \
            -e SSL_KEYSTORE_PASSWORD=$SSL_KEYSTORE_PASSWORD \
            hashpass:latest
 ```
