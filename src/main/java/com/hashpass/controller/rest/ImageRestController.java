@@ -48,6 +48,14 @@ public class ImageRestController {
 
 	@GetMapping("/profiles")
 	public ResponseEntity<Page<ProfileImageResponse>> listProfileImages(Pageable pageable) {
+		var currentUser = userService.getLoggedUser().orElse(null);
+		if (currentUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		if (!currentUser.isAdmin()) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+		}
+
 		Page<ProfileImageResponse> responses = imageService.listProfileImages(pageable)
 				.map(img -> new ProfileImageResponse(
 						img.getId(),
@@ -61,6 +69,14 @@ public class ImageRestController {
 
 	@GetMapping("/credentials")
 	public ResponseEntity<Page<CredentialImageResponse>> listCredentialImages(Pageable pageable) {
+		var currentUser = userService.getLoggedUser().orElse(null);
+		if (currentUser == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		if (!currentUser.isAdmin()) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+		}
+
 		Page<CredentialImageResponse> responses = imageService.listCredentialImages(pageable)
 				.map(img -> new CredentialImageResponse(
 						img.getId(),

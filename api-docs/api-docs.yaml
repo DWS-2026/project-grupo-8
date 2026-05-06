@@ -13,7 +13,7 @@ paths:
       operationId: getUserById
       parameters:
       - name: id
-        in: query
+        in: path
         required: true
         schema:
           type: integer
@@ -24,102 +24,812 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/User"
+                type: object
+    put:
+      tags:
+      - user-rest-controller
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - user-rest-controller
+      operationId: deleteUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+  /api/v1/reviews/{id}:
+    get:
+      tags:
+      - review-rest-controller
+      operationId: getReviewById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ReviewResponse"
+    put:
+      tags:
+      - review-rest-controller
+      operationId: updateReview
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - review-rest-controller
+      operationId: deleteReview
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/plans/{id}:
+    get:
+      tags:
+      - plan-rest-controller
+      operationId: getPlanById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PlanResponse"
+    put:
+      tags:
+      - plan-rest-controller
+      operationId: updatePlan
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePlanRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - plan-rest-controller
+      operationId: deletePlan
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+  /api/v1/images/profile/{userId}:
+    get:
+      tags:
+      - image-rest-controller
+      operationId: getProfileImage
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: byte
+    put:
+      tags:
+      - image-rest-controller
+      operationId: uploadProfileImage
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+              - file
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - image-rest-controller
+      operationId: deleteProfileImage
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+  /api/v1/images/credential/{credentialId}:
+    get:
+      tags:
+      - image-rest-controller
+      operationId: getCredentialImage
+      parameters:
+      - name: credentialId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: byte
+    put:
+      tags:
+      - image-rest-controller
+      operationId: uploadCredentialImage
+      parameters:
+      - name: credentialId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+              - file
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - image-rest-controller
+      operationId: deleteCredentialImage
+      parameters:
+      - name: credentialId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+  /api/v1/credentials/{id}:
+    get:
+      tags:
+      - credential-rest-controller
+      operationId: getCredentialById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    put:
+      tags:
+      - credential-rest-controller
+      operationId: updateCredential
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCredentialRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - credential-rest-controller
+      operationId: deleteCredential
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/users:
+    get:
+      tags:
+      - user-rest-controller
+      operationId: getAllUsers
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - user-rest-controller
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/users/{id}/document:
+    get:
+      tags:
+      - user-rest-controller
+      operationId: downloadUserDocument
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - user-rest-controller
+      operationId: uploadUserDocument
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+              - file
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - user-rest-controller
+      operationId: deleteUserDocument
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+  /api/v1/users/register:
+    post:
+      tags:
+      - user-rest-controller
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/users/login:
+    post:
+      tags:
+      - user-rest-controller
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/reviews:
+    get:
+      tags:
+      - review-rest-controller
+      operationId: getAllReviews
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageReviewResponse"
+    post:
+      tags:
+      - review-rest-controller
+      operationId: createReview
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/plans:
+    get:
+      tags:
+      - plan-rest-controller
+      operationId: getAllPlans
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PagePlanResponse"
+    post:
+      tags:
+      - plan-rest-controller
+      operationId: createPlan
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePlanRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/credentials:
+    get:
+      tags:
+      - credential-rest-controller
+      operationId: getAllCredentials
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - credential-rest-controller
+      operationId: createCredential
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCredentialRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/users/me:
+    get:
+      tags:
+      - user-rest-controller
+      operationId: getCurrentUser
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/reviews/top:
+    get:
+      tags:
+      - review-rest-controller
+      operationId: getTopReviews
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReviewResponse"
+  /api/v1/images/profiles:
+    get:
+      tags:
+      - image-rest-controller
+      operationId: listProfileImages
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageProfileImageResponse"
+  /api/v1/images/credentials:
+    get:
+      tags:
+      - image-rest-controller
+      operationId: listCredentialImages
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageCredentialImageResponse"
 components:
   schemas:
-    Credential:
+    UpdateUserRequest:
       type: object
       properties:
-        id:
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        planId:
           type: integer
           format: int64
-        siteName:
-          type: string
-        siteUrl:
-          type: string
-        username:
-          type: string
-        passwordEncrypted:
-          type: string
-        note:
-          type: string
-        user:
-          $ref: "#/components/schemas/User"
-        credentialImage:
-          $ref: "#/components/schemas/CredentialImage"
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        imageUrl:
-          type: string
-    CredentialImage:
+        admin:
+          type: boolean
+        securityTimeoutMinutes:
+          type: integer
+          format: int32
+    ReviewRequest:
       type: object
       properties:
-        id:
+        title:
+          type: string
+        comment:
+          type: string
+        rating:
           type: integer
-          format: int64
-        filename:
-          type: string
-        contentType:
-          type: string
-        data:
-          type: string
-          format: byte
-        credential:
-          $ref: "#/components/schemas/Credential"
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    Image:
+          format: int32
+    UpdatePlanRequest:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-        filename:
-          type: string
-        contentType:
-          type: string
-        data:
-          type: string
-          format: byte
-        user:
-          $ref: "#/components/schemas/User"
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    Plan:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
         name:
           type: string
         priceMonthly:
           type: number
         description:
           type: string
-        users:
+    UpdateCredentialRequest:
+      type: object
+      properties:
+        siteName:
+          type: string
+        siteUrl:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        note:
+          type: string
+    CreateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        password:
+          type: string
+        password2:
+          type: string
+        planId:
+          type: integer
+          format: int64
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    CreatePlanRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        priceMonthly:
+          type: number
+        description:
+          type: string
+    CreateCredentialRequest:
+      type: object
+      properties:
+        siteName:
+          type: string
+        siteUrl:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        note:
+          type: string
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+        sort:
           type: array
           items:
-            $ref: "#/components/schemas/User"
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    Review:
+            type: string
+    PageReviewResponse:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewResponse"
+        number:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        paged:
+          type: boolean
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        unpaged:
+          type: boolean
+    ReviewResponse:
       type: object
       properties:
         id:
@@ -132,11 +842,58 @@ components:
         rating:
           type: integer
           format: int32
-        user: {}
+        userId:
+          type: integer
+          format: int64
+        userName:
+          type: string
+        userEmail:
+          type: string
         createdAt:
           type: string
           format: date-time
-    User:
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+    PagePlanResponse:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/PlanResponse"
+        number:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    PlanResponse:
       type: object
       properties:
         id:
@@ -144,57 +901,118 @@ components:
           format: int64
         name:
           type: string
-        email:
+        priceMonthly:
+          type: number
+        description:
           type: string
-        passwordHash:
-          type: string
-        encryptionKey:
-          type: string
-        previousPasswordHash:
-          type: string
-        passwordChangeTime:
-          type: string
-          format: date-time
-        plan:
-          $ref: "#/components/schemas/Plan"
-        credentials:
-          type: array
-          items:
-            $ref: "#/components/schemas/Credential"
-        reviews:
-          type: array
-          items:
-            $ref: "#/components/schemas/Review"
-        profileImage:
-          $ref: "#/components/schemas/Image"
-        admin:
-          type: boolean
+        totalUsers:
+          type: integer
+          format: int32
         createdAt:
           type: string
           format: date-time
         updatedAt:
           type: string
           format: date-time
-        loginCount:
+    PageProfileImageResponse:
+      type: object
+      properties:
+        totalPages:
           type: integer
           format: int32
-        loginCountWindowStart:
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileImageResponse"
+        number:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    ProfileImageResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        filename:
+          type: string
+        contentType:
+          type: string
+        createdAt:
           type: string
           format: date-time
-        securityTimeoutMinutes:
-          type: integer
-          format: int32
-        lastLogin:
+        updatedAt:
           type: string
           format: date-time
-        failedAttempts:
+    CredentialImageResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        credentialId:
+          type: integer
+          format: int64
+        filename:
+          type: string
+        contentType:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    PageCredentialImageResponse:
+      type: object
+      properties:
+        totalPages:
           type: integer
           format: int32
-        security:
-          type: string
-        tenure:
-          type: string
-        twoFactorAuth:
-          type: string
-        paymentStatus:
-          type: string
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/CredentialImageResponse"
+        number:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean

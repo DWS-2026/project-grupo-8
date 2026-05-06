@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+// CSRF for API is disabled below; CookieCsrfTokenRepository removed for API chain
 import org.springframework.security.authentication.LockedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -268,7 +268,6 @@ public class WebSecurityConfig {
 				.authorizeHttpRequests(authorize -> authorize
 						.requestMatchers(HttpMethod.POST, "/api/v1/users/login").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/v1/users/register").permitAll()
-						.requestMatchers(HttpMethod.GET, "/api/v1/csrf").permitAll()
 
 						// Reviews API
 						.requestMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll()
@@ -307,9 +306,8 @@ public class WebSecurityConfig {
 		// Disable form login for REST endpoints and use HTTP Basic for API clients
 		http.formLogin(AbstractHttpConfigurer::disable);
 
-		// Enable CSRF protection for API endpoints used from browsers.
-		// Use a cookie-backed CSRF token so single-page app fetch/XHR requests can read it.
-		http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()));
+		// Disable CSRF for API endpoints (API clients authenticate differently).
+		http.csrf(AbstractHttpConfigurer::disable);
 
 		http.httpBasic(Customizer.withDefaults());
 

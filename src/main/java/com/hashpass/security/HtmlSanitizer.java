@@ -53,10 +53,17 @@ public class HtmlSanitizer {
         if (sanitizedPhone == null) {
             return null;
         }
-        if (!sanitizedPhone.matches("[0-9+()\\s-]{6,32}")) {
+        if (sanitizedPhone.indexOf('+') > 0 || sanitizedPhone.indexOf('+') != sanitizedPhone.lastIndexOf('+')) {
             return null;
         }
-        return sanitizedPhone;
+        if (!sanitizedPhone.matches("[+0-9()\\s.\\-]{6,32}")) {
+            return null;
+        }
+        String digitsOnly = sanitizedPhone.replaceAll("[^0-9]", "");
+        if (digitsOnly.length() < 6 || digitsOnly.length() > 15) {
+            return null;
+        }
+        return normalizeWhitespace(sanitizedPhone);
     }
 
     public String sanitizeRichText(String rawHtml) {
