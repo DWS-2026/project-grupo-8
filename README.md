@@ -386,11 +386,11 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Vulnerabilidad A08 en el cifrado de contraseñas fixed](https://github.com/DWS-2026/project-grupo-8/commit/5e93cdbfad875f4dc8e92860e938198019164409)  | [DatabaseInitializer & EntryService](https://github.com/DWS-2026/project-grupo-8/commit/5e93cdbfad875f4dc8e92860e938198019164409#diff-aab8d044c6b9ea28aca50299a7012538d80d3b401f37e6a197d8953e132530c1)   |
+|2| [Security api issue fixed users](https://github.com/DWS-2026/project-grupo-8/commit/3ee6f073ff517cacc105770c96857d0dc07f4346)  | [UserRestController & WebSecurityConfug](https://github.com/DWS-2026/project-grupo-8/commit/3ee6f073ff517cacc105770c96857d0dc07f4346#diff-7062ba911bacca2bc5eebdb5d27114a982fdac698d63831f3a97749d630a8529)   |
+|3| [RestController security issue fix](https://github.com/DWS-2026/project-grupo-8/commit/b31548f971720e50e18d60cd81dbf993c51f91e1)  | [UserRestController](https://github.com/DWS-2026/project-grupo-8/commit/b31548f971720e50e18d60cd81dbf993c51f91e1#diff-7062ba911bacca2bc5eebdb5d27114a982fdac698d63831f3a97749d630a8529)   |
+|4| [Review Rest Controller Creation](https://github.com/DWS-2026/project-grupo-8/commit/11cf6e08cc3a962be2f5fca723ade19f2e9e2169)  | [ReviewRestController](https://github.com/DWS-2026/project-grupo-8/commit/11cf6e08cc3a962be2f5fca723ade19f2e9e2169#diff-9352a89df7ce85b69558d794fe5ce29f1a5ed457a1457a95f2beb7c081f49dd3)   |
+|5| [WebSecurityConfig RestController](https://github.com/DWS-2026/project-grupo-8/commit/35655bee2b98ded9e891f7c5a5d8c68772de5053)  | [WebSecurityConfig](https://github.com/DWS-2026/project-grupo-8/commit/35655bee2b98ded9e891f7c5a5d8c68772de5053#diff-97835509a9295b1decf4bd5c32383652a586805f11aed07d6ec3f007f20ff950)   |
 
 ---
 
