@@ -192,8 +192,7 @@ public class ReviewRestController {
                 htmlSanitizer.sanitizeRichText(review.getComment()),
                 review.getRating(),
                 user != null ? user.getId() : null,
-                user != null ? user.getName() : null,
-                user != null ? user.getEmail() : null,
+            user != null ? user.getName() : null,
                 review.getCreatedAt());
     }
 
@@ -206,7 +205,6 @@ public class ReviewRestController {
             Integer rating,
             Long userId,
             String userName,
-            String userEmail,
             LocalDateTime createdAt) {
     }
 }

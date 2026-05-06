@@ -255,14 +255,8 @@ public class WebSecurityConfig {
 				//.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
 
 		http.exceptionHandling(handling -> handling
-				.authenticationEntryPoint((request, response, authException) -> {
-					logUnauthorized(request, authException);
-					response.sendError(401, "Unauthorized");
-				})
-				.accessDeniedHandler((request, response, accessDeniedException) -> {
-					logAccessDenied(request, accessDeniedException);
-					response.sendError(403, "Forbidden");
-				}));
+				.authenticationEntryPoint(new JsonAuthenticationEntryPoint())
+				.accessDeniedHandler(new JsonAccessDeniedHandler()));
 
 		http
 				.authorizeHttpRequests(authorize -> authorize

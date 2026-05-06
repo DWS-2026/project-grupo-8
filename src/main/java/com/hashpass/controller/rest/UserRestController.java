@@ -252,6 +252,10 @@ public class UserRestController {
         }
 
         if (request.admin() != null) {
+            if (!loggedUser.isAdmin()) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(Map.of("message", "No tienes permisos para modificar el rol de administrador."));
+            }
             user.setAdmin(request.admin());
         }
 
