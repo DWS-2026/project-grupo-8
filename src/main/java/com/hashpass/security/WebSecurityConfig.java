@@ -26,6 +26,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import com.hashpass.security.jwt.JwtRequestFilter;
 import com.hashpass.service.UserService;
 import java.time.LocalDateTime;
 import com.hashpass.repository.UserRepository;
@@ -45,6 +46,9 @@ public class WebSecurityConfig {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	JwtRequestFilter jwtRequestFilter;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -309,7 +313,7 @@ public class WebSecurityConfig {
 		http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		// Add JWT Token filter
-		//http.addFilterBefore(new JwtRequestFilter(userDetailService, jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(jwtRequestFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
