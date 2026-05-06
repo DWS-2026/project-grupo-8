@@ -38,6 +38,9 @@ public class WebSecurityConfig {
 	private static final int MAX_FAILED_LOGIN_ATTEMPTS = 5;
 	private static final int LOCK_MINUTES = 15;
 
+
+	@Autowired
+	LoginRateLimitFilter loginRateLimitFilter;
 	@Autowired
 	RepositoryUserDetailsService userDetailsService;
 
@@ -210,6 +213,7 @@ public class WebSecurityConfig {
 						.deleteCookies("JSESSIONID")
 						.addLogoutHandler((request, response, auth) -> userService.logout())
 						.permitAll());
+		http.addFilterBefore(loginRateLimitFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 

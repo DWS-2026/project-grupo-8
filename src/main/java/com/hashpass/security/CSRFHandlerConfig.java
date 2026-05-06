@@ -16,6 +16,13 @@ public class CSRFHandlerConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new CSRFHandlerInterceptor());
+		registry.addInterceptor(rateLimitInterceptor);
+	}
+
+	private final RateLimitInterceptor rateLimitInterceptor;
+
+	public CSRFHandlerConfig(RateLimitInterceptor rateLimitInterceptor) {
+		this.rateLimitInterceptor = rateLimitInterceptor;
 	}
 }
 
