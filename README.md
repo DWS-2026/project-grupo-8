@@ -382,7 +382,7 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 #### **Alumno 1 - Iván Tabares Rico**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Encargado de la api de reviews, junto con arreglo de vulnerabilidades del WAS top 10, ademas de varios fallos de seguridad en la web]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
