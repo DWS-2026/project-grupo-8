@@ -2,7 +2,7 @@ package com.hashpass.security.jwt;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,27 +30,30 @@ public class UserLoginService {
 		this.jwtTokenProvider = jwtTokenProvider;
 	}
 
-	public ResponseEntity<AuthResponse> login(HttpServletResponse response, LoginRequest loginRequest) {
-		
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+	public ResponseEntity<AuthResponse> login(HttpServletResponse response, String email, String password) {
+		try {
+			Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(email, password));
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		
-		String username = loginRequest.getUsername();
-		UserDetails user = userDetailsService.loadUserByUsername(username);
+			UserDetails user = userDetailsService.loadUserByUsername(email);
 
-		HttpHeaders responseHeaders = new HttpHeaders();
-		var newAccessToken = jwtTokenProvider.generateAccessToken(user);
-		var newRefreshToken = jwtTokenProvider.generateRefreshToken(user);
+			var newAccessToken = jwtTokenProvider.generateAccessToken(user);
+			var newRefreshToken = jwtTokenProvider.generateRefreshToken(user);
 
-		response.addCookie(buildTokenCookie(TokenType.ACCESS, newAccessToken));
-		response.addCookie(buildTokenCookie(TokenType.REFRESH, newRefreshToken));
+			response.addCookie(buildTokenCookie(TokenType.ACCESS, newAccessToken));
+			response.addCookie(buildTokenCookie(TokenType.REFRESH, newRefreshToken));
 
-		AuthResponse loginResponse = new AuthResponse(AuthResponse.Status.SUCCESS,
-				"Auth successful. Tokens are created in cookie.");
-		return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
+			AuthResponse loginResponse = new AuthResponse(AuthResponse.Status.SUCCESS,
+					"Auth successful. Tokens are created in cookie.");
+			return ResponseEntity.ok().body(loginResponse);
+		} catch (Exception e) {
+			log.error("Error during login for email: {}", email, e);
+			AuthResponse loginResponse = new AuthResponse(AuthResponse.Status.FAILURE,
+					"Invalid credentials", e.getMessage());
+			return ResponseEntity.status(401).body(loginResponse);
+		}
 	}
 
 	public ResponseEntity<AuthResponse> refresh(HttpServletResponse response, String refreshToken) {

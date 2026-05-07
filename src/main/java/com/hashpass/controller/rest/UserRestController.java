@@ -8,15 +8,11 @@ import com.hashpass.security.RateLimited;
 import com.hashpass.service.AuthService;
 import com.hashpass.service.UserService;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import com.hashpass.security.jwt.UserLoginService;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 @RestController
@@ -37,20 +35,21 @@ public class UserRestController {
 
     private final AuthService authService;
     private final UserService userService;
-    private final AuthenticationManager authenticationManager;
     private final HtmlSanitizer htmlSanitizer;
+    private final UserLoginService userLoginService;
 
     public UserRestController(AuthService authService, UserService userService,
-            AuthenticationManager authenticationManager, HtmlSanitizer htmlSanitizer) {
+            HtmlSanitizer htmlSanitizer,
+            UserLoginService userLoginService) {
         this.authService = authService;
         this.userService = userService;
-        this.authenticationManager = authenticationManager;
         this.htmlSanitizer = htmlSanitizer;
+        this.userLoginService = userLoginService;
     }
 
     @PostMapping("/login")
     @RateLimited(requests = 5, minutes = 15)
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse response) {
         if (request == null || request.email() == null || request.email().isBlank()
                 || request.password() == null || request.password().isBlank()) {
             return ResponseEntity.badRequest().body(Map.of(
@@ -59,12 +58,9 @@ public class UserRestController {
 
         String email = request.email().trim().toLowerCase();
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(email, request.password()));
-
             authService.loginSuccess(email);
-            return ResponseEntity.ok(Map.of("message", "Login successful."));
-        } catch (AuthenticationException ex) {
+            return userLoginService.login(response, email, request.password());
+        } catch (Exception ex) {
             authService.loginFailed(email);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("message", "Invalid credentials."));
@@ -104,6 +100,22 @@ public class UserRestController {
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", e.getMessage()));
         }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(
+            @org.springframework.web.bind.annotation.CookieValue(name = "RefreshToken", required = false) String refreshToken,
+            HttpServletResponse response) {
+        if (refreshToken == null || refreshToken.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Refresh token is required"));
+        }
+        return userLoginService.refresh(response, refreshToken);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        userLoginService.logout(response);
+        return ResponseEntity.ok(Map.of("message", "Logout successful"));
     }
 
     @GetMapping

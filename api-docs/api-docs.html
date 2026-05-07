@@ -845,6 +845,7 @@ ul.nav-tabs {
     // Script section to load models into a JS Var
     var defs = {}
     defs["CreateCredentialRequest"] = {
+  "type" : "object",
   "properties" : {
     "siteName" : {
       "type" : "string"
@@ -864,6 +865,7 @@ ul.nav-tabs {
   }
 };
     defs["CreatePlanRequest"] = {
+  "type" : "object",
   "properties" : {
     "name" : {
       "type" : "string"
@@ -877,6 +879,7 @@ ul.nav-tabs {
   }
 };
     defs["CreateUserRequest"] = {
+  "type" : "object",
   "properties" : {
     "name" : {
       "type" : "string"
@@ -900,6 +903,7 @@ ul.nav-tabs {
   }
 };
     defs["CredentialImageResponse"] = {
+  "type" : "object",
   "properties" : {
     "id" : {
       "type" : "integer",
@@ -926,6 +930,7 @@ ul.nav-tabs {
   }
 };
     defs["LoginRequest"] = {
+  "type" : "object",
   "properties" : {
     "email" : {
       "type" : "string"
@@ -936,6 +941,7 @@ ul.nav-tabs {
   }
 };
     defs["PageCredentialImageResponse"] = {
+  "type" : "object",
   "properties" : {
     "totalPages" : {
       "type" : "integer",
@@ -981,6 +987,7 @@ ul.nav-tabs {
   }
 };
     defs["PagePlanResponse"] = {
+  "type" : "object",
   "properties" : {
     "totalPages" : {
       "type" : "integer",
@@ -1026,6 +1033,7 @@ ul.nav-tabs {
   }
 };
     defs["PageProfileImageResponse"] = {
+  "type" : "object",
   "properties" : {
     "totalPages" : {
       "type" : "integer",
@@ -1071,6 +1079,7 @@ ul.nav-tabs {
   }
 };
     defs["PageReviewResponse"] = {
+  "type" : "object",
   "properties" : {
     "totalPages" : {
       "type" : "integer",
@@ -1116,6 +1125,7 @@ ul.nav-tabs {
   }
 };
     defs["Pageable"] = {
+  "type" : "object",
   "properties" : {
     "page" : {
       "minimum" : 0,
@@ -1136,6 +1146,7 @@ ul.nav-tabs {
   }
 };
     defs["PageableObject"] = {
+  "type" : "object",
   "properties" : {
     "offset" : {
       "type" : "integer",
@@ -1161,6 +1172,7 @@ ul.nav-tabs {
   }
 };
     defs["PlanResponse"] = {
+  "type" : "object",
   "properties" : {
     "id" : {
       "type" : "integer",
@@ -1190,6 +1202,7 @@ ul.nav-tabs {
   }
 };
     defs["ProfileImageResponse"] = {
+  "type" : "object",
   "properties" : {
     "id" : {
       "type" : "integer",
@@ -1216,6 +1229,7 @@ ul.nav-tabs {
   }
 };
     defs["ReviewRequest"] = {
+  "type" : "object",
   "properties" : {
     "title" : {
       "type" : "string"
@@ -1230,6 +1244,7 @@ ul.nav-tabs {
   }
 };
     defs["ReviewResponse"] = {
+  "type" : "object",
   "properties" : {
     "id" : {
       "type" : "integer",
@@ -1262,6 +1277,7 @@ ul.nav-tabs {
   }
 };
     defs["SortObject"] = {
+  "type" : "object",
   "properties" : {
     "empty" : {
       "type" : "boolean"
@@ -1275,6 +1291,7 @@ ul.nav-tabs {
   }
 };
     defs["UpdateCredentialRequest"] = {
+  "type" : "object",
   "properties" : {
     "siteName" : {
       "type" : "string"
@@ -1294,6 +1311,7 @@ ul.nav-tabs {
   }
 };
     defs["UpdatePlanRequest"] = {
+  "type" : "object",
   "properties" : {
     "name" : {
       "type" : "string"
@@ -1307,6 +1325,7 @@ ul.nav-tabs {
   }
 };
     defs["UpdateUserRequest"] = {
+  "type" : "object",
   "properties" : {
     "name" : {
       "type" : "string"
@@ -1332,6 +1351,7 @@ ul.nav-tabs {
 };
     defs["uploadProfileImage_request"] = {
   "required" : [ "file" ],
+  "type" : "object",
   "properties" : {
     "file" : {
       "type" : "string",
