@@ -346,7 +346,7 @@ Desarrollo general del backend, configuración de base de datos, autenticación,
 ## 🛠 **Práctica 3: Incorporación de una API REST a la aplicación web, análisis de vulnerabilidades y contramedidas**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)**
+📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=xwlpdTYKv-4)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
 ### **Documentación de la API REST**
@@ -422,14 +422,14 @@ Encargado del desarrollo general de la aplicación, focalizando en las Apis de l
 
 ---
 
-#### **Alumno 4 - [Nombre Completo]**
+#### **Alumno 4 - Carlos Javier González Ledo**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Desarrollo de la API REST (Credential) e implementación del bloqueo temporal de cuentas, Rate Limiting y XSS.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Creación de la API REST para gestión de credenciales](https://github.com/DWS-2026/project-grupo-8/commit/3ee7b9bbe8d33326d1e0282994db33b5ae655e72)  | [CredentialRestController.java](https://github.com/DWS-2026/project-grupo-8/commit/3ee7b9bbe8d33326d1e0282994db33b5ae655e72#diff-afdc4f6bccad7602d4664bc2c4730188ec1087a03df4afc1cbd7705bdd361f43) , [WebSecurityConfig.java](https://github.com/DWS-2026/project-grupo-8/commit/3ee7b9bbe8d33326d1e0282994db33b5ae655e72#diff-97835509a9295b1decf4bd5c32383652a586805f11aed07d6ec3f007f20ff950 ) |
+|2| [Implementación de bloqueo temporal de cuentas tras intentos fallidos](https://github.com/DWS-2026/project-grupo-8/commit/b9695e41cbe97a491b1ef9175e0a976e977af0ce)  | [RepositoryUserDetailsService.java, entre otros...](https://github.com/DWS-2026/project-grupo-8/commit/b9695e41cbe97a491b1ef9175e0a976e977af0ce#diff-a3193fa28ac7f3d91511400c588104a29e00a50beaf95dfd1ce0e42fc478824b)   |
+|3| [Creación del motor, filtros e interceptores para Rate Limiting](https://github.com/DWS-2026/project-grupo-8/commit/f6ede1d51afbcadcf287c78a719b91d269bf1d47)  | [RateLimitService.java, entre otros...](https://github.com/DWS-2026/project-grupo-8/commit/f6ede1d51afbcadcf287c78a719b91d269bf1d47#diff-5318c56952e6b2f8597a8904b011dd30fc9f8ca1e144068a371540ecb4ba514c)   |
+|4| [Aplicación de Rate Limiting en controladores Web y REST](https://github.com/DWS-2026/project-grupo-8/commit/0a8e97da9f48ee6be4955fcbe340d692357c9d8e)  | [UserRestController.java, entre otros...](https://github.com/DWS-2026/project-grupo-8/commit/0a8e97da9f48ee6be4955fcbe340d692357c9d8e#diff-7062ba911bacca2bc5eebdb5d27114a982fdac698d63831f3a97749d630a8529)   |
+|5| [Vulnerabilidad XSS](https://github.com/DWS-2026/project-grupo-8/commit/1951b6c54428a39ecc40acdd414d035d86bcfe23#diff-dbd1337d00de64e54f39aff7aeb4dfefae9a6b8f3f1879a73f6cca630c8b1a27)  | [HtmlSanitizer.java, entre otros...](https://github.com/DWS-2026/project-grupo-8/commit/1951b6c54428a39ecc40acdd414d035d86bcfe23#diff-dbd1337d00de64e54f39aff7aeb4dfefae9a6b8f3f1879a73f6cca630c8b1a27)   |
