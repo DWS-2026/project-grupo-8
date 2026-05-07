@@ -27,6 +27,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 import com.hashpass.security.jwt.JwtRequestFilter;
+import com.hashpass.security.jwt.UnauthorizedHandlerJwt;
 import com.hashpass.service.UserService;
 import java.time.LocalDateTime;
 import com.hashpass.repository.UserRepository;
@@ -52,6 +53,12 @@ public class WebSecurityConfig {
 
 	@Autowired
 	JwtRequestFilter jwtRequestFilter;
+
+	@Autowired
+	UnauthorizedHandlerJwt unauthorizedHandlerJwt;
+
+	@Autowired
+	JsonAccessDeniedHandler jsonAccessDeniedHandler;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -252,11 +259,10 @@ public class WebSecurityConfig {
 
 		http
 				.securityMatcher("/api/**");
-				//.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
 
 		http.exceptionHandling(handling -> handling
-				.authenticationEntryPoint(new JsonAuthenticationEntryPoint())
-				.accessDeniedHandler(new JsonAccessDeniedHandler()));
+				.authenticationEntryPoint(unauthorizedHandlerJwt)
+				.accessDeniedHandler(jsonAccessDeniedHandler));
 
 		http
 				.authorizeHttpRequests(authorize -> authorize
@@ -297,13 +303,13 @@ public class WebSecurityConfig {
 						.requestMatchers(HttpMethod.DELETE, "/api/v1/plans/**").hasRole("ADMIN")
 						.anyRequest().authenticated());
 
-		// Disable form login for REST endpoints and use HTTP Basic for API clients
-		http.formLogin(AbstractHttpConfigurer::disable);
+		// Disable form login for REST endpoints; authentication comes from JWT cookies.
+		http.formLogin(formLogin -> formLogin.disable());
 
 		// Disable CSRF for API endpoints (API clients authenticate differently).
-		http.csrf(AbstractHttpConfigurer::disable);
+		http.csrf(csrf-> csrf.disable());
 
-		http.httpBasic(Customizer.withDefaults());
+		http.httpBasic(httpBasic -> httpBasic.disable());
 
 		// Stateless session
 		http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
