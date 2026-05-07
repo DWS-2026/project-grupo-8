@@ -380,7 +380,7 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 ### **Participación de Miembros en la Práctica 3**
 
-#### **Alumno 1 - [Nombre Completo]**
+#### **Alumno 1 - Iván Tabares Rico**
 
 [Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
 
@@ -396,7 +396,7 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 #### **Alumno 2 - [Yago Contreras Nevares]**
 
-[Encargado de la api de User e imágenes, junto con el conjunto de las peticiones postman, ademas de arreglar vulnerabilidades como XSS, SSRF o Path Traversal entre otras y también encargado de la implementación del texto enriquecido y la subida de archivos grandes]
+Encargado de la api de User e imágenes, junto con el conjunto de las peticiones postman, ademas de arreglar vulnerabilidades como XSS, SSRF o Path Traversal entre otras y también encargado de la implementación del texto enriquecido y la subida de archivos grandes
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
@@ -408,17 +408,17 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 ---
 
-#### **Alumno 3 - [Nombre Completo]**
+#### **Alumno 3 - Iker Marín López**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Encargado del desarrollo general de la aplicación, focalizando en las Apis de los planes y en el desarrollo de la seguridad frente a vulnerabilidades que involucran el uso de sesiones del usuario y de su acceso a las apis. Desarrollo también de la seguridad frente a mal uso de descuentos en la parte de pago.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Commit inicial de las APIs (general)](https://github.com/DWS-2026/project-grupo-8/commit/87dda5a2c15d7b9e901c4f033bb96635526c6048)  | [api-docs.yaml](https://github.com/DWS-2026/project-grupo-8/commit/87dda5a2c15d7b9e901c4f033bb96635526c6048#diff-90bf9bd22bd4e33f805fa98d82f2e28ef4ae38c2b70c2982b46b3e0b583e5fdd)   |
+|2| [API Rest Planes](https://github.com/DWS-2026/project-grupo-8/commit/d3f1ca297c3915002b1e0e031550803bb11d2074)  | [PlanRestController.java](https://github.com/DWS-2026/project-grupo-8/commit/d3f1ca297c3915002b1e0e031550803bb11d2074#diff-3d6c7757cbc9bb76639c4bde15a0448a98c5647f17aa90d09fba6d917924d5a3)   |
+|3| [Payment Discount HASHPASS10](https://github.com/DWS-2026/project-grupo-8/commit/5008269a37d980db9ec3378fd13771267c648f64#diff-60dd92f15d48d415e23781af957118702ea752b52e94da158ddb07a1d4225cc8)  | [PlanController.java](https://github.com/DWS-2026/project-grupo-8/commit/5008269a37d980db9ec3378fd13771267c648f64#diff-60dd92f15d48d415e23781af957118702ea752b52e94da158ddb07a1d4225cc8)   |
+|4| [Vuln control A09](https://github.com/DWS-2026/project-grupo-8/commit/df6711994ef0a61dac8e1ff2d8f1d8356de156f0)  | [WebSecurityConfig.java](https://github.com/DWS-2026/project-grupo-8/commit/df6711994ef0a61dac8e1ff2d8f1d8356de156f0#diff-97835509a9295b1decf4bd5c32383652a586805f11aed07d6ec3f007f20ff950)   |
+|5| [Tokens y ajustes de las cookies](https://github.com/DWS-2026/project-grupo-8/commit/3bc5ccb2388fdbfa84c6798fffd87d155645cd71)  | [UserRestController.java](https://github.com/DWS-2026/project-grupo-8/commit/3bc5ccb2388fdbfa84c6798fffd87d155645cd71#diff-7062ba911bacca2bc5eebdb5d27114a982fdac698d63831f3a97749d630a8529)   |
 
 ---
 
