@@ -183,10 +183,13 @@
 
                 // Load previous content when editing
                 if (commentHidden && commentHidden.value) {
-                    // SECURITY: Use the Quill API to convert HTML to delta and load it
-                    // This avoids writing HTML directly into the DOM and lets Quill process/sanitize the content
+                    // SECURITY: Load the already-sanitized HTML through Quill's clipboard API.
+                    // This keeps the editor in sync without injecting raw markup into the DOM.
                     try {
-                        const delta = quillInstance.clipboard.convert(commentHidden.value);
+                        const delta = quillInstance.clipboard.convert({
+                            html: commentHidden.value,
+                            text: (new DOMParser()).parseFromString(commentHidden.value, 'text/html').body.textContent || ''
+                        });
                         quillInstance.setContents(delta);
                     } catch (err) {
                         // Safe fallback: load plain text if the conversion fails
